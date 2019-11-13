@@ -1,0 +1,21 @@
+-- noinspection SqlNoDataSourceInspectionForFile
+insert into clinical_center(name) value ('Dr Cvjetkovic');
+insert into clinic (name, address,description,rating,number_of_reviews) value ('Neurologija', 'Narodnog Fronta 76', 'Klinika za neurologiju',0,0);
+insert into user (name, surname, email, password, address, city, country, phone_number, serial_number,number_of_reviews, rating, activated_account, type) values ('Mika', 'Mikic', 'drpera@gmail.com','pera','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',-1,-1,TRUE,'CLINICAL_CENTER_ADMIN');
+insert into user (name, surname, email, password, address, city, country, phone_number, serial_number,number_of_reviews, rating, activated_account, type) values ('Mika', 'Mikic', 'drpera@gmail.com','pera','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',-1,-1,TRUE,'CLINIC_ADMIN');
+insert into user (name, surname, email, password, address, city, country, phone_number, serial_number, number_of_reviews, rating, activated_account, type) values ('Petar', 'Petrovic', 'drpera@gmail.com','pera','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',0,0,TRUE,'DOCTOR');
+insert into user (name, surname, email, password, address, city, country, phone_number, serial_number,number_of_reviews, rating, activated_account, type) values ('Mira', 'Miric', 'drpera@gmail.com','pera','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',-1,-1,TRUE,'NURSE');
+insert into user (name, surname, email, password, address, city, country, phone_number, serial_number,number_of_reviews, rating, activated_account, type) values ('Igor', 'Igic', 'drpera@gmail.com','pera','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',-1,-1,TRUE,'PATIENT');
+insert into diagnose (code, description) values ('fs456d', 'Hipohondrija');
+insert into exam_type (name, description, price,discount) values ('CT snimanje glave', 'Snimanje glave',10000,10);
+insert into room (name, number,room_type,occupied,clinic_id) value ('soba 1',1,'1',FALSE,1);
+insert into medical_exam (date, start_time, end_time,reserved,doctor_id,exam_room_id,exam_type_id,patient_id) values ('2018-07-31', '1:05:04','4:34:12',FALSE,1,1,1,1);
+insert into medical_record (date_of_birth,height,weight,diopter,blood_type) value ('2011-11-11',178,62,0.0,'A+');
+insert into prescription (verified,nurse_id) value (FALSE,1);
+insert into medical_report (description,date,time,doctor_id,prescription_id) value ('Ceste migrene.','2019-04-07','12:45:00',1,1);
+insert into medication (code, description) value ('ad89','Bensedin 500 mg');
+insert into request_for_absence (start_date,end_date,serial_number,type) value ('2019-10-15','2019-11-01','032163256332','paid vacation');
+insert into surgery_type(name,description,price,discount) value ('Operacija slepog creva','Najnovija laserska metoda.',100000,5);
+insert into surgery (date,start_time, end_time,patient_id,surgery_type_id) value ('2019-04-12','12:45:00','15:45:00',1,1);
+insert into clinics_surgery_types (clinic_id, surgery_type_id) value (1,1);
+insert into doctors_surgeries (doctor_id, surgery_id) value (1,1);
