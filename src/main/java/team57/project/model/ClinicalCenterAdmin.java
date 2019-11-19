@@ -7,4 +7,8 @@ import javax.persistence.Entity;
 @DiscriminatorValue("CLINICAL_CENTER_ADMIN")
 public class ClinicalCenterAdmin extends User{
 
+    public ClinicalCenterAdmin(){
+        super();
+    }
+
 }

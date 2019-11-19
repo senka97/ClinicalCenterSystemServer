@@ -11,9 +11,13 @@ import java.util.Set;
 @DiscriminatorValue("DOCTOR")
 public class Doctor extends User {
 
-    @Column(name = "rating", nullable = false)
+    public Doctor(){
+        super();
+    }
+
+    @Column(name = "rating", nullable = false, columnDefinition = "double default -1")
     private double rating; //( rating  * reviews + new rating)/(reviews + 1)
-    @Column(name = "numberOfReviews", nullable = false)
+    @Column(name = "numberOfReviews", nullable = false, columnDefinition = "bigint default -1")
     private long numberOfReviews; //number of reviews
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Patient> patients;

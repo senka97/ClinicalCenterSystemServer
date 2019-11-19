@@ -1,12 +1,14 @@
 package team57.project.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import team57.project.repository.UserRepository;
+import team57.project.dto.UserRequest;
+import team57.project.model.User;
 
-@Service
-public class UserService {
+import java.util.List;
 
-    @Autowired
-    private UserRepository userRepository;
+public interface UserService {
+
+    User findById(Long id);
+    User findByEmail(String username);
+    List<User> findAll ();
+    User save(UserRequest userRequest);
 }
