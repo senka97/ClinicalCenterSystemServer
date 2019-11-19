@@ -1,11 +1,24 @@
 -- noinspection SqlNoDataSourceInspectionForFile
+insert into authority (name) value ('ROLE_CLINICAL_CENTER_ADMIN');
+insert into authority (name) value ('ROLE_CLINIC_ADMIN');
+insert into authority (name) value ('ROLE_PATIENT');
+insert into authority (name) value ('ROLE_DOCTOR');
+insert into authority (name) value ('ROLE_NURSE');
+
 insert into clinical_center(name) value ('Dr Cvjetkovic');
 insert into clinic (name, address,description,rating,number_of_reviews) value ('Neurologija', 'Narodnog Fronta 76', 'Klinika za neurologiju',0,0);
-insert into user (name, surname, email, password, address, city, country, phone_number, serial_number,number_of_reviews, rating, activated_account, type) values ('Mika', 'Mikic', 'drpera@gmail.com','pera','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',-1,-1,TRUE,'CLINICAL_CENTER_ADMIN');
-insert into user (name, surname, email, password, address, city, country, phone_number, serial_number,number_of_reviews, rating, activated_account, type) values ('Mika', 'Mikic', 'drpera@gmail.com','pera','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',-1,-1,TRUE,'CLINIC_ADMIN');
-insert into user (name, surname, email, password, address, city, country, phone_number, serial_number, number_of_reviews, rating, activated_account, type) values ('Petar', 'Petrovic', 'drpera@gmail.com','pera','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',0,0,TRUE,'DOCTOR');
-insert into user (name, surname, email, password, address, city, country, phone_number, serial_number,number_of_reviews, rating, activated_account, type) values ('Mira', 'Miric', 'drpera@gmail.com','pera','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',-1,-1,TRUE,'NURSE');
-insert into user (name, surname, email, password, address, city, country, phone_number, serial_number,number_of_reviews, rating, activated_account, type) values ('Igor', 'Igic', 'drpera@gmail.com','pera','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',-1,-1,TRUE,'PATIENT');
+insert into user (name, surname, email, password, address, city, country, phone_number, serial_number,number_of_reviews, rating, activated_account, enabled, last_password_reset_date, type) values ('Mika', 'Mikic', 'mika@gmail.com','mika','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',-1,-1,TRUE,TRUE,'2019-11-19 04:00:00','CLINICAL_CENTER_ADMIN');
+insert into user (name, surname, email, password, address, city, country, phone_number, serial_number,number_of_reviews, rating, activated_account, enabled, last_password_reset_date, type) values ('Zika', 'Zikic', 'zika@gmail.com','zika','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',-1,-1,TRUE,TRUE,'2019-11-19 04:00:00','CLINIC_ADMIN');
+insert into user (name, surname, email, password, address, city, country, phone_number, serial_number, number_of_reviews, rating, activated_account, enabled, last_password_reset_date, type) values ('Petar', 'Petrovic', 'petar@gmail.com','petar','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',0,0,TRUE,TRUE,'2019-11-19 04:00:00','DOCTOR');
+insert into user (name, surname, email, password, address, city, country, phone_number, serial_number,number_of_reviews, rating, activated_account, enabled, last_password_reset_date, type) values ('Mira', 'Miric', 'mira@gmail.com','mira','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',-1,-1,TRUE,TRUE,'2019-11-19 04:00:00','NURSE');
+insert into user (name, surname, email, password, address, city, country, phone_number, serial_number,number_of_reviews, rating, activated_account, enabled, last_password_reset_date, type) values ('Pera', 'Peric', 'pera@gmail.com','pera','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',-1,-1,TRUE,TRUE,'2019-11-19 04:00:00','PATIENT');
+
+insert into user_authority(user_id, authority_id) value (1,1);
+insert into user_authority(user_id, authority_id) value (2,2);
+insert into user_authority(user_id, authority_id) value (3,4);
+insert into user_authority(user_id, authority_id) value (4,5);
+insert into user_authority(user_id, authority_id) value (5,3);
+
 insert into diagnose (code, description) values ('fs456d', 'Hipohondrija');
 insert into exam_type (name, description, price,discount) values ('CT snimanje glave', 'Snimanje glave',10000,10);
 insert into room (name, number,room_type,occupied,clinic_id) value ('soba 1',1,'1',FALSE,1);
