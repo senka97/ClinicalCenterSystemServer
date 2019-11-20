@@ -41,4 +41,6 @@ public class Clinic {
     private Set<ExamType> examTypes;
 
 
+    public Clinic() {
+    }
 }

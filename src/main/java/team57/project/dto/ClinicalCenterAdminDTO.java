@@ -1,8 +1,8 @@
 package team57.project.dto;
 
-import team57.project.model.User;
+import team57.project.model.ClinicalCenterAdmin;
 
-public class UserDTO {
+public class ClinicalCenterAdminDTO {
 
     private Long id;
     private String name;
@@ -15,19 +15,11 @@ public class UserDTO {
     private String phoneNumber;
     private String serialNumber;
 
-    public UserDTO()
-    {
+    public ClinicalCenterAdminDTO() {
 
     }
 
-    public UserDTO(User user)
-    {
-        this(user.getId(),user.getName(),user.getSurname(),user.getEmail(),user.getPassword(),user.getAddress(),
-                user.getCity(),user.getCountry(),user.getPhoneNumber(),user.getSerialNumber());
-
-    }
-
-    public UserDTO(Long id, String name, String surname, String email, String password, String address, String city, String country, String phoneNumber, String serialNumber) {
+    public ClinicalCenterAdminDTO(Long id, String name, String surname, String email, String password, String address, String city, String country, String phoneNumber, String serialNumber) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -38,6 +30,11 @@ public class UserDTO {
         this.country = country;
         this.phoneNumber = phoneNumber;
         this.serialNumber = serialNumber;
+    }
+
+    public ClinicalCenterAdminDTO(ClinicalCenterAdmin clinicalCenterAdmin) {
+        this(clinicalCenterAdmin.getId(),clinicalCenterAdmin.getName(),clinicalCenterAdmin.getSurname(),clinicalCenterAdmin.getEmail(),clinicalCenterAdmin.getPassword(),clinicalCenterAdmin.getAddress(),
+                clinicalCenterAdmin.getCity(),clinicalCenterAdmin.getCountry(),clinicalCenterAdmin.getPhoneNumber(),clinicalCenterAdmin.getSerialNumber());
     }
 
     public Long getId() {

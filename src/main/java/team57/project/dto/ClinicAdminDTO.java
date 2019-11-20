@@ -1,8 +1,9 @@
 package team57.project.dto;
 
-import team57.project.model.User;
+import team57.project.model.Clinic;
+import team57.project.model.ClinicAdmin;
 
-public class UserDTO {
+public class ClinicAdminDTO {
 
     private Long id;
     private String name;
@@ -14,20 +15,13 @@ public class UserDTO {
     private String country;
     private String phoneNumber;
     private String serialNumber;
+    private Clinic clinic;
 
-    public UserDTO()
-    {
-
-    }
-
-    public UserDTO(User user)
-    {
-        this(user.getId(),user.getName(),user.getSurname(),user.getEmail(),user.getPassword(),user.getAddress(),
-                user.getCity(),user.getCountry(),user.getPhoneNumber(),user.getSerialNumber());
+    public ClinicAdminDTO() {
 
     }
 
-    public UserDTO(Long id, String name, String surname, String email, String password, String address, String city, String country, String phoneNumber, String serialNumber) {
+    public ClinicAdminDTO(Long id, String name, String surname, String email, String password, String address, String city, String country, String phoneNumber, String serialNumber, Clinic clinic) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -38,6 +32,12 @@ public class UserDTO {
         this.country = country;
         this.phoneNumber = phoneNumber;
         this.serialNumber = serialNumber;
+        this.clinic = clinic;
+    }
+
+    public ClinicAdminDTO(ClinicAdmin clinicAdmin) {
+        this(clinicAdmin.getId(),clinicAdmin.getName(),clinicAdmin.getSurname(),clinicAdmin.getEmail(),clinicAdmin.getPassword(),clinicAdmin.getAddress(),
+                clinicAdmin.getCity(),clinicAdmin.getCountry(),clinicAdmin.getPhoneNumber(),clinicAdmin.getSerialNumber(),clinicAdmin.getClinic());
     }
 
     public Long getId() {
@@ -118,5 +118,13 @@ public class UserDTO {
 
     public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
+    }
+
+    public Clinic getClinic() {
+        return clinic;
+    }
+
+    public void setClinic(Clinic clinic) {
+        this.clinic = clinic;
     }
 }

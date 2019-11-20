@@ -7,7 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
-@Builder
+//@Builder
 @Setter
 @Getter
 @ToString
@@ -17,4 +17,14 @@ import javax.persistence.*;
 public class ClinicAdmin extends User{
     @ManyToOne(fetch = FetchType.LAZY)
     private Clinic clinic;
+
+    public ClinicAdmin(String name, String surname, String email, String password, String address, String city, String country, String phoneNumber, String serialNumber, Clinic clinic) {
+        super(name,surname,email,password,address,city,country,phoneNumber,serialNumber);
+        this.clinic = clinic;
+    }
+
+    public ClinicAdmin()
+    {
+
+    }
 }
