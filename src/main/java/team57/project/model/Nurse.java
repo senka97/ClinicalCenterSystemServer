@@ -6,6 +6,9 @@ import javax.persistence.*;
 @DiscriminatorValue("NURSE")
 public class Nurse extends User {
 
+    public Nurse(){
+        super();
+    }
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Clinic clinic;
 

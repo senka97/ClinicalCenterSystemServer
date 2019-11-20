@@ -7,14 +7,14 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
-//@Builder
-@Setter
-@Getter
-@ToString
-
 @Entity
 @DiscriminatorValue("CLINIC_ADMIN")
 public class ClinicAdmin extends User{
+
+    public ClinicAdmin() {
+        super();
+    }
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Clinic clinic;
 
