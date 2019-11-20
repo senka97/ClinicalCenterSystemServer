@@ -196,4 +196,18 @@ public class User implements UserDetails {
     public User(){
 
     }
+
+    public User(String name, String surname, String email, String password, String address, String city, String country, String phoneNumber, String serialNumber) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.password = password;
+        this.address = address;
+        this.city = city;
+        this.country = country;
+        this.phoneNumber = phoneNumber;
+        this.serialNumber = serialNumber;
+    }
+
+
 }

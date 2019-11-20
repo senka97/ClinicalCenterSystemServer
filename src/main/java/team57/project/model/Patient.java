@@ -18,4 +18,8 @@ public class Patient extends User {
     private Set<Surgery> surgeries;
     @OneToMany(mappedBy = "patient",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<MedicalExam> medicalExams;
+
+    public Patient(String name, String surname, String email, String password, String address, String city, String country, String phoneNumber, String serialNumber) {
+        super(name, surname, email, password, address, city, country, phoneNumber, serialNumber);
+    }
 }

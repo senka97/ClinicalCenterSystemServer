@@ -11,13 +11,11 @@ import java.util.Set;
 @DiscriminatorValue("DOCTOR")
 public class Doctor extends User {
 
-    public Doctor(){
-        super();
-    }
 
-    @Column(name = "rating", nullable = false, columnDefinition = "double default -1")
+
+    @Column(name = "rating", nullable = true, columnDefinition = "double default -1")
     private double rating; //( rating  * reviews + new rating)/(reviews + 1)
-    @Column(name = "numberOfReviews", nullable = false, columnDefinition = "bigint default -1")
+    @Column(name = "numberOfReviews", nullable = true, columnDefinition = "bigint default -1")
     private long numberOfReviews; //number of reviews
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Patient> patients;
@@ -35,4 +33,11 @@ public class Doctor extends User {
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<MedicalExam> medicalExams;
 
+    public Doctor(){
+        super();
+    }
+
+    public Doctor(String name, String surname, String email, String password, String address, String city, String country, String phoneNumber, String serialNumber) {
+        super(name, surname, email, password, address, city, country, phoneNumber, serialNumber);
+    }
 }
