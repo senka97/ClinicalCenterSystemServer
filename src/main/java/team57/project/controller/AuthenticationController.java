@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,15 +22,20 @@ import team57.project.exception.ResourceConflictException;
 import team57.project.model.User;
 import team57.project.security.TokenUtils;
 import team57.project.security.auth.JwtAuthenticationRequest;
+import team57.project.service.EmailService;
 import team57.project.service.UserService;
 import team57.project.service.impl.CustomUserDetailsService;
 
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
+@Controller
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthenticationController {
 
@@ -44,6 +50,10 @@ public class AuthenticationController {
 
     @Autowired
     private UserService userService;
+
+    private Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
+    @Autowired
+    private EmailService emailService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest,
@@ -74,6 +84,11 @@ public class AuthenticationController {
         }
 
         User user = this.userService.save(userRequest);
+        try {
+            emailService.sendNotificaitionAsync(user);
+        }catch( Exception e ){
+            logger.info("Greska prilikom slanja emaila za aktivaciju: " + e.getMessage());
+        }
         //HttpHeaders headers = new HttpHeaders();
         //headers.setLocation(ucBuilder.path("/api/user/{userId}").buildAndExpand(user.getId()).toUri());
         return new ResponseEntity<User>(user, HttpStatus.CREATED);

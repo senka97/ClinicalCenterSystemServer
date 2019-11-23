@@ -9,6 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @DiscriminatorValue("CLINIC_ADMIN")
+@Getter
 public class ClinicAdmin extends User{
 
     public ClinicAdmin() {
@@ -23,8 +24,6 @@ public class ClinicAdmin extends User{
         this.clinic = clinic;
     }
 
-    public ClinicAdmin()
-    {
 
-    }
+
 }
