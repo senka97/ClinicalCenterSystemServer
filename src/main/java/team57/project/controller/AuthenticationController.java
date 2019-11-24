@@ -11,15 +11,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 import team57.project.dto.UserRequest;
 import team57.project.dto.UserTokenState;
+import team57.project.event.OnRegistrationSuccessEvent;
 import team57.project.exception.ResourceConflictException;
 import team57.project.model.User;
+import team57.project.model.VerificationToken;
 import team57.project.security.TokenUtils;
 import team57.project.security.auth.JwtAuthenticationRequest;
 import team57.project.service.EmailService;
@@ -29,6 +31,8 @@ import team57.project.service.impl.CustomUserDetailsService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Calendar;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,14 +87,51 @@ public class AuthenticationController {
             throw new ResourceConflictException(userRequest.getId(), "This email already exists");
         }
 
+
         User user = this.userService.save(userRequest);
+
         try {
-            emailService.sendNotificaitionAsync(user);
+
+            String appUrl =  ucBuilder.toUriString();
+            System.out.println(appUrl);
+            OnRegistrationSuccessEvent event = new OnRegistrationSuccessEvent(user,appUrl);
+            emailService.sendNotificaitionAsync(user,event);
         }catch( Exception e ){
-            logger.info("Greska prilikom slanja emaila za aktivaciju: " + e.getMessage());
+            logger.info("Sending activation link to user email error: " + e.getMessage());
         }
+
+     //   user.setSurname("registracija");
+        //User notification should be moved to admin
+
         //HttpHeaders headers = new HttpHeaders();
         //headers.setLocation(ucBuilder.path("/api/user/{userId}").buildAndExpand(user.getId()).toUri());
         return new ResponseEntity<User>(user, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/confirmRegistration", method = RequestMethod.GET)
+    public String confirmRegistration
+            (WebRequest request, Model model, @RequestParam("token") String token) {
+
+        System.out.println("registration confirm started");
+
+        VerificationToken verificationToken = userService.getVerificationToken(token);
+        if (verificationToken == null) {
+            String message = "NULL verification tonen";
+            model.addAttribute("message", message);
+            return "redirect:/badUser.html";
+        }
+
+        User user = verificationToken.getUser();
+
+        Calendar cal = Calendar.getInstance();
+        if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
+            String messageValue ="Token expired";
+            model.addAttribute("message", messageValue);
+            return "redirect:/badUser.html";
+        }
+
+        user.setEnabled(true);
+        userService.enableRegisteredUser(user);
+        return null;
     }
 }
