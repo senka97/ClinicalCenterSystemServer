@@ -1,7 +1,8 @@
 package team57.project.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 import team57.project.dto.UserRequest;
 import team57.project.dto.UserTokenState;
@@ -28,13 +28,9 @@ import team57.project.service.EmailService;
 import team57.project.service.UserService;
 import team57.project.service.impl.CustomUserDetailsService;
 
-
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Calendar;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -89,7 +85,7 @@ public class AuthenticationController {
 
 
         User user = this.userService.save(userRequest);
-
+        //Sending email to all new users
         try {
 
             String appUrl =  ucBuilder.toUriString();
@@ -99,37 +95,25 @@ public class AuthenticationController {
         }catch( Exception e ){
             logger.info("Sending activation link to user email error: " + e.getMessage());
         }
-
-     //   user.setSurname("registracija");
-        //User notification should be moved to admin
-
-        //HttpHeaders headers = new HttpHeaders();
-        //headers.setLocation(ucBuilder.path("/api/user/{userId}").buildAndExpand(user.getId()).toUri());
         return new ResponseEntity<User>(user, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/confirmRegistration", method = RequestMethod.GET)
     public String confirmRegistration
             (WebRequest request, Model model, @RequestParam("token") String token) {
-
-        System.out.println("registration confirm started");
-
         VerificationToken verificationToken = userService.getVerificationToken(token);
         if (verificationToken == null) {
-            String message = "NULL verification tonen";
+            String message = "Missing verification token";
             model.addAttribute("message", message);
-            return "redirect:/badUser.html";
+            return "redirect:/MissingToken.html";
         }
-
         User user = verificationToken.getUser();
-
         Calendar cal = Calendar.getInstance();
         if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
             String messageValue ="Token expired";
             model.addAttribute("message", messageValue);
-            return "redirect:/badUser.html";
+            return "redirect:/ExpiredToken.html";
         }
-
         user.setEnabled(true);
         userService.enableRegisteredUser(user);
         return null;
