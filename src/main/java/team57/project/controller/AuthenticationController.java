@@ -20,6 +20,7 @@ import team57.project.dto.UserRequest;
 import team57.project.dto.UserTokenState;
 import team57.project.event.OnRegistrationSuccessEvent;
 import team57.project.exception.ResourceConflictException;
+import team57.project.model.Authority;
 import team57.project.model.User;
 import team57.project.model.VerificationToken;
 import team57.project.security.TokenUtils;
@@ -63,14 +64,11 @@ public class AuthenticationController {
                 .authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),
                         authenticationRequest.getPassword()));
 
-        // Ubaci email + password u kontext
-        SecurityContextHolder.getContext().setAuthentication(authentication);// ako su ispravni, korisnika treba da upisemo u security context holder
-        //odnosno da nasa aplikacija bude svesna da je korisnik ulogovan
-        // Kreiraj token
-        User user = (User) authentication.getPrincipal();
-        String jwt = tokenUtils.generateToken(user.getEmail()); //kreiranje tokena je odredjeno u ovoj tokenUtils klasi, koju smo mi napisali
-        int expiresIn = tokenUtils.getExpiredIn(); //koja ima funkcije za generisanje i validiranje jwt tokena
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        User user = (User) authentication.getPrincipal();
+        String jwt = tokenUtils.generateToken(user.getEmail());
+        int expiresIn = tokenUtils.getExpiredIn();
 
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn)); //kroz ovaj dto objekat se salje token na klijent
     }

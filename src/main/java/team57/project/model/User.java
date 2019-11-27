@@ -136,8 +136,8 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return null;
-    }
+        return email;
+    } //ovo je potrebno jer bez ovoga ne radi dobavljanje usera
 
     public String getName() {
         return name;
