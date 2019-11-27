@@ -9,8 +9,9 @@ import javax.persistence.*;
 
 @Entity
 @DiscriminatorValue("CLINIC_ADMIN")
+@Getter
 public class ClinicAdmin extends User{
-    
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Clinic clinic;
@@ -20,8 +21,6 @@ public class ClinicAdmin extends User{
         this.clinic = clinic;
     }
 
-    public ClinicAdmin()
-    {
 
     }
 
@@ -32,4 +31,5 @@ public class ClinicAdmin extends User{
     public void setClinic(Clinic clinic) {
         this.clinic = clinic;
     }
+
 }

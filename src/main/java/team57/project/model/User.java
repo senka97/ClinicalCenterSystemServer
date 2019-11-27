@@ -48,7 +48,7 @@ public class User implements UserDetails {
     private String serialNumber;
 
     @Column(name = "enabled")
-    private boolean enabled;
+    private boolean enabled = false;
 
     @Column(name = "last_password_reset_date")
     private Timestamp lastPasswordResetDate;
@@ -58,6 +58,8 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
     private List<Authority> authorities;
+
+
 
     //getters and setters
 
@@ -134,8 +136,8 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return null;
-    }
+        return email;
+    } //ovo je potrebno jer bez ovoga ne radi dobavljanje usera
 
     public String getName() {
         return name;

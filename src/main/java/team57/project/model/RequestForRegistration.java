@@ -25,4 +25,5 @@ public class RequestForRegistration {
     private String phoneNumber;
     @Column(name = "serialNumber", nullable = false)
     private String serialNumber;
+
 }

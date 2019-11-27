@@ -12,6 +12,7 @@ insert into user (name, surname, email, password, address, city, country, phone_
 insert into user (name, surname, email, password, address, city, country, phone_number, serial_number, number_of_reviews, rating, activated_account, enabled, last_password_reset_date, type) values ('Petar', 'Petrovic', 'petar@gmail.com','$2a$10$.4TlEcGSbL2ibKLkKMBqo.otZTShm8UqMjkpOK3Lpl42y3BH0m56q','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',0,0,TRUE,TRUE,'2019-11-19 04:00:00','DOCTOR');
 insert into user (name, surname, email, password, address, city, country, phone_number, serial_number,number_of_reviews, rating, activated_account, enabled, last_password_reset_date, type) values ('Mira', 'Miric', 'mira@gmail.com','$2a$10$KE8DhbZ9044d9fMIDIJopOc70vGQpjGzKjIRWrVlCDiyoSxJGEJ2G','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',-1,-1,TRUE,TRUE,'2019-11-19 04:00:00','NURSE');
 insert into user (name, surname, email, password, address, city, country, phone_number, serial_number,number_of_reviews, rating, activated_account, enabled, last_password_reset_date, type) values ('Pera', 'Peric', 'pera@gmail.com','$2a$10$ys.u36Wk7e/9y.dkUb0svOD5I.vaFRtdDwaXQlR5K/O42EYrlWGq6','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',-1,-1,TRUE,TRUE,'2019-11-19 04:00:00','PATIENT');
+
 insert into user_authority(user_id, authority_id) value (1,1);
 insert into user_authority(user_id, authority_id) value (2,2);
 insert into user_authority(user_id, authority_id) value (3,4);
