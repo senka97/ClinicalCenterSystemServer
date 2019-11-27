@@ -10,10 +10,7 @@ import javax.persistence.*;
 @Entity
 @DiscriminatorValue("CLINIC_ADMIN")
 public class ClinicAdmin extends User{
-
-    public ClinicAdmin() {
-        super();
-    }
+    
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Clinic clinic;
@@ -26,5 +23,13 @@ public class ClinicAdmin extends User{
     public ClinicAdmin()
     {
 
+    }
+
+    public Clinic getClinic() {
+        return this.clinic;
+    }
+
+    public void setClinic(Clinic clinic) {
+        this.clinic = clinic;
     }
 }

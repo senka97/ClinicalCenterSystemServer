@@ -12,7 +12,7 @@ public class ClinicalCenterAdmin extends User{
     }
 
     public ClinicalCenterAdmin() {
-        super();
+
 
     }
 
