@@ -21,7 +21,7 @@ public class ClinicAdmin extends User{
         this.clinic = clinic;
     }
 
-
+    public ClinicAdmin() {
     }
 
     public Clinic getClinic() {
