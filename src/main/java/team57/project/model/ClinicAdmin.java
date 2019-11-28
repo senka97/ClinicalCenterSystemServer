@@ -12,9 +12,6 @@ import javax.persistence.*;
 @Getter
 public class ClinicAdmin extends User{
 
-    public ClinicAdmin() {
-        super();
-    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Clinic clinic;
@@ -24,6 +21,15 @@ public class ClinicAdmin extends User{
         this.clinic = clinic;
     }
 
+    public ClinicAdmin() {
+    }
 
+    public Clinic getClinic() {
+        return this.clinic;
+    }
+
+    public void setClinic(Clinic clinic) {
+        this.clinic = clinic;
+    }
 
 }
