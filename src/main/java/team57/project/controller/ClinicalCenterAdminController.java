@@ -40,29 +40,6 @@ public class ClinicalCenterAdminController {
     @Autowired
     private AuthorityService authService;
 
-    @PostMapping(value="/changeInformation", produces="application/json", consumes="application/json")
-    @PreAuthorize("hasRole('CLINICAL_CENTER_ADMIN')")
-    public ResponseEntity<ClinicalCenterAdminDTO> changeInformation(@RequestBody ClinicalCenterAdminDTO adminDTO)
-    {
-        System.out.println(adminDTO.getEmail()+ " " + adminDTO.getPassword());
-        ClinicalCenterAdmin admin= clinicalCenterAdminService.findByEmail(adminDTO.getEmail());
-        if (admin == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        admin.setName(adminDTO.getName());
-        admin.setSurname(adminDTO.getSurname());
-        //admin.setPassword(passwordEncoder.encode(adminDTO.getPassword()));
-        admin.setAddress(adminDTO.getAddress());
-        admin.setCity(adminDTO.getCity());
-        admin.setCountry(adminDTO.getCountry());
-        admin.setPhoneNumber(adminDTO.getPhoneNumber());
-
-        admin = clinicalCenterAdminService.saveClinicalCenterAdmin(admin);
-        return new ResponseEntity<>(new ClinicalCenterAdminDTO(admin), HttpStatus.OK);
-
-    }
-
     @PostMapping(value="/saveClinicAdmin/{id_clinic}", produces = "application/json", consumes = "application/json")
     @PreAuthorize("hasRole('CLINICAL_CENTER_ADMIN')")
     public ResponseEntity<ClinicAdminDTO> saveClinicAdmin(@RequestBody UserDTO userDTO, @PathVariable Long id_clinic) {

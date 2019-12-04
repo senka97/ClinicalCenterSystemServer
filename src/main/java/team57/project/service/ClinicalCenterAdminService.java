@@ -21,9 +21,5 @@ public class ClinicalCenterAdminService {
     }
 
     public void remove(Long id) { clinicalCenterAdminRepository.deleteById(id); }
-
-    public ClinicalCenterAdmin findByEmail(String email)
-    {
-        return clinicalCenterAdminRepository.findByEmail(email);
-    }
+    
 }
