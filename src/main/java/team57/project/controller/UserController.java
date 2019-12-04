@@ -1,6 +1,7 @@
 package team57.project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,7 +18,7 @@ import team57.project.model.User;
 import team57.project.service.UserService;
 import team57.project.service.impl.CustomUserDetailsService;
 
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @RestController
 @Controller
@@ -39,28 +40,32 @@ public class UserController {
         return this.userService.findByEmail(email);
     }
 
-    @RequestMapping(method = POST, value = "/editPatient")
-    public ResponseEntity<?> addUser(@RequestBody UserRequest userRequest, UriComponentsBuilder ucBuilder) {
+    @RequestMapping(value = "/editUser", method = PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_PATIENT') or hasRole('ROLE_DOCTOR') or hasRole('ROLE_CLINIC_ADMIN') or hasRole('ROLE_CLINICAL_CENTER_ADMIN') or hasRole('ROLE_NURSE')")
+    public ResponseEntity<?> editUser(@RequestBody UserRequest userRequest, UriComponentsBuilder ucBuilder) {
 
-        User existUser = this.userService.findByEmail(userRequest.getEmail());
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+        String email = currentUser.getName();
+        User existUser = this.userService.findByEmail(email);
         if (existUser == null) {
             throw new ResourceConflictException(userRequest.getId(), "Missing user");
         }
-
-
         this.userService.updateUser(userRequest, existUser);
-        return null;
+        return new ResponseEntity<User>(existUser, HttpStatus.OK);
     }
 
-    @RequestMapping(method = POST, value = "/changePassword")
+    @RequestMapping(value = "/changePassword", method = PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_PATIENT') or hasRole('ROLE_DOCTOR') or hasRole('ROLE_CLINIC_ADMIN') or hasRole('ROLE_CLINICAL_CENTER_ADMIN') or hasRole('ROLE_NURSE')")
     public ResponseEntity<?> changeUserPassword(@RequestBody UserRequest userRequest, UriComponentsBuilder ucBuilder) {
 
-        User existUser = this.userService.findByEmail(userRequest.getEmail());
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+        String email = currentUser.getName();
+        User existUser = this.userService.findByEmail(email);
         if (existUser == null) {
             throw new ResourceConflictException(userRequest.getId(), "Missing user");
         }
         this.customService.changePassword(existUser.getPassword(), userRequest.getPassword());
-        return null;
+        return new ResponseEntity<User>(existUser, HttpStatus.OK);
     }
 
 
