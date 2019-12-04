@@ -93,4 +93,17 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Override
+    public void updateUser(UserRequest userRequest, User existUser) {
+        existUser.setName(userRequest.getName());
+        existUser.setSurname(userRequest.getSurname());
+        existUser.setPhoneNumber(userRequest.getPhoneNumber());
+        existUser.setCountry(userRequest.getCountry());
+        existUser.setCity(userRequest.getCity());
+        existUser.setAddress(userRequest.getAddress());
+        userRepository.save(existUser);
+
+
+    }
+
 }
