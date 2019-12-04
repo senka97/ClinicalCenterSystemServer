@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -116,4 +117,18 @@ public class AuthenticationController {
         userService.enableRegisteredUser(user);
         return null;
     }
+
+    @RequestMapping(value = "/changePassword", method = RequestMethod.PUT)
+    @PreAuthorize("hasRole('ROLE_PATIENT') or hasRole('ROLE_DOCTOR') or hasRole('ROLE_CLINIC_ADMIN') or hasRole('ROLE_CLINICAL_CENTER_ADMIN') or hasRole('ROLE_NURSE')")
+    public ResponseEntity<?> changePassword(@RequestBody PasswordChanger passwordChanger) {
+        userDetailsService.changePassword(passwordChanger.oldPassword, passwordChanger.newPassword);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    static class PasswordChanger {
+        public String oldPassword;
+        public String newPassword;
+    }
+
+
 }

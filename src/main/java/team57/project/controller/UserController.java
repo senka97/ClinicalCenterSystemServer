@@ -54,19 +54,5 @@ public class UserController {
         return new ResponseEntity<User>(existUser, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/changePassword", method = PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('ROLE_PATIENT') or hasRole('ROLE_DOCTOR') or hasRole('ROLE_CLINIC_ADMIN') or hasRole('ROLE_CLINICAL_CENTER_ADMIN') or hasRole('ROLE_NURSE')")
-    public ResponseEntity<?> changeUserPassword(@RequestBody UserRequest userRequest, UriComponentsBuilder ucBuilder) {
-
-        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-        String email = currentUser.getName();
-        User existUser = this.userService.findByEmail(email);
-        if (existUser == null) {
-            throw new ResourceConflictException(userRequest.getId(), "Missing user");
-        }
-        this.customService.changePassword(existUser.getPassword(), userRequest.getPassword());
-        return new ResponseEntity<User>(existUser, HttpStatus.OK);
-    }
-
 
 }
