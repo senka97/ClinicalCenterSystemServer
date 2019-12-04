@@ -5,4 +5,6 @@ import team57.project.model.ClinicalCenterAdmin;
 
 public interface ClinicalCenterAdminRepository extends JpaRepository<ClinicalCenterAdmin, Long> {
 
+    ClinicalCenterAdmin findByEmail(String email);
+
 }
