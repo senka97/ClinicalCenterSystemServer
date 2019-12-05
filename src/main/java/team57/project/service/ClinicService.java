@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import team57.project.model.Clinic;
 import team57.project.repository.ClinicRepository;
 
+import java.util.List;
+
 @Service
 public class ClinicService {
 
@@ -14,4 +16,6 @@ public class ClinicService {
     public Clinic findOne(Long id) {
         return clinicRepository.findById(id).orElseGet(null);
     }
+
+    public List<Clinic> findAll() { return clinicRepository.findAll(); }
 }

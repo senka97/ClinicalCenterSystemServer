@@ -11,7 +11,8 @@ public class ClinicalCenterAdminService {
     @Autowired
     private ClinicalCenterAdminRepository clinicalCenterAdminRepository;
 
-    public ClinicalCenterAdmin saveClinicalCenterAdmin(ClinicalCenterAdmin clinicalCenterAdmin) {
+    public ClinicalCenterAdmin saveClinicalCenterAdmin(ClinicalCenterAdmin clinicalCenterAdmin)
+    {
         return clinicalCenterAdminRepository.save(clinicalCenterAdmin);
     }
 
@@ -20,4 +21,5 @@ public class ClinicalCenterAdminService {
     }
 
     public void remove(Long id) { clinicalCenterAdminRepository.deleteById(id); }
+    
 }

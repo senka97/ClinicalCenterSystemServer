@@ -43,4 +43,52 @@ public class Clinic {
 
     public Clinic() {
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public long getNumberOfReviews() {
+        return numberOfReviews;
+    }
+
+    public void setNumberOfReviews(long numberOfReviews) {
+        this.numberOfReviews = numberOfReviews;
+    }
 }

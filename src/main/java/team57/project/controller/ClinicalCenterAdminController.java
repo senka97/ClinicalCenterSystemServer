@@ -9,14 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import team57.project.dto.ClinicAdminDTO;
 import team57.project.dto.ClinicalCenterAdminDTO;
 import team57.project.dto.UserDTO;
-import team57.project.model.Authority;
-import team57.project.model.Clinic;
-import team57.project.model.ClinicAdmin;
-import team57.project.model.ClinicalCenterAdmin;
-import team57.project.service.AuthorityService;
-import team57.project.service.ClinicAdminService;
-import team57.project.service.ClinicService;
-import team57.project.service.ClinicalCenterAdminService;
+import team57.project.exception.ResourceConflictException;
+import team57.project.model.*;
+import team57.project.service.*;
 
 import java.util.List;
 
@@ -40,56 +35,71 @@ public class ClinicalCenterAdminController {
     @Autowired
     private AuthorityService authService;
 
+    @Autowired
+    private UserService userService;
+
     @PostMapping(value="/saveClinicAdmin/{id_clinic}", produces = "application/json", consumes = "application/json")
     @PreAuthorize("hasRole('CLINICAL_CENTER_ADMIN')")
     public ResponseEntity<ClinicAdminDTO> saveClinicAdmin(@RequestBody UserDTO userDTO, @PathVariable Long id_clinic) {
 
-        Clinic c=clinicService.findOne(id_clinic);
-        ClinicAdmin clinicAdmin= new ClinicAdmin();
+        User existUser = this.userService.findByEmail(userDTO.getEmail());
+        if (existUser != null) {
+            throw new ResourceConflictException(userDTO.getId(), "This email already exists");
+        }
+        else
+        {
+            Clinic c=clinicService.findOne(id_clinic);
+            ClinicAdmin clinicAdmin= new ClinicAdmin();
 
-        clinicAdmin.setEmail(userDTO.getEmail());
-        clinicAdmin.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        clinicAdmin.setName(userDTO.getName());
-        clinicAdmin.setSurname(userDTO.getSurname());
-        clinicAdmin.setAddress(userDTO.getAddress());
-        clinicAdmin.setCity(userDTO.getCity());
-        clinicAdmin.setCountry(userDTO.getCountry());
-        clinicAdmin.setPhoneNumber(userDTO.getPhoneNumber());
-        clinicAdmin.setSerialNumber(userDTO.getSerialNumber());
-        clinicAdmin.setEnabled(true);
-        clinicAdmin.setClinic(c);
+            clinicAdmin.setEmail(userDTO.getEmail());
+            clinicAdmin.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            clinicAdmin.setName(userDTO.getName());
+            clinicAdmin.setSurname(userDTO.getSurname());
+            clinicAdmin.setAddress(userDTO.getAddress());
+            clinicAdmin.setCity(userDTO.getCity());
+            clinicAdmin.setCountry(userDTO.getCountry());
+            clinicAdmin.setPhoneNumber(userDTO.getPhoneNumber());
+            clinicAdmin.setSerialNumber(userDTO.getSerialNumber());
+            clinicAdmin.setEnabled(true);
+            clinicAdmin.setClinic(c);
 
-        List<Authority> auth = authService.findByname("ROLE_CLINIC_ADMIN");
-        clinicAdmin.setAuthorities(auth);
+            List<Authority> auth = authService.findByname("ROLE_CLINIC_ADMIN");
+            clinicAdmin.setAuthorities(auth);
 
-        clinicAdmin = clinicAdminService.saveClinicAdmin(clinicAdmin);
-        return new ResponseEntity<>(new ClinicAdminDTO(clinicAdmin), HttpStatus.CREATED);
-
+            clinicAdmin = clinicAdminService.saveClinicAdmin(clinicAdmin);
+            return new ResponseEntity<>(new ClinicAdminDTO(clinicAdmin), HttpStatus.CREATED);
+        }
     }
 
     @PostMapping(value="/saveClinicalCenterAdmin", produces = "application/json", consumes = "application/json")
     @PreAuthorize("hasRole('CLINICAL_CENTER_ADMIN')")
     public ResponseEntity<ClinicalCenterAdminDTO> saveClinicalCenterAdmin(@RequestBody UserDTO userDTO) {
 
-        ClinicalCenterAdmin clinicalCenterAdmin = new ClinicalCenterAdmin();
+        User existUser = this.userService.findByEmail(userDTO.getEmail());
+        if (existUser != null) {
+            throw new ResourceConflictException(userDTO.getId(), "This email already exists");
+        }
+        else
+        {
+            ClinicalCenterAdmin clinicalCenterAdmin = new ClinicalCenterAdmin();
 
-        clinicalCenterAdmin.setEmail(userDTO.getEmail());
-        clinicalCenterAdmin.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        clinicalCenterAdmin.setName(userDTO.getName());
-        clinicalCenterAdmin.setSurname(userDTO.getSurname());
-        clinicalCenterAdmin.setAddress(userDTO.getAddress());
-        clinicalCenterAdmin.setCity(userDTO.getCity());
-        clinicalCenterAdmin.setCountry(userDTO.getCountry());
-        clinicalCenterAdmin.setPhoneNumber(userDTO.getPhoneNumber());
-        clinicalCenterAdmin.setSerialNumber(userDTO.getSerialNumber());
-        clinicalCenterAdmin.setEnabled(true);
+            clinicalCenterAdmin.setEmail(userDTO.getEmail());
+            clinicalCenterAdmin.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            clinicalCenterAdmin.setName(userDTO.getName());
+            clinicalCenterAdmin.setSurname(userDTO.getSurname());
+            clinicalCenterAdmin.setAddress(userDTO.getAddress());
+            clinicalCenterAdmin.setCity(userDTO.getCity());
+            clinicalCenterAdmin.setCountry(userDTO.getCountry());
+            clinicalCenterAdmin.setPhoneNumber(userDTO.getPhoneNumber());
+            clinicalCenterAdmin.setSerialNumber(userDTO.getSerialNumber());
+            clinicalCenterAdmin.setEnabled(true);
 
-        List<Authority> auth = authService.findByname("ROLE_CLINICAL_CENTER_ADMIN");
-        clinicalCenterAdmin.setAuthorities(auth);
+            List<Authority> auth = authService.findByname("ROLE_CLINICAL_CENTER_ADMIN");
+            clinicalCenterAdmin.setAuthorities(auth);
 
-        clinicalCenterAdmin = clinicalCenterAdminService.saveClinicalCenterAdmin(clinicalCenterAdmin);
-        return new ResponseEntity<>(new ClinicalCenterAdminDTO(clinicalCenterAdmin), HttpStatus.CREATED);
-
+            clinicalCenterAdmin = clinicalCenterAdminService.saveClinicalCenterAdmin(clinicalCenterAdmin);
+            return new ResponseEntity<>(new ClinicalCenterAdminDTO(clinicalCenterAdmin), HttpStatus.CREATED);
+        }
     }
 
     @DeleteMapping(value = "deleteClinicAdmin/{id}")
