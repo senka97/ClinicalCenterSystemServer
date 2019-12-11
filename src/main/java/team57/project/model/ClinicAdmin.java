@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class ClinicAdmin extends User{
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Clinic clinic;
 
     public ClinicAdmin(String name, String surname, String email, String password, String address, String city, String country, String phoneNumber, String serialNumber, Clinic clinic) {

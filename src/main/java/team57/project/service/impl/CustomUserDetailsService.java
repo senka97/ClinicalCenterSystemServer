@@ -51,6 +51,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = (User) loadUserByUsername(email);
 
         user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPasswordChanged(true);
         userRepository.save(user);
 
     }
