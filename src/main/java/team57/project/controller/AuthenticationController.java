@@ -85,7 +85,7 @@ public class AuthenticationController {
 
         User user = this.userService.save(userRequest);
         //Sending email to all new users
-        try {
+       /* try {
 
             String appUrl =  ucBuilder.toUriString();
             System.out.println(appUrl);
@@ -93,7 +93,7 @@ public class AuthenticationController {
             emailService.sendNotificaitionAsync(user,event);
         }catch( Exception e ){
             logger.info("Sending activation link to user email error: " + e.getMessage());
-        }
+        }*/
         return new ResponseEntity<User>(user, HttpStatus.CREATED);
     }
 

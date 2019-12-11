@@ -24,5 +24,7 @@ public class PatientServiceImpl implements PatientService {
         return patientRepostiory.findById(id).orElse(null);
     }
 
+    @Override
+    public Patient save(Patient p) {return patientRepostiory.save(p); }
 
 }
