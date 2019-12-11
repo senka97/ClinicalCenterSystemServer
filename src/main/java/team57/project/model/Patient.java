@@ -9,8 +9,8 @@ public class Patient extends User {
     public Patient(){
         super();
     }
-    @Column(name = "activatedAccount", nullable = false, columnDefinition = "boolean default 1")
-    private boolean activatedAccount;
+    @Column(name = "activatedAccount", nullable = false)
+    private String activatedAccount; //ACCEPTED, REJECTED, UNRESOLVED
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="medicalRecord_id")
     private MedicalRecord medicalRecord;
@@ -21,5 +21,13 @@ public class Patient extends User {
 
     public Patient(String name, String surname, String email, String password, String address, String city, String country, String phoneNumber, String serialNumber) {
         super(name, surname, email, password, address, city, country, phoneNumber, serialNumber);
+    }
+
+    public String getActivatedAccount() {
+        return activatedAccount;
+    }
+
+    public void setActivatedAccount(String activatedAccount) {
+        this.activatedAccount = activatedAccount;
     }
 }
