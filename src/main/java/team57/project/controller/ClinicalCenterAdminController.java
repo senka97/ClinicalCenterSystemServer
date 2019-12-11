@@ -1,19 +1,27 @@
 package team57.project.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 import team57.project.dto.ClinicAdminDTO;
 import team57.project.dto.ClinicalCenterAdminDTO;
 import team57.project.dto.UserDTO;
+import team57.project.event.OnRegistrationSuccessEvent;
 import team57.project.exception.ResourceConflictException;
 import team57.project.model.*;
 import team57.project.service.*;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
 @RequestMapping(value = "api/clinicalCenterAdmin")
@@ -27,6 +35,9 @@ public class ClinicalCenterAdminController {
     private ClinicAdminService clinicAdminService;
 
     @Autowired
+    private PatientService patientService;
+
+    @Autowired
     private ClinicService clinicService;
 
     @Autowired
@@ -37,6 +48,10 @@ public class ClinicalCenterAdminController {
 
     @Autowired
     private UserService userService;
+
+    private Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
+    @Autowired
+    private EmailService emailService;
 
     @PostMapping(value="/saveClinicAdmin/{id_clinic}", produces = "application/json", consumes = "application/json")
     @PreAuthorize("hasRole('CLINICAL_CENTER_ADMIN')")
@@ -128,5 +143,69 @@ public class ClinicalCenterAdminController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @RequestMapping(value="/getNewRequests", method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_CLINICAL_CENTER_ADMIN')")
+    public ResponseEntity<?> getNewRequests()
+    {
+        List<User> users = clinicalCenterAdminService.findNewRequests("UNRESOLVED");
+
+        List<UserDTO> usersDTO = new ArrayList<>();
+        for(User u : users)
+        {
+            usersDTO.add(new UserDTO(u));
+        }
+
+        return new ResponseEntity<>(usersDTO, HttpStatus.OK);
+    }
+
+    @PutMapping(value="/acceptRequest/{id}", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_CLINICAL_CENTER_ADMIN')")
+    public ResponseEntity<?> acceptRequest(@PathVariable Long id, UriComponentsBuilder ucBuilder)
+    {
+
+        Patient p = patientService.findOne(id);
+        if(p!=null)
+        {
+            p.setActivatedAccount("ACCEPTED");
+            p = patientService.save(p);
+            try {
+
+                String appUrl =  ucBuilder.toUriString();
+                System.out.println(appUrl);
+                OnRegistrationSuccessEvent event = new OnRegistrationSuccessEvent(p,appUrl);
+                emailService.sendNotificaitionAsync(p,event);
+            }catch( Exception e ){
+                logger.info("Sending activation link to user email error: " + e.getMessage());
+            }
+            return new ResponseEntity<>( HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND);
+    }
+
+    @PutMapping(value="/rejectRequest/{id}", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_CLINICAL_CENTER_ADMIN')")
+    public ResponseEntity<?> rejectRequest(@PathVariable Long id, UriComponentsBuilder ucBuilder)
+    {
+
+        Patient p = patientService.findOne(id);
+        if(p!=null){
+            p.setActivatedAccount("REJECTED");
+            p = patientService.save(p);
+            try {
+
+                String appUrl =  ucBuilder.toUriString();
+                System.out.println(appUrl);
+                OnRegistrationSuccessEvent event = new OnRegistrationSuccessEvent(p,appUrl);
+                emailService.sendMessageAsync(p,event);
+            }catch( Exception e ){
+                logger.info("Sending activation link to user email error: " + e.getMessage());
+            }
+            return new ResponseEntity<>( HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND);
     }
 }
