@@ -2,6 +2,7 @@ package team57.project.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import team57.project.dto.ClinicDTO;
 import team57.project.model.Clinic;
 import team57.project.repository.ClinicRepository;
 
@@ -18,4 +19,11 @@ public class ClinicService {
     }
 
     public List<Clinic> findAll() { return clinicRepository.findAll(); }
+
+    public void updateClinic(Clinic existClinic, ClinicDTO clinicDTO){
+        existClinic.setName(clinicDTO.getName());
+        existClinic.setDescription(clinicDTO.getDescription());
+        existClinic.setAddress(clinicDTO.getAddress());
+        clinicRepository.save(existClinic);
+    }
 }
