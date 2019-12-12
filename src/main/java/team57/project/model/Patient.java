@@ -9,7 +9,7 @@ public class Patient extends User {
     public Patient(){
         super();
     }
-    @Column(name = "activatedAccount", nullable = false)
+    @Column(name = "activatedAccount", nullable = true)
     private String activatedAccount; //ACCEPTED, REJECTED, UNRESOLVED
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="medicalRecord_id")
