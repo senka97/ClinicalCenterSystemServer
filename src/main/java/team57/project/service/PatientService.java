@@ -10,4 +10,7 @@ public interface PatientService {
     List<Patient> findAll();
     Patient findOne(Long id);
     MedicalRecord findPatientMedicalRecord(Long id);
+
+    Patient save(Patient p);
+
 }

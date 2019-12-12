@@ -3,7 +3,10 @@ package team57.project.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team57.project.model.ClinicalCenterAdmin;
+import team57.project.model.User;
 import team57.project.repository.ClinicalCenterAdminRepository;
+
+import java.util.List;
 
 @Service
 public class ClinicalCenterAdminService {
@@ -21,5 +24,9 @@ public class ClinicalCenterAdminService {
     }
 
     public void remove(Long id) { clinicalCenterAdminRepository.deleteById(id); }
-    
+
+    public List<User> findNewRequests(String f)
+    {
+        return clinicalCenterAdminRepository.findNewRequests(f);
+    }
 }

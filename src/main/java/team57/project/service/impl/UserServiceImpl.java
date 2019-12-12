@@ -15,6 +15,7 @@ import team57.project.repository.VerificationTokenRepository;
 import team57.project.service.AuthorityService;
 import team57.project.service.UserService;
 
+import javax.crypto.BadPaddingException;
 import java.util.List;
 
 @Service
@@ -62,6 +63,7 @@ public class UserServiceImpl implements UserService {
         p.setPhoneNumber(userRequest.getPhoneNumber());
         p.setSerialNumber(userRequest.getSerialNumber());
         p.setEnabled(false);
+        p.setActivatedAccount("UNRESOLVED"); //zbog slanja zahteva za registraciju
         List<Authority> auth = authService.findByname("ROLE_PATIENT");
         p.setAuthorities(auth);
 
@@ -105,5 +107,6 @@ public class UserServiceImpl implements UserService {
 
 
     }
+
 
 }

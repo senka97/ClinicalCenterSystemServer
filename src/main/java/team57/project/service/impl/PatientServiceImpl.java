@@ -28,6 +28,9 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    public Patient save(Patient p) {return patientRepostiory.save(p); }
+
+    @Override
     public MedicalRecord findPatientMedicalRecord(Long id) {
         Patient p = patientRepostiory.findById(id).orElse(null);
         Long medicalRecordId = p.getMedicalRecord().getId();

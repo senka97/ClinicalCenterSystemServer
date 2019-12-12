@@ -59,7 +59,8 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
     private List<Authority> authorities;
 
-
+    @Column(name = "passwordChanged")
+    private boolean passwordChanged = false;
 
     //getters and setters
 
@@ -193,6 +194,14 @@ public class User implements UserDetails {
 
     public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
+    }
+
+    public boolean isPasswordChanged() {
+        return passwordChanged;
+    }
+
+    public void setPasswordChanged(boolean passwordChanged) {
+        this.passwordChanged = passwordChanged;
     }
 
     public User(){
