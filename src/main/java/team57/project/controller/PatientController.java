@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import team57.project.model.MedicalRecord;
 import team57.project.model.Patient;
 import team57.project.model.User;
 import team57.project.service.PatientService;
@@ -37,4 +38,11 @@ public class PatientController {
 
         return this.patientService.findOne(id);
     }
+    @RequestMapping(value = "/patientMedicalRecord/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_DOCTOR') or hasRole('ROLE_PATIENT')")
+    public MedicalRecord getPatientMedicalRecord(@PathVariable("id") Long id) {
+
+        return this.patientService.findPatientMedicalRecord(id);
+    }
+
 }

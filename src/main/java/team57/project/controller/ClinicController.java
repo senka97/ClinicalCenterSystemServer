@@ -24,7 +24,7 @@ public class ClinicController {
     private ClinicService clinicService;
 
     @GetMapping(value="/getClinics", produces="application/json")
-    @PreAuthorize("hasRole('CLINICAL_CENTER_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_PATIENT') or hasRole('CLINICAL_CENTER_ADMIN')")
     public ResponseEntity<List<ClinicDTO>> getClinics()
     {
         List<Clinic> clinics = clinicService.findAll();
