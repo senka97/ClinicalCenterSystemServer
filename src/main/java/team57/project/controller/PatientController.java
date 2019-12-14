@@ -24,7 +24,7 @@ public class PatientController {
     private PatientService patientService;
 
     @RequestMapping(value = "/allSorted", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('ROLE_DOCTOR')")
+    @PreAuthorize("hasRole('ROLE_DOCTOR') or hasRole('ROLE_NURSE')")
     public List<Patient> getAllPatients() {
 
         List<Patient> sortedPatients = this.patientService.findAll();
@@ -33,7 +33,7 @@ public class PatientController {
     }
 
     @RequestMapping(value = "/patient/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('ROLE_DOCTOR')")
+    @PreAuthorize("hasRole('ROLE_DOCTOR') or hasRole('ROLE_NURSE')")
     public Patient getPatient(@PathVariable("id") Long id) {
 
         return this.patientService.findOne(id);
