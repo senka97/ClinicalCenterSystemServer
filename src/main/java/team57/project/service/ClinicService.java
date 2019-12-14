@@ -26,4 +26,10 @@ public class ClinicService {
         existClinic.setAddress(clinicDTO.getAddress());
         clinicRepository.save(existClinic);
     }
+
+    public Clinic findByName(String name) {return clinicRepository.findByName(name);}
+
+    public  Clinic saveClinic(Clinic clinic){
+        return clinicRepository.save(clinic);
+    }
 }
