@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import team57.project.dto.ClinicAdminDTO;
+import team57.project.dto.ClinicDTO;
 import team57.project.dto.ClinicalCenterAdminDTO;
 import team57.project.dto.UserDTO;
 import team57.project.event.OnRegistrationSuccessEvent;
@@ -117,32 +118,22 @@ public class ClinicalCenterAdminController {
         }
     }
 
-    @DeleteMapping(value = "deleteClinicAdmin/{id}")
-    @PreAuthorize("hasRole('CLINICAL_CENTER_ADMIN')")
-    public ResponseEntity<Void> deleteClinicAdmin(@PathVariable Long id) {
+    @PostMapping(value="/saveClinic", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_CLINICAL_CENTER_ADMIN')")
+    public ResponseEntity<?> saveClinic(@RequestBody ClinicDTO clinic) {
+        Clinic existClinic = this.clinicService.findByName(clinic.getName());
+        if (existClinic == null)
+        {
+            Clinic newClinic = new Clinic();
+            newClinic.setName(clinic.getName());
+            newClinic.setAddress(clinic.getAddress());
+            newClinic.setDescription(clinic.getDescription());
 
-        ClinicAdmin clinicAdmin = clinicAdminService.findOne(id);
-
-        if (clinicAdmin != null) {
-            clinicAdminService.remove(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            newClinic = clinicService.saveClinic(newClinic);
+            return new ResponseEntity<>(new ClinicDTO(newClinic), HttpStatus.CREATED);
         }
-    }
+        else return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
 
-    @DeleteMapping(value = "deleteClinicalCenterAdmin/{id}")
-    @PreAuthorize("hasRole('CLINICAL_CENTER_ADMIN')")
-    public ResponseEntity<Void> deleteClinicalCenterAdmin(@PathVariable Long id) {
-
-        ClinicalCenterAdmin clinicalCenterAdmin = clinicalCenterAdminService.findOne(id);
-
-        if (clinicalCenterAdmin != null) {
-            clinicalCenterAdminService.remove(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
     }
 
     @RequestMapping(value="/getNewRequests", method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -208,4 +199,32 @@ public class ClinicalCenterAdminController {
         else
             return new ResponseEntity<>( HttpStatus.NOT_FOUND);
     }
+
+   /* @DeleteMapping(value = "deleteClinicAdmin/{id}")
+    @PreAuthorize("hasRole('CLINICAL_CENTER_ADMIN')")
+    public ResponseEntity<Void> deleteClinicAdmin(@PathVariable Long id) {
+
+        ClinicAdmin clinicAdmin = clinicAdminService.findOne(id);
+
+        if (clinicAdmin != null) {
+            clinicAdminService.remove(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping(value = "deleteClinicalCenterAdmin/{id}")
+    @PreAuthorize("hasRole('CLINICAL_CENTER_ADMIN')")
+    public ResponseEntity<Void> deleteClinicalCenterAdmin(@PathVariable Long id) {
+
+        ClinicalCenterAdmin clinicalCenterAdmin = clinicalCenterAdminService.findOne(id);
+
+        if (clinicalCenterAdmin != null) {
+            clinicalCenterAdminService.remove(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }*/
 }
