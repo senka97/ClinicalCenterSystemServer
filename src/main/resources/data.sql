@@ -26,8 +26,9 @@ insert into user_authority(user_id, authority_id) value (5,3);
 
 
 insert into exam_type (name, description, price,discount) values ('CT snimanje glave', 'Snimanje glave',10000,10);
-insert into room (name, number,room_type,occupied,clinic_id) value ('soba 1',1,'1',FALSE,1);
+insert into room (name, number,room_type,occupied) value ('Room 1',1,'Medical exam',FALSE);
 insert into medical_exam (date, start_time, end_time,reserved,doctor_id,exam_room_id,exam_type_id,patient_id) values ('2018-07-31', '1:05:04','4:34:12',FALSE,3,1,1,5);
+insert into clinic_rooms (clinic_id, rooms_id) value (1,1);
 
 insert into prescription (verified,nurse_id) value (FALSE,4);
 insert into medical_report (description,date,time,doctor_id,prescription_id) value ('Ceste migrene.','2019-04-07','12:45:00',3,1);
