@@ -46,14 +46,14 @@ public class EmailService {
     }
 
     @Async
-    public void sendMessageAsync(User user, OnRegistrationSuccessEvent event) throws MailException, InterruptedException, MessagingException {
+    public void sendMessageAsync(String message,User user, OnRegistrationSuccessEvent event) throws MailException, InterruptedException, MessagingException {
         String token = UUID.randomUUID().toString();
         userService.createVerificationToken(user, token);
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
-        String htmlMsg = "Hello, \n " + user.getName() + ",\n\n We are sorry to inform you that your registration has been rejected due to our strict policy. " ;
-        helper.setText(htmlMsg, true); // Use this or above line.
+        //String htmlMsg = "Hello, \n " + user.getName() + ",\n\n We are sorry to inform you that your registration has been rejected due to our strict policy. " ;
+        helper.setText(message, true); // Use this or above line.
         helper.setTo(user.getEmail());
         helper.setSubject("Clinical Center System account activation.");
         helper.setFrom(env.getProperty("spring.mail.username"));
