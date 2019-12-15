@@ -178,7 +178,7 @@ public class ClinicalCenterAdminController {
 
     @PutMapping(value="/rejectRequest/{id}", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ROLE_CLINICAL_CENTER_ADMIN')")
-    public ResponseEntity<?> rejectRequest(@PathVariable Long id, UriComponentsBuilder ucBuilder)
+    public ResponseEntity<?> rejectRequest(@PathVariable Long id,@RequestBody String message ,UriComponentsBuilder ucBuilder)
     {
 
         Patient p = patientService.findOne(id);
@@ -190,7 +190,7 @@ public class ClinicalCenterAdminController {
                 String appUrl =  ucBuilder.toUriString();
                 System.out.println(appUrl);
                 OnRegistrationSuccessEvent event = new OnRegistrationSuccessEvent(p,appUrl);
-                emailService.sendMessageAsync(p,event);
+                emailService.sendMessageAsync(message,p,event);
             }catch( Exception e ){
                 logger.info("Sending activation link to user email error: " + e.getMessage());
             }
