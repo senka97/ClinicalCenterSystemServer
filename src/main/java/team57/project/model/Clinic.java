@@ -31,7 +31,7 @@ public class Clinic {
     private Set<Doctor> doctors;
     @OneToMany(mappedBy = "clinic",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Nurse> nurses;
-    @OneToMany(mappedBy = "clinic",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Room> rooms;
     @ManyToMany
     @JoinTable(name = "clinics_surgeryTypes", joinColumns = @JoinColumn(name = "clinic_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "surgeryType_id", referencedColumnName = "id"))
@@ -90,5 +90,13 @@ public class Clinic {
 
     public void setNumberOfReviews(long numberOfReviews) {
         this.numberOfReviews = numberOfReviews;
+    }
+
+    public Set<Room> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(Set<Room> rooms) {
+        this.rooms = rooms;
     }
 }
