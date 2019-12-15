@@ -36,10 +36,17 @@ public class ClinicService {
         return clinic.getRooms();
     }
 
-    public void addNewRoom(Clinic clinic, RoomDTO roomDTO){
+    public void addNewRoom(Clinic clinic, RoomDTO roomDTO) {
 
-         Room room = new Room(roomDTO.getName(), roomDTO.getNumber(), roomDTO.getRoomType(),false);
-         clinic.getRooms().add(room);
-         clinicRepository.save(clinic);
+        Room room = new Room(roomDTO.getName(), roomDTO.getNumber(), roomDTO.getRoomType(), false);
+        clinic.getRooms().add(room);
+        clinicRepository.save(clinic);
+    }
+
+    public Clinic findByName(String name) {return clinicRepository.findByName(name);}
+
+    public  Clinic saveClinic(Clinic clinic){
+        return clinicRepository.save(clinic);
+
     }
 }
