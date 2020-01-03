@@ -1,25 +1,28 @@
-package team57.project.model;
+package team57.project.dto;
 
-import javax.persistence.*;
 
-@Entity
-public class Diagnose {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+import team57.project.model.Diagnose;
+
+public class DiagnosisDTO {
+
     private Long id;
-    @Column(name = "code", nullable = false)
     private String code;
-    @Column(name = "description", nullable = false)
     private String description;
 
-    public Diagnose()
+    private DiagnosisDTO()
     {
 
     }
 
-    public Diagnose(String code, String description) {
+    public DiagnosisDTO(Long id, String code, String description) {
+        this.id = id;
         this.code = code;
         this.description = description;
+    }
+
+    public DiagnosisDTO(Diagnose d)
+    {
+        this(d.getId(), d.getCode(), d.getDescription());
     }
 
     public Long getId() {

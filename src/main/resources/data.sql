@@ -6,7 +6,10 @@ insert into authority (name) value ('ROLE_DOCTOR');
 insert into authority (name) value ('ROLE_NURSE');
 
 insert into clinical_center(name) value ('Dr Cvjetkovic');
-insert into diagnose (code, description) values ('#00000023', 'Hipohondrija');
+insert into diagnose (code, description) values ('#00000023', 'Sinusitis');
+insert into diagnose (code, description) values ('#0B048020', 'Pneumonia');
+insert into diagnose (code, description) values ('#A0000023', 'Gastritis');
+insert into diagnose (code, description) values ('#ABC00800', 'Cystitis');
 insert into medical_record (organ_donor,height,weight,diopter,blood_type) value (true,182,70,0.0,'A-');
 insert into clinic (name, address,description,rating,number_of_reviews) value ('Neurologija', 'Narodnog Fronta 76', 'Klinika za neurologiju',4.5,10);
 insert into clinic (name, address,description,rating,number_of_reviews) value ('Rehabilitacija', 'Kralja Petra 33', 'Klinika za rehabilitaciju',3,1);
@@ -32,7 +35,10 @@ insert into clinic_rooms (clinic_id, rooms_id) value (1,1);
 
 insert into prescription (verified,nurse_id) value (FALSE,4);
 insert into medical_report (description,date,time,doctor_id,prescription_id) value ('Ceste migrene.','2019-04-07','12:45:00',3,1);
-insert into medication (code, description) value ('ad89','Bensedin 500 mg');
+insert into medication (code, description) value ('#ABC12300','Bensedin 500 mg');
+insert into medication (code, description) value ('#AF000025','Nolpaza 40 mg');
+insert into medication (code, description) value ('#AB250020','Vitamin D 2000 UI');
+insert into medication (code, description) value ('#BD803021','Ciprocinal 500 mg');
 insert into request_for_absence (start_date,end_date,serial_number,type) value ('2019-10-15','2019-11-01','032163256332','paid vacation');
 insert into surgery_type(name,description,price,discount) value ('Operacija slepog creva','Najnovija laserska metoda.',100000,5);
 insert into surgery (date,start_time, end_time,patient_id,surgery_type_id) value ('2019-04-12','12:45:00','15:45:00',5,1);
