@@ -12,7 +12,6 @@ public class ClinicalCenter {
     private Long id;
     @Column(name = "name", nullable = false)
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<RequestForRegistration> requestForRegistrations;
+
 
 }
