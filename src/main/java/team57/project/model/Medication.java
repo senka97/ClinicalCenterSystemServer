@@ -1,6 +1,7 @@
 package team57.project.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Medication {
@@ -11,7 +12,8 @@ public class Medication {
     private String code;
     @Column(name = "description", nullable = false)
     private String description;
-
+    @ManyToMany(mappedBy = "allergicToMedications")
+    private Set<MedicalRecord> records;
     public Medication()
     {
 

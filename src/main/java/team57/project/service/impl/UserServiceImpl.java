@@ -6,16 +6,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import team57.project.dto.UserRequest;
-import team57.project.model.Authority;
-import team57.project.model.Patient;
-import team57.project.model.User;
-import team57.project.model.VerificationToken;
+import team57.project.model.*;
 import team57.project.repository.UserRepository;
 import team57.project.repository.VerificationTokenRepository;
 import team57.project.service.AuthorityService;
 import team57.project.service.UserService;
 
-import javax.crypto.BadPaddingException;
 import java.util.List;
 
 @Service
@@ -66,7 +62,7 @@ public class UserServiceImpl implements UserService {
         p.setActivatedAccount("UNRESOLVED"); //zbog slanja zahteva za registraciju
         List<Authority> auth = authService.findByname("ROLE_PATIENT");
         p.setAuthorities(auth);
-
+        p.setMedicalRecord(new MedicalRecord());
         p = this.userRepository.save(p); //na kraju snimimo korisnika u bazu
         return p;
     }
