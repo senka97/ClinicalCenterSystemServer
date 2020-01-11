@@ -1,6 +1,7 @@
 package team57.project.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Room {
@@ -13,8 +14,10 @@ public class Room {
     private String number;
     @Column(name = "roomType", nullable = false)
     private String roomType; //Medical exam or Surgery
-    @Column(name = "occupied", nullable = false)
-    private boolean occupied;
+    @Column(name = "removed", nullable = false)
+    private boolean removed;
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<RoomReservationTime> roomReservationTimes;
     //@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     //private Clinic clinic;
     //date and time of reservation
@@ -25,11 +28,11 @@ public class Room {
 
     }
 
-    public Room(String name, String number, String roomType, boolean occupied) {
+    public Room(String name, String number, String roomType, boolean removed) {
         this.name = name;
         this.number = number;
         this.roomType = roomType;
-        this.occupied = occupied;
+        this.removed = removed;
     }
 
     public Long getId() {
@@ -48,12 +51,19 @@ public class Room {
         return roomType;
     }
 
-    public boolean isOccupied() {
-        return occupied;
+    public boolean isRemoved() {
+        return removed;
+    }
+
+    public void setRemoved(boolean removed) {
+        this.removed = removed;
     }
 
     /*public Clinic getClinic() {
         return clinic;
+    }*/
+     /*public void setClinic(Clinic clinic) {
+        this.clinic = clinic;
     }*/
 
     public void setId(Long id) {
@@ -72,11 +82,12 @@ public class Room {
         this.roomType = roomType;
     }
 
-    public void setOccupied(boolean occupied) {
-        this.occupied = occupied;
+
+    public Set<RoomReservationTime> getRoomReservationTimes() {
+        return roomReservationTimes;
     }
 
-    /*public void setClinic(Clinic clinic) {
-        this.clinic = clinic;
-    }*/
+    public void setRoomReservationTimes(Set<RoomReservationTime> roomReservationTimes) {
+        this.roomReservationTimes = roomReservationTimes;
+    }
 }

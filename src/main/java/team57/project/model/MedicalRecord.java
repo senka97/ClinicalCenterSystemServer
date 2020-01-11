@@ -7,8 +7,6 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.util.Set;
 @Entity
-@Getter
-@Setter
 public class MedicalRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,5 +30,75 @@ public class MedicalRecord {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<MedicalReport> medicalReports; //object
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public boolean isOrganDonor() {
+        return organDonor;
+    }
+
+    public void setOrganDonor(boolean organDonor) {
+        this.organDonor = organDonor;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public double getDiopter() {
+        return diopter;
+    }
+
+    public void setDiopter(double diopter) {
+        this.diopter = diopter;
+    }
+
+    public String getBloodType() {
+        return bloodType;
+    }
+
+    public void setBloodType(String bloodType) {
+        this.bloodType = bloodType;
+    }
+
+    public Set<Medication> getAllergicToMedications() {
+        return allergicToMedications;
+    }
+
+    public void setAllergicToMedications(Set<Medication> allergicToMedications) {
+        this.allergicToMedications = allergicToMedications;
+    }
+
+    public Set<Diagnose> getChronicConditions() {
+        return chronicConditions;
+    }
+
+    public void setChronicConditions(Set<Diagnose> chronicConditions) {
+        this.chronicConditions = chronicConditions;
+    }
+
+    public Set<MedicalReport> getMedicalReports() {
+        return medicalReports;
+    }
+
+    public void setMedicalReports(Set<MedicalReport> medicalReports) {
+        this.medicalReports = medicalReports;
+    }
 }

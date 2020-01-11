@@ -52,54 +52,84 @@ public class ClinicController {
     @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
     public ResponseEntity<?> editClinic(@PathVariable("id") Long id, @RequestBody ClinicDTO clinicDTO) {
 
-        Clinic existClinic = clinicService.findOne(id);
+        if(clinicDTO.getAddress() == null || clinicDTO.getAddress().equals("") || clinicDTO.getDescription() == null
+        || clinicDTO.getDescription().equals("") || clinicDTO.getName() == null || clinicDTO.getName().equals("")){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Clinic's name, description and address are mandatory.");
 
-        if (existClinic == null) {
-            throw new ResourceConflictException(clinicDTO.getId(), "Missing clinic");
         }
-        clinicService.updateClinic(existClinic, clinicDTO);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try {
+            Clinic existClinic = clinicService.findOne(id);
+            boolean nameExists = clinicService.clinicNameExists(clinicDTO.getName(),id);
+            if(!nameExists){
+                clinicService.updateClinic(existClinic, clinicDTO);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }else{
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Clinic with that name already exists.");
+            }
+        } catch(NullPointerException e) {
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
     @GetMapping(value="/getRooms/{id}", produces="application/json")
     @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
-    public ResponseEntity<List<RoomDTO>> getRooms(@PathVariable("id") Long id)
+    public ResponseEntity getRooms(@PathVariable("id") Long id)
     {
-        Set<Room> rooms = clinicService.findRooms(id);
+        try {
+            Clinic existClinic = clinicService.findOne(id);
+            Set<Room> rooms = existClinic.getRooms();
 
-        List<RoomDTO> roomsDTO = new ArrayList<>();
-        for(Room r : rooms)
-        {
-            roomsDTO.add(new RoomDTO(r));
+            List<RoomDTO> roomsDTO = new ArrayList<>();
+            for(Room r : rooms)
+            {
+                if(!r.isRemoved()) {
+                    roomsDTO.add(new RoomDTO(r));
+                }
+            }
+
+            return new ResponseEntity(roomsDTO, HttpStatus.OK);
+
+        }catch (NullPointerException e){
+            return ResponseEntity.notFound().build();
         }
 
-        return new ResponseEntity<>(roomsDTO, HttpStatus.OK);
+
+
     }
 
     @RequestMapping(value = "/addNewRoom/{id}", method = POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
     public ResponseEntity<?> editClinic(@PathVariable("id") Long id, @RequestBody RoomDTO roomDTO) {
 
-        Clinic existClinic = clinicService.findOne(id);
-        String msg = "";
-        boolean error = false;
-        Long idRoom;
-        Set<Room> roomsInClinic = existClinic.getRooms();
-        for(Room room: roomsInClinic){
-            if(room.getName().equals(roomDTO.getName())){
-                msg += "A room with that name already exists in this clinic. ";
-                error = true;
+        try {
+            Clinic existClinic = clinicService.findOne(id);
+            String msg = "";
+            boolean error = false;
+            Long idRoom;
+            Set<Room> roomsInClinic = existClinic.getRooms();
+            for(Room room: roomsInClinic){
+                if(room.getName().equals(roomDTO.getName()) && !room.isRemoved()){
+                    msg += "A room with that name already exists in this clinic. ";
+                    error = true;
+                }
+                if(room.getNumber().equals(roomDTO.getNumber()) && !room.isRemoved()){
+                    msg += "A room with that number already exists in this clinic.";
+                    error = true;
+                }
             }
-            if(room.getNumber().equals(roomDTO.getNumber())){
-                msg += "A room with that number already exists in this clinic.";
-                error = true;
+
+            if (error) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(msg);
             }
+            clinicService.addNewRoom(existClinic, roomDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        }catch(NullPointerException e) {
+
+            return ResponseEntity.notFound().build();
         }
 
-        if (error) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(msg);
-        }
-        clinicService.addNewRoom(existClinic, roomDTO);
-        return new ResponseEntity<>(HttpStatus.OK);
+
     }
 }

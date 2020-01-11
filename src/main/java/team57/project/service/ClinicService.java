@@ -30,10 +30,15 @@ public class ClinicService {
         clinicRepository.save(existClinic);
     }
 
-    public Set<Room> findRooms(Long id){
+    public boolean clinicNameExists(String name, Long id){
 
-        Clinic clinic = this.findOne(id);
-        return clinic.getRooms();
+        List<Clinic> allClinics = this.findAll();
+        for(Clinic c : allClinics){
+            if(c.getName().equals(name) && c.getId() != id){
+                return false;
+            }
+        }
+        return true;
     }
 
     public void addNewRoom(Clinic clinic, RoomDTO roomDTO) {
