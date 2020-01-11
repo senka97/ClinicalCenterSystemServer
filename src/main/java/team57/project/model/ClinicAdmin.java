@@ -1,5 +1,6 @@
 package team57.project.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,7 @@ public class ClinicAdmin extends User{
     public ClinicAdmin() {
     }
 
+    @JsonIgnore
     public Clinic getClinic() {
         return this.clinic;
     }

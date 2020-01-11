@@ -19,6 +19,7 @@ public interface PatientService {
     void addAlergicMedication(Medication medication, MedicalRecord record);
 
     void addChronicCondition(Diagnose diagnose, MedicalRecord record);
+
     Patient save(Patient p);
 
 }

@@ -8,22 +8,22 @@ public class RoomDTO {
     private String name;
     private String number;
     private String roomType;
-    private boolean occupied;
+    private boolean removed;
 
     public RoomDTO(){
 
     }
 
     public RoomDTO(Room r){
-        this(r.getId(),r.getName(),r.getNumber(),r.getRoomType(),r.isOccupied());
+        this(r.getId(),r.getName(),r.getNumber(),r.getRoomType(),r.isRemoved());
     }
 
-    public RoomDTO(Long id, String name, String number, String roomType, boolean occupied){
+    public RoomDTO(Long id, String name, String number, String roomType, boolean removed){
         this.id = id;
         this.name = name;
         this.number = number;
         this.roomType = roomType;
-        this.occupied = occupied;
+        this.removed = removed;
     }
 
     public Long getId() {
@@ -58,11 +58,11 @@ public class RoomDTO {
         this.roomType = roomType;
     }
 
-    public boolean isOccupied() {
-        return occupied;
+    public boolean isRemoved() {
+        return removed;
     }
 
-    public void setOccupied(boolean occupied) {
-        this.occupied = occupied;
+    public void setRemoved(boolean removed) {
+        this.removed = removed;
     }
 }

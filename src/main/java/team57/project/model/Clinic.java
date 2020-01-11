@@ -1,5 +1,7 @@
 package team57.project.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,20 +27,20 @@ public class Clinic {
     private Set<ClinicAdmin> clinicAdmins;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Patient> patients;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<MedicalExam> medicalExams; //lista slobodnih termina za preglede
     @OneToMany(mappedBy = "clinic", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Doctor> doctors;
     @OneToMany(mappedBy = "clinic",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Nurse> nurses;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Room> rooms;
-    @ManyToMany
-    @JoinTable(name = "clinics_surgeryTypes", joinColumns = @JoinColumn(name = "clinic_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "surgeryType_id", referencedColumnName = "id"))
+    @ManyToMany(mappedBy = "clinics", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<SurgeryType> surgeryTypes;
-    @ManyToMany
-    @JoinTable(name = "clinics_examTypes", joinColumns = @JoinColumn(name = "clinic_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "examType_id", referencedColumnName = "id"))
+    @ManyToMany(mappedBy = "clinics", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<ExamType> examTypes;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<MedicalExam> medicalExams;
+    @OneToMany(mappedBy = "clinic", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<FastAppointment> fastAppointments;
 
 
     public Clinic() {
@@ -98,5 +100,70 @@ public class Clinic {
 
     public void setRooms(Set<Room> rooms) {
         this.rooms = rooms;
+    }
+
+
+    public Set<ClinicAdmin> getClinicAdmins() {
+        return clinicAdmins;
+    }
+
+    public void setClinicAdmins(Set<ClinicAdmin> clinicAdmins) {
+        this.clinicAdmins = clinicAdmins;
+    }
+
+    public Set<Patient> getPatients() {
+        return patients;
+    }
+
+    public void setPatients(Set<Patient> patients) {
+        this.patients = patients;
+    }
+
+    public Set<Doctor> getDoctors() {
+        return doctors;
+    }
+
+    public void setDoctors(Set<Doctor> doctors) {
+        this.doctors = doctors;
+    }
+
+    public Set<Nurse> getNurses() {
+        return nurses;
+    }
+
+    public void setNurses(Set<Nurse> nurses) {
+        this.nurses = nurses;
+    }
+
+    public Set<SurgeryType> getSurgeryTypes() {
+        return surgeryTypes;
+    }
+
+    public void setSurgeryTypes(Set<SurgeryType> surgeryTypes) {
+        this.surgeryTypes = surgeryTypes;
+    }
+
+    public Set<ExamType> getExamTypes() {
+        return examTypes;
+    }
+
+    public void setExamTypes(Set<ExamType> examTypes) {
+        this.examTypes = examTypes;
+    }
+
+    public Set<MedicalExam> getMedicalExams() {
+        return medicalExams;
+    }
+
+    public void setMedicalExams(Set<MedicalExam> medicalExams) {
+        this.medicalExams = medicalExams;
+    }
+
+    public Set<FastAppointment> getFastAppointments() {
+        return fastAppointments;
+    }
+
+    public void setFastAppointments(Set<FastAppointment> fastAppointments) {
+        this.fastAppointments = fastAppointments;
     }
 }
