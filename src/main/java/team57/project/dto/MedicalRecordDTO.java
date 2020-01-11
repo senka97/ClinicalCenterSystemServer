@@ -1,33 +1,38 @@
-package team57.project.model;
+package team57.project.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import team57.project.model.Diagnose;
+import team57.project.model.MedicalReport;
+import team57.project.model.Medication;
 
-import javax.persistence.*;
 import java.util.Set;
-@Entity
-public class MedicalRecord {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+public class MedicalRecordDTO {
+
     private Long id;
-    @Column(name = "organDonor", nullable = true)
     private boolean organDonor;
-    @Column(name = "height", nullable = true)
     private double height;
-    @Column(name = "weight", nullable = true)
     private double weight;
-    @Column(name = "diopter", nullable = true)
     private double diopter;
-    @Column(name = "bloodType", nullable = true)
     private String bloodType;
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "medical_record_allergic_medication", joinColumns = @JoinColumn(name = "medicalRecord_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "medication_id", referencedColumnName = "id"))
     private Set<Medication> allergicToMedications;
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "medical_record_chronic_condition", joinColumns = @JoinColumn(name = "medicalRecord_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "diagnose_id", referencedColumnName = "id"))
     private Set<Diagnose> chronicConditions; //codes of diagnoses
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<MedicalReport> medicalReports; //obje
+    private Set<MedicalReport> medicalReports; //object
+
+    public MedicalRecordDTO(){
+
+    }
+
+    public MedicalRecordDTO(Long id, boolean organDonor, double height, double weight, double diopter, String bloodType, Set<Medication> allergicToMedications, Set<Diagnose> chronicConditions, Set<MedicalReport> medicalReports) {
+        this.id = id;
+        this.organDonor = organDonor;
+        this.height = height;
+        this.weight = weight;
+        this.diopter = diopter;
+        this.bloodType = bloodType;
+        this.allergicToMedications = allergicToMedications;
+        this.chronicConditions = chronicConditions;
+        this.medicalReports = medicalReports;
+    }
 
     public Long getId() {
         return id;

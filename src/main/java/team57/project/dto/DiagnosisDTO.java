@@ -1,27 +1,28 @@
-package team57.project.model;
+package team57.project.dto;
 
-import javax.persistence.*;
-import java.util.Set;
 
-@Entity
-public class Medication {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+import team57.project.model.Diagnose;
+
+public class DiagnosisDTO {
+
     private Long id;
-    @Column(name = "code", nullable = false)
     private String code;
-    @Column(name = "description", nullable = false)
     private String description;
-    @ManyToMany(mappedBy = "allergicToMedications")
-    private Set<MedicalRecord> records;
-    public Medication()
+
+    private DiagnosisDTO()
     {
 
     }
 
-    public Medication(String code, String description) {
+    public DiagnosisDTO(Long id, String code, String description) {
+        this.id = id;
         this.code = code;
         this.description = description;
+    }
+
+    public DiagnosisDTO(Diagnose d)
+    {
+        this(d.getId(), d.getCode(), d.getDescription());
     }
 
     public Long getId() {
