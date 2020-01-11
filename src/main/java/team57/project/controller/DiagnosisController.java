@@ -22,7 +22,7 @@ public class DiagnosisController {
     private DiagnosisService diagnosisService;
 
     @GetMapping( value = "/getDiagnosis", produces = "application/json")
-    @PreAuthorize("hasRole('CLINICAL_CENTER_ADMIN')")
+    @PreAuthorize("hasRole('CLINICAL_CENTER_ADMIN') or hasRole('ROLE_DOCTOR') or hasRole('ROLE_NURSE')")
     public ResponseEntity<?> getDiagnosis()
     {
         List<Diagnose> diagnosis = diagnosisService.findAll();

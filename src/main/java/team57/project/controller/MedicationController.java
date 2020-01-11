@@ -22,7 +22,7 @@ public class MedicationController {
     private MedicationService medicationService;
 
     @GetMapping( value = "/getMedications", produces = "application/json")
-    @PreAuthorize("hasRole('CLINICAL_CENTER_ADMIN')")
+    @PreAuthorize("hasRole('CLINICAL_CENTER_ADMIN') or hasRole('ROLE_DOCTOR') or hasRole('ROLE_NURSE')")
     public ResponseEntity<?> getMedications()
     {
         List<Medication> medications = medicationService.findAll();

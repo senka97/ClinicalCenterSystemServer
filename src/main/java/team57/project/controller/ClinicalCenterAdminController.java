@@ -160,6 +160,7 @@ public class ClinicalCenterAdminController {
         if(p!=null)
         {
             p.setActivatedAccount("ACCEPTED");
+            p.setMedicalRecord(new MedicalRecord());
             p = patientService.save(p);
             try {
 
