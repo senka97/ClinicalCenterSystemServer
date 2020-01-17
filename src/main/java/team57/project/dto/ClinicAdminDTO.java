@@ -15,13 +15,13 @@ public class ClinicAdminDTO {
     private String country;
     private String phoneNumber;
     private String serialNumber;
-    private Clinic clinic;
+    //private Clinic clinic;
 
     public ClinicAdminDTO() {
 
     }
 
-    public ClinicAdminDTO(Long id, String name, String surname, String email, String password, String address, String city, String country, String phoneNumber, String serialNumber, Clinic clinic) {
+    public ClinicAdminDTO(Long id, String name, String surname, String email, String password, String address, String city, String country, String phoneNumber, String serialNumber) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -32,12 +32,12 @@ public class ClinicAdminDTO {
         this.country = country;
         this.phoneNumber = phoneNumber;
         this.serialNumber = serialNumber;
-        this.clinic = clinic;
+        //this.clinic = clinic;
     }
 
     public ClinicAdminDTO(ClinicAdmin clinicAdmin) {
         this(clinicAdmin.getId(),clinicAdmin.getName(),clinicAdmin.getSurname(),clinicAdmin.getEmail(),clinicAdmin.getPassword(),clinicAdmin.getAddress(),
-                clinicAdmin.getCity(),clinicAdmin.getCountry(),clinicAdmin.getPhoneNumber(),clinicAdmin.getSerialNumber(),clinicAdmin.getClinic());
+                clinicAdmin.getCity(),clinicAdmin.getCountry(),clinicAdmin.getPhoneNumber(),clinicAdmin.getSerialNumber());
     }
 
     public Long getId() {
@@ -120,11 +120,11 @@ public class ClinicAdminDTO {
         this.serialNumber = serialNumber;
     }
 
-    public Clinic getClinic() {
+    /*public Clinic getClinic() {
         return clinic;
     }
 
     public void setClinic(Clinic clinic) {
         this.clinic = clinic;
-    }
+    }*/
 }
