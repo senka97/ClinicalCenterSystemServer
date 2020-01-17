@@ -2,6 +2,8 @@ package team57.project.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -45,14 +47,17 @@ public class Doctor extends User {
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<FastAppointment> fastAppointments;
 
-    @Column(name="workingHoursStart", nullable=false)
+    @Column(name="workingHoursStart", nullable = false, columnDefinition = "time default '06:00:00'")
     private LocalTime workingHoursStart; // this will be converted into localTime; format 00:00 - 23:59
 
-    @Column(name="workingHoursEnd", nullable=false)
-    private LocalTime workingHoursEnd; // this will be converted into localTime; format 00:00 - 23:59
+    @Column(name="workingHoursEnd", nullable = false, columnDefinition = "time default '14:00:00'")
+    private LocalTime workingHoursEnd ; // this will be converted into localTime; format 00:00 - 23:59
 
     @OneToMany
     private Set<Absence> absences;
+
+    @Column(name="removed", nullable = false, columnDefinition = "bit(1) default 0")
+    private boolean removed;
 
     public Doctor(){
         super();
@@ -61,6 +66,15 @@ public class Doctor extends User {
     public Doctor(String name, String surname, String email, String password, String address, String city, String country, String phoneNumber, String serialNumber) {
         super(name, surname, email, password, address, city, country, phoneNumber, serialNumber);
     }
+
+    public Doctor(String name, String surname, String email, String password, String address, String city, String country, String phoneNumber, String serialNumber, LocalTime workingHoursStart, LocalTime workingHoursEnd) {
+        super(name, surname, email, password, address, city, country, phoneNumber, serialNumber);
+        this.workingHoursStart = workingHoursStart;
+        this.workingHoursEnd = workingHoursEnd;
+        this.removed = false;
+    }
+
+
 
     public double getRating() {
         return rating;
@@ -159,4 +173,14 @@ public class Doctor extends User {
     public void setAbsences(Set<Absence> absences) {
         this.absences = absences;
     }
+
+    public boolean isRemoved() {
+        return removed;
+    }
+
+    public void setRemoved(boolean removed) {
+        this.removed = removed;
+    }
+
+
 }
