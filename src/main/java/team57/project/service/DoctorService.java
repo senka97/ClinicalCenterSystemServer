@@ -11,6 +11,7 @@ import java.util.List;
 public interface DoctorService {
 
     Doctor findOne(Long id);
+    Doctor findByEmail(String email);
     String doctorExists(String email, String serialNumber);
     void addDoctor(DoctorDTO doctorDTO, Clinic clinic);
     boolean removeDoctor(Doctor doctor);

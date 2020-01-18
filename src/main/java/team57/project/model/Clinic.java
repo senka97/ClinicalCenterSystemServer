@@ -41,6 +41,8 @@ public class Clinic {
     private Set<MedicalExam> medicalExams;
     @OneToMany(mappedBy = "clinic", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<FastAppointment> fastAppointments;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Absence> absences;
 
 
     public Clinic() {
@@ -165,5 +167,13 @@ public class Clinic {
 
     public void setFastAppointments(Set<FastAppointment> fastAppointments) {
         this.fastAppointments = fastAppointments;
+    }
+
+    public Set<Absence> getAbsences() {
+        return absences;
+    }
+
+    public void setAbsences(Set<Absence> absences) {
+        this.absences = absences;
     }
 }
