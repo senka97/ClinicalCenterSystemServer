@@ -36,6 +36,12 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    public Doctor findByEmail(String email) {
+        return doctorRepository.findByEmail(email);
+    }
+
+
+    @Override
     public String doctorExists(String email, String serialNumber) {
         String msg = "";
         boolean exists = false;

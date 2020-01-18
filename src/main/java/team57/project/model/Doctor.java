@@ -53,11 +53,12 @@ public class Doctor extends User {
     @Column(name="workingHoursEnd", nullable = false, columnDefinition = "time default '14:00:00'")
     private LocalTime workingHoursEnd ; // this will be converted into localTime; format 00:00 - 23:59
 
-    @OneToMany
-    private Set<Absence> absences;
-
     @Column(name="removed", nullable = false, columnDefinition = "bit(1) default 0")
     private boolean removed;
+
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Absence> absences;
+
 
     public Doctor(){
         super();
@@ -166,6 +167,7 @@ public class Doctor extends User {
         this.workingHoursEnd = workingHoursEnd;
     }
 
+    @JsonIgnore
     public Set<Absence> getAbsences() {
         return absences;
     }
@@ -181,6 +183,8 @@ public class Doctor extends User {
     public void setRemoved(boolean removed) {
         this.removed = removed;
     }
+
+
 
 
 }
