@@ -9,6 +9,8 @@ public interface AbsenceService {
 
     Absence findOne(Long id);
     boolean sendRequestDoctor(Doctor doctor, AbsenceRequest absenceRequest);
+    boolean approveAbsence(Absence absence);
+    boolean rejectAbsence(Absence absence, String message);
 
     boolean sendRequestNurse(Nurse nurse, AbsenceRequest absenceRequest);
 }

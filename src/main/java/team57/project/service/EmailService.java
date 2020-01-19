@@ -3,11 +3,13 @@ package team57.project.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import team57.project.event.OnRegistrationSuccessEvent;
+import team57.project.model.Absence;
 import team57.project.model.User;
 
 import javax.mail.MessagingException;
@@ -58,5 +60,46 @@ public class EmailService {
         helper.setSubject("Clinical Center System account activation.");
         helper.setFrom(env.getProperty("spring.mail.username"));
         javaMailSender.send(mimeMessage);
+    }
+
+    @Async
+    public void sendMessageApproved(Absence absence) throws MailException, InterruptedException, MessagingException {
+
+        String name;
+        String email;
+        if(absence.getDoctor() != null){
+            name = absence.getDoctor().getName();
+            email = absence.getDoctor().getEmail();
+        }else{
+            name = absence.getNurse().getName();
+            email = absence.getNurse().getEmail();
+        }
+        SimpleMailMessage mail = new SimpleMailMessage();
+        String msg = "Hello, " + name + "!\n\nYour request for absence has been approved.\n\nBest regards,\nClinic admin";
+        mail.setText(msg);
+        mail.setTo(email);
+        mail.setSubject("Clinical Center System - absence request");
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        javaMailSender.send(mail);
+    }
+
+    @Async
+    public void sendMessageReject(Absence absence, String message) throws MailException, InterruptedException, MessagingException {
+
+        String name;
+        String email;
+        if(absence.getDoctor() != null){
+            name = absence.getDoctor().getName();
+            email = absence.getDoctor().getEmail();
+        }else{
+            name = absence.getNurse().getName();
+            email = absence.getNurse().getEmail();
+        }
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setText("Hello, " + name + "!\n\n" + message + "\n\nBest regards,\nClinic admin");
+        mail.setTo(email);
+        mail.setSubject("Clinical Center System - absence request");
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        javaMailSender.send(mail);
     }
 }
