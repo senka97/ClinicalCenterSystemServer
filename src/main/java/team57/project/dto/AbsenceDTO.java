@@ -13,21 +13,27 @@ public class AbsenceDTO {
     private String statusOfAbsence;
     private LocalDate startDate;
     private LocalDate endDate;
-    private DoctorDTO doctorDTO;
-    private NurseDTO nurseDTO;
+    private Long idEmployee;
+    private String employee; //Doctor, Nurse
+    private String employeeName;
+    private String employeeSurname;
+    private String employeeSerialNumber;
 
     public AbsenceDTO(){
 
     }
 
-    public AbsenceDTO(Long id, String typeOfAbsence, String statusOfAbsence, LocalDate startDate, LocalDate endDate, DoctorDTO doctorDTO, NurseDTO nurseDTO) {
+    public AbsenceDTO(Long id, String typeOfAbsence, String statusOfAbsence, LocalDate startDate, LocalDate endDate, Long idEmployee, String employee, String employeeName, String employeeSurname, String employeeSerialNumber) {
         this.id = id;
         this.typeOfAbsence = typeOfAbsence;
         this.statusOfAbsence = statusOfAbsence;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.doctorDTO = doctorDTO;
-        this.nurseDTO = nurseDTO;
+        this.idEmployee = idEmployee;
+        this.employee = employee;
+        this.employeeName = employeeName;
+        this.employeeSurname = employeeSurname;
+        this.employeeSerialNumber = employeeSerialNumber;
     }
 
     public AbsenceDTO(Absence absence){
@@ -37,9 +43,17 @@ public class AbsenceDTO {
         this.startDate = absence.getStartDate();
         this.endDate = absence.getEndDate();
         if(absence.getDoctor() != null) {
-            this.doctorDTO = new DoctorDTO(absence.getDoctor());
+            this.employee = "Doctor";
+            this.idEmployee = absence.getDoctor().getId();
+            this.employeeName = absence.getDoctor().getName();
+            this.employeeSurname = absence.getDoctor().getSurname();
+            this.employeeSerialNumber = absence.getDoctor().getSerialNumber();
         }else {
-            this.nurseDTO = new NurseDTO(absence.getNurse());
+            this.employee = "Nurse";
+            this.idEmployee = absence.getNurse().getId();
+            this.employeeName = absence.getNurse().getName();
+            this.employeeSurname = absence.getNurse().getSurname();
+            this.employeeSerialNumber = absence.getNurse().getSerialNumber();
         }
     }
 
@@ -83,19 +97,43 @@ public class AbsenceDTO {
         this.endDate = endDate;
     }
 
-    public DoctorDTO getDoctorDTO() {
-        return doctorDTO;
+    public Long getIdEmployee() {
+        return idEmployee;
     }
 
-    public void setDoctorDTO(DoctorDTO doctorDTO) {
-        this.doctorDTO = doctorDTO;
+    public void setIdEmployee(Long idEmployee) {
+        this.idEmployee = idEmployee;
     }
 
-    public NurseDTO getNurseDTO() {
-        return nurseDTO;
+    public String getEmployee() {
+        return employee;
     }
 
-    public void setNurseDTO(NurseDTO nurseDTO) {
-        this.nurseDTO = nurseDTO;
+    public void setEmployee(String employee) {
+        this.employee = employee;
+    }
+
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
+    }
+
+    public String getEmployeeSurname() {
+        return employeeSurname;
+    }
+
+    public void setEmployeeSurname(String employeeSurname) {
+        this.employeeSurname = employeeSurname;
+    }
+
+    public String getEmployeeSerialNumber() {
+        return employeeSerialNumber;
+    }
+
+    public void setEmployeeSerialNumber(String employeeSerialNumber) {
+        this.employeeSerialNumber = employeeSerialNumber;
     }
 }

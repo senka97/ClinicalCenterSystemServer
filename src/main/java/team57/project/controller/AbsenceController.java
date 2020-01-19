@@ -19,6 +19,7 @@ import team57.project.service.DoctorService;
 import team57.project.service.impl.AbsenceServiceImpl;
 import team57.project.service.impl.DoctorServiceImpl;
 
+import javax.xml.ws.Response;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +46,25 @@ public class AbsenceController {
 
         }catch(NullPointerException e){
 
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Absence with that ID don't exist in the system");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Absence with that ID doesn't exist in the system");
+        }
+    }
+
+    @GetMapping(value="/getNumberOfRequests/{idClinic}", produces="application/json")
+    @PreAuthorize("hasRole('CLINIC_ADMIN')")
+    public ResponseEntity<?> getNumberOfRequests(@PathVariable("idClinic") Long idClinic) {
+
+        try{
+            Clinic clinic = clinicService.findOne(idClinic);
+            int num = 0;
+            for(Absence absence: clinic.getAbsences()){
+                if(absence.getStatusOfAbsence().equals("REQUESTED")){
+                    num++;
+                }
+            }
+            return new ResponseEntity(num, HttpStatus.OK);
+        }catch(NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
@@ -65,11 +84,11 @@ public class AbsenceController {
 
         }catch(NullPointerException e){
 
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Clinic with that ID don't exist in the system");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Clinic with that ID doesn't exist in the system");
         }
     }
 
-    @PostMapping(value="/sendRequestDoctor")
+    @PostMapping(value="/sendRequestDoctor", consumes="application/json")
     @PreAuthorize("hasRole('DOCTOR')")
     public ResponseEntity<?> sendRequestDoctor(@RequestBody AbsenceRequest absenceRequest){
 
@@ -86,6 +105,50 @@ public class AbsenceController {
               return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You can't be absent in requested period because you have scheduled exams or surgeries.");
           }
 
+    }
+
+    @PutMapping(value="/approveAbsence/{id}")
+    @PreAuthorize("hasRole('CLINIC_ADMIN')")
+    public ResponseEntity<?> approveAbsence(@PathVariable("id") Long id){
+
+        try{
+            Absence absence = absenceService.findOne(id);
+            if(!absence.getStatusOfAbsence().equals("REQUESTED")){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This absence request has already been completed.");
+            }
+            if(absenceService.approveAbsence(absence)){
+                return ResponseEntity.status(HttpStatus.OK).build();
+
+            }else{
+                return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Something went wrong with sending email notification. Please try again.");
+            }
+
+        }catch(NullPointerException e){
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PutMapping(value="/rejectAbsence/{id}", consumes = "application/json")
+    @PreAuthorize("hasRole('CLINIC_ADMIN')")
+    public ResponseEntity<?> rejectAbsence(@PathVariable("id") Long id, @RequestBody String message){
+
+        try{
+            Absence absence = absenceService.findOne(id);
+            if(!absence.getStatusOfAbsence().equals("REQUESTED")){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This absence request has already been completed.");
+            }
+            if(absenceService.rejectAbsence(absence, message)){
+                return ResponseEntity.status(HttpStatus.OK).build();
+
+            }else{
+                return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Something went wrong with sending email notification. Please try again.");
+            }
+
+        }catch(NullPointerException e){
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
 

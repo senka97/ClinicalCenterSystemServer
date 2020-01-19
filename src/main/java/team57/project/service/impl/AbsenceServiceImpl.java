@@ -11,6 +11,9 @@ import team57.project.repository.AbsenceRepository;
 import team57.project.repository.ClinicRepository;
 import team57.project.service.AbsenceService;
 import team57.project.service.ClinicService;
+import team57.project.service.EmailService;
+
+import javax.mail.MessagingException;
 
 @Service
 public class AbsenceServiceImpl implements AbsenceService {
@@ -19,6 +22,8 @@ public class AbsenceServiceImpl implements AbsenceService {
     private AbsenceRepository absenceRepository;
     @Autowired
     private ClinicRepository clinicRepository;
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public Absence findOne(Long id) {
@@ -45,6 +50,35 @@ public class AbsenceServiceImpl implements AbsenceService {
         clinicRepository.save(clinic);
         return true;
 
+    }
+
+    @Override
+    public boolean approveAbsence(Absence absence) {
+
+        try{
+            emailService.sendMessageApproved(absence);
+        } catch (Exception e) {
+            return false;
+        }
+
+        absence.setStatusOfAbsence("APPROVED");
+        absenceRepository.save(absence);
+        return true;
+
+    }
+
+    @Override
+    public boolean rejectAbsence(Absence absence, String message) {
+
+        try{
+            emailService.sendMessageReject(absence, message);
+        } catch (Exception e) {
+            return false;
+        }
+
+        absence.setStatusOfAbsence("REJECTED");
+        absenceRepository.save(absence);
+        return true;
     }
 
 
