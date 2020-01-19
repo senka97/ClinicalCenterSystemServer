@@ -10,12 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import team57.project.dto.AbsenceDTO;
 import team57.project.dto.AbsenceRequest;
 import team57.project.dto.DoctorDTO;
-import team57.project.model.Absence;
-import team57.project.model.Clinic;
-import team57.project.model.Doctor;
-import team57.project.model.User;
+import team57.project.model.*;
 import team57.project.service.ClinicService;
 import team57.project.service.DoctorService;
+import team57.project.service.NurseService;
 import team57.project.service.impl.AbsenceServiceImpl;
 import team57.project.service.impl.DoctorServiceImpl;
 
@@ -33,6 +31,8 @@ public class AbsenceController {
     private ClinicService clinicService;
     @Autowired
     private DoctorServiceImpl doctorService;
+    @Autowired
+    private NurseService nurseService;
 
     @GetMapping(value="/getAbsence/{id}", produces="application/json")
     @PreAuthorize("hasRole('CLINIC_ADMIN')")
@@ -85,6 +85,25 @@ public class AbsenceController {
           }else{
               return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You can't be absent in requested period because you have scheduled exams or surgeries.");
           }
+
+    }
+
+    @PostMapping(value="/sendRequestNurse")
+    @PreAuthorize("hasRole('NURSE')")
+    public ResponseEntity<?> sendRequestNurse(@RequestBody AbsenceRequest absenceRequest){
+
+        if(absenceRequest.getEndDate() == null || absenceRequest.getStartDate() == null ||
+                absenceRequest.getTypeOfAbsence().equals("") || absenceRequest.getTypeOfAbsence() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You have to enter a type of absence, start date and end date.");
+        }
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+        String email = currentUser.getName();
+        Nurse nurse = (Nurse) nurseService.findByEmail(email);
+        if(absenceService.sendRequestNurse(nurse, absenceRequest)){
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }else{
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You can't be absent in requested period."); //because
+        }
 
     }
 

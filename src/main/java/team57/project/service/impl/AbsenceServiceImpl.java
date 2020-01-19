@@ -3,10 +3,7 @@ package team57.project.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team57.project.dto.AbsenceRequest;
-import team57.project.model.Absence;
-import team57.project.model.Clinic;
-import team57.project.model.Doctor;
-import team57.project.model.FastAppointment;
+import team57.project.model.*;
 import team57.project.repository.AbsenceRepository;
 import team57.project.repository.ClinicRepository;
 import team57.project.service.AbsenceService;
@@ -47,5 +44,18 @@ public class AbsenceServiceImpl implements AbsenceService {
 
     }
 
+    @Override
+    public boolean sendRequestNurse(Nurse nurse, AbsenceRequest absenceRequest)
+    {
+        //mozda nesto proveriti
+
+        Absence absence = new Absence(absenceRequest.getTypeOfAbsence(),"REQUESTED",absenceRequest.getStartDate(),absenceRequest.getEndDate());
+        absence.setNurse(nurse);
+        absence.setDoctor(null);
+        Clinic clinic = nurse.getClinic();
+        clinic.getAbsences().add(absence);
+        clinicRepository.save(clinic);
+        return true;
+    }
 
 }
