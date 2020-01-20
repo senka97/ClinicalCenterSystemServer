@@ -11,6 +11,7 @@ import javax.persistence.*;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -29,15 +30,15 @@ public class Doctor extends User {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Clinic clinic;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "doctors_examTypes", joinColumns = @JoinColumn(name = "doctor_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "examType_id", referencedColumnName = "id"))
     private Set<ExamType> examTypes; //type of medical examination
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "doctors_surgeries", joinColumns = @JoinColumn(name = "doctor_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "surgery_id", referencedColumnName = "id"))
     private Set<Surgery> surgeries;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "doctors_surgeryTypes", joinColumns = @JoinColumn(name = "doctor_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "surgeryType_id", referencedColumnName = "id"))
     private Set<SurgeryType> surgeryTypes;
 
@@ -73,6 +74,8 @@ public class Doctor extends User {
         this.workingHoursStart = workingHoursStart;
         this.workingHoursEnd = workingHoursEnd;
         this.removed = false;
+        this.examTypes = new HashSet<ExamType>();
+        this.surgeryTypes = new HashSet<SurgeryType>();
     }
 
 
@@ -110,6 +113,7 @@ public class Doctor extends User {
         this.clinic = clinic;
     }
 
+    @JsonIgnore
     public Set<ExamType> getExamTypes() {
         return examTypes;
     }
@@ -126,6 +130,7 @@ public class Doctor extends User {
         this.surgeries = surgeries;
     }
 
+    @JsonIgnore
     public Set<SurgeryType> getSurgeryTypes() {
         return surgeryTypes;
     }
