@@ -66,8 +66,8 @@ public class DoctorController {
         doctorDTO.getAddress().equals("") || doctorDTO.getAddress() == null || doctorDTO.getCity().equals("") || doctorDTO.getCity() == null ||
         doctorDTO.getCountry().equals("") || doctorDTO.getCountry() == null || doctorDTO.getEmail().equals("") || doctorDTO.getEmail() == null ||
         doctorDTO.getPassword().equals("") || doctorDTO.getPassword() == null || doctorDTO.getPhoneNumber().equals("") || doctorDTO.getPhoneNumber() == null ||
-                !isSerialNumber(doctorDTO.getSerialNumber())){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("All fields are mandatory. Serial number must contain 13 numbers.");
+                !isSerialNumber(doctorDTO.getSerialNumber()) || doctorDTO.getExamTypesId().size() == 0 || doctorDTO.getSurgeryTypesId().size() == 0){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("All fields are mandatory. Serial number must contain 13 numbers. Doctor must have at least one exam type or surgery type.");
         }
 
         try{

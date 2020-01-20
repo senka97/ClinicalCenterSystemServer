@@ -6,10 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import team57.project.dto.DoctorDTO;
 import team57.project.dto.DoctorSearch;
-import team57.project.model.Authority;
-import team57.project.model.Clinic;
-import team57.project.model.Doctor;
-import team57.project.model.FastAppointment;
+import team57.project.model.*;
 import team57.project.repository.DoctorRepository;
 import team57.project.service.DoctorService;
 
@@ -28,6 +25,7 @@ public class DoctorServiceImpl implements DoctorService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthorityServiceImpl authService;
+
 
 
     @Override
@@ -69,6 +67,20 @@ public class DoctorServiceImpl implements DoctorService {
                 doctorDTO.getAddress(), doctorDTO.getCity(), doctorDTO.getCountry(), doctorDTO.getPhoneNumber(), doctorDTO.getSerialNumber(),
                 doctorDTO.getWorkingHoursStart(), doctorDTO.getWorkingHoursEnd());
         doctor.setClinic(clinic);
+        for(Long id: doctorDTO.getExamTypesId()){
+            for(ExamType et: clinic.getExamTypes()){
+                if(et.getId() == id){
+                    doctor.getExamTypes().add(et);
+                }
+            }
+        }
+        for(Long id: doctorDTO.getSurgeryTypesId()){
+            for(SurgeryType st: clinic.getSurgeryTypes()){
+                if(st.getId() == id){
+                    doctor.getSurgeryTypes().add(st);
+                }
+            }
+        }
         List<Authority> auth = authService.findByname("ROLE_DOCTOR");
         doctor.setAuthorities(auth);
         doctor.setEnabled(true);
