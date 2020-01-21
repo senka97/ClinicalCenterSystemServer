@@ -13,8 +13,8 @@ public class PrescriptionService {
     @Autowired
     private PrescriptionRepository prescriptionRepository;
 
-    public List<Prescription> findUnverified() {
-        return prescriptionRepository.findUnverified();
+    public List<Prescription> findUnverified(Long clinic_id) {
+        return prescriptionRepository.findUnverified(clinic_id);
     }
 
     public Prescription findOne(Long id)

@@ -43,8 +43,6 @@ public class Clinic {
     private Set<FastAppointment> fastAppointments;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Absence> absences;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Prescription> prescriptions;
 
 
     public Clinic() {
