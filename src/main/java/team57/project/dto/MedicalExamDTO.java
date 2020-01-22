@@ -1,6 +1,5 @@
 package team57.project.dto;
 
-import java.sql.Date;
 import java.sql.Time;
 
 public class MedicalExamDTO {

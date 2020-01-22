@@ -8,7 +8,8 @@ public class SurgeryDTO {
     private Time endTime;
     private String surgeryType;
 
-    public SurgeryDTO(){}
+    public SurgeryDTO() {
+    }
 
     public String getDate() {
         return date;

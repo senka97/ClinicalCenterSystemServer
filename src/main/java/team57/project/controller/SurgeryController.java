@@ -24,7 +24,7 @@ public class SurgeryController {
     public List<SurgeryDTO> getSurgeries(@PathVariable("id") Long id) {
         List<Surgery> surgeries = this.surgeryService.findByPatientId(id);
         List<SurgeryDTO> surgeryDTO = new ArrayList<SurgeryDTO>();
-        for(Surgery surgery : surgeries){
+        for (Surgery surgery : surgeries) {
             SurgeryDTO dto = new SurgeryDTO();
             dto.setDate(surgery.getDate().toString());
             dto.setEndTime(surgery.getEndTime());

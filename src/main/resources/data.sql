@@ -29,21 +29,42 @@ insert into user_authority(user_id, authority_id) value (5,3);
 
 
 insert into exam_type (name, description, price,discount,removed) value ('CT snimanje glave', 'Snimanje glave',10000,10, FALSE);
+insert into exam_type (name, description, price,discount,removed) value ('Ultrazvuk kicenog stuba', 'Kompletan ultrazvuk celog kicmenog stuba.',15000, 10, FALSE);
+insert into exam_type (name, description, price,discount,removed) value ('Provera motornih sposobnosti', 'Provera motornih sposobnosti uz pomoc savremenih uredjaja.',7000,10, FALSE);
 insert into surgery_type(name,description,price,discount,removed) value ('Operacija slepog creva','Najnovija laserska metoda.',100000,5,FALSE);
+insert into surgery_type(name,description,price,discount,removed) value ('Operacija ledjnih prsljena','Najnovija laserska metoda.',90000,5,FALSE);
+insert into surgery_type(name,description,price,discount,removed) value ('Operacija kicmene mozdine','Najnovija laserska metoda.',150000,5,FALSE);
+
+insert into doctors_exam_types(doctor_id, exam_type_id) value (3,1);
+insert into doctors_surgery_types(doctor_id, surgery_type_id) value (3,1);
 insert into room (name, number,room_type,removed) value ('Room 1',1,'Medical exam',FALSE);
 insert into medical_exam (date, start_time, end_time,reserved,doctor_id,exam_room_id,exam_type_id,patient_id) values ('2018-07-31', '1:05:04','4:34:12',FALSE,3,1,1,5);
 insert into clinic_rooms (clinic_id, rooms_id) value (1,1);
+
 insert into clinics_exam_types (exam_type_id, clinic_id) value (1,1);
+insert into clinics_exam_types (exam_type_id, clinic_id) value (2,1);
+insert into clinics_exam_types (exam_type_id, clinic_id) value (3,1);
 insert into clinics_surgery_types(surgery_type_id, clinic_id) value (1,1);
+insert into clinics_surgery_types(surgery_type_id, clinic_id) value (2,1);
+insert into clinics_surgery_types(surgery_type_id, clinic_id) value (3,1);
+
 insert into fast_appointment(date_time, done, duration, price, clinic_id, doctor_id, exam_type_id, patient_id, room_id) values ('2020-12-02 13:45:00', FALSE, 45, 5000, 1, 3, 1, 5, 1);
 insert into room_reservation_time(start_date_time, end_date_time, done, room_id) value ('2020-12-02 13:45:00','2020-12-02 14:30:00', FALSE, 1);
 
-insert into prescription (verified,nurse_id) value (FALSE,4);
-insert into medical_report (description,date,time,doctor_id,prescription_id) value ('Ceste migrene.','2019-04-07','12:45:00',3,1);
+
+insert into medical_report (description,date,time,doctor_id) value ('Ceste migrene.','2019-04-07','12:45:00',3);
 insert into medication (code, description) value ('#ABC12300','Bensedin 500 mg');
 insert into medication (code, description) value ('#AF000025','Nolpaza 40 mg');
 insert into medication (code, description) value ('#AB250020','Vitamin D 2000 UI');
 insert into medication (code, description) value ('#BD803021','Ciprocinal 500 mg');
+insert into prescription (verified, medication_id, nurse_id, patient_id, doctor_id, clinic_id) value (FALSE,1,null,5,3,1);
+insert into prescription (verified, medication_id, nurse_id, patient_id, doctor_id, clinic_id) value (FALSE,2,null,5,3,1);
+insert into prescription (verified, medication_id, nurse_id, patient_id, doctor_id, clinic_id) value (FALSE,3,null,5,3,2);
+
+insert into medical_report_prescriptions (medical_report_id, prescriptions_id) value(1,1);
+insert into medical_report_prescriptions (medical_report_id, prescriptions_id) value(1,2);
+insert into medical_report_prescriptions (medical_report_id, prescriptions_id) value(1,3);
+
 insert into request_for_absence (start_date,end_date,serial_number,type) value ('2019-10-15','2019-11-01','032163256332','paid vacation');
 insert into surgery (date,start_time, end_time,patient_id,surgery_type_id) value ('2019-04-12','12:45:00','15:45:00',5,1);
 insert into doctors_surgeries (doctor_id, surgery_id) value (3,1);

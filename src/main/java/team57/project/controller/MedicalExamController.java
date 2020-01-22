@@ -6,13 +6,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import team57.project.dto.MedicalExamDTO;
 import team57.project.model.MedicalExam;
-import team57.project.model.Patient;
 import team57.project.service.MedicalExamService;
-import team57.project.service.PatientService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping(value = "api/medicalExams")
