@@ -1,7 +1,6 @@
 package team57.project.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -91,7 +90,8 @@ public class ExamType {
     public void setDiscount(double discount) {
         this.discount = discount;
     }
-   // @JsonIgnore
+
+    @JsonIgnore
     public Set<Doctor> getDoctors() {
         return doctors;
     }
@@ -99,7 +99,8 @@ public class ExamType {
     public void setDoctors(Set<Doctor> doctors) {
         this.doctors = doctors;
     }
-   // @JsonIgnore
+
+    @JsonIgnore
     public Set<Clinic> getClinics() {
         return clinics;
     }

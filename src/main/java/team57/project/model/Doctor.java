@@ -115,6 +115,7 @@ public class Doctor extends User {
         this.examTypes = examTypes;
     }
 
+    @JsonIgnore
     public Set<Surgery> getSurgeries() {
         return surgeries;
     }
@@ -132,6 +133,7 @@ public class Doctor extends User {
         this.surgeryTypes = surgeryTypes;
     }
 
+    @JsonIgnore
     public Set<MedicalExam> getMedicalExams() {
         return medicalExams;
     }
