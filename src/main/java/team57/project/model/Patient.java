@@ -36,7 +36,7 @@ public class Patient extends User {
     public void setMedicalRecord(MedicalRecord medicalRecord) {
         this.medicalRecord = medicalRecord;
     }
-
+    @JsonIgnore
     public Set<Surgery> getSurgeries() {
         return surgeries;
     }

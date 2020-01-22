@@ -1,11 +1,16 @@
 package team57.project.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.sql.Time;
 import java.util.Date;
 import java.util.Set;
 
 @Entity
+@Getter
+@Setter
 public class Surgery {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,4 +27,6 @@ public class Surgery {
     private Set<Doctor> doctors;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Patient patient;
+
+    public Surgery(){}
 }

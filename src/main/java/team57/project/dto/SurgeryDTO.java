@@ -1,26 +1,14 @@
 package team57.project.dto;
 
-import java.sql.Date;
 import java.sql.Time;
 
-public class MedicalExamDTO {
-
-    private Long id;
+public class SurgeryDTO {
     private String date;
     private Time startTime;
     private Time endTime;
-    private String examType;
-    private String doctor;
+    private String surgeryType;
 
-    public MedicalExamDTO(){}
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public SurgeryDTO(){}
 
     public String getDate() {
         return date;
@@ -46,19 +34,11 @@ public class MedicalExamDTO {
         this.endTime = endTime;
     }
 
-    public String getExamType() {
-        return examType;
+    public String getSurgeryType() {
+        return surgeryType;
     }
 
-    public void setExamType(String examType) {
-        this.examType = examType;
-    }
-
-    public String getDoctor() {
-        return doctor;
-    }
-
-    public void setDoctor(String doctor) {
-        this.doctor = doctor;
+    public void setSurgeryType(String surgeryType) {
+        this.surgeryType = surgeryType;
     }
 }

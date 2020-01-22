@@ -12,7 +12,7 @@ insert into diagnose (code, description) values ('#A0000023', 'Gastritis');
 insert into diagnose (code, description) values ('#ABC00800', 'Cystitis');
 insert into medical_record (organ_donor,height,weight,diopter,blood_type) value (true,182,70,0.0,'A-');
 insert into clinic (name, address,description,rating,number_of_reviews) value ('Neurologija', 'Narodnog Fronta 76 Novi Sad', 'Klinika za neurologiju',4.5,10);
-insert into clinic (name, address,description,rating,number_of_reviews) value ('Rehabilitacija', 'Kralja Petra 33 Novi Sad', 'Klinika za rehabilitaciju',3,1);
+insert into clinic (name, address,description,rating,number_of_reviews) value ('Rehabilitacija', 'Kralja Konstantina 33 Novi Sad', 'Klinika za rehabilitaciju',3,1);
 insert into clinic (name, address,description,rating,number_of_reviews) value ('Pulmologija', 'Brace Ribnikar 49 Novi Sad', 'Klinika za pulmologiju',4,2);
 insert into clinic (name, address,description,rating,number_of_reviews) value ('Kardiologija', 'Kralja Petra 37 Novi Sad', 'Klinika za kardiologiju',5,25);
 insert into user (name, surname, email, password, address, city, country, phone_number, serial_number,number_of_reviews, rating, activated_account, enabled, last_password_reset_date, password_changed, working_hours_start, working_hours_end, removed, type) values ('Mika', 'Mikic', 'mika@gmail.com','$2a$10$.iwB3NV6S83aXegd8HmYweflprG3x8lMvXMevv1oYEtmnArEaE1iW','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',-1,-1,-1,TRUE,'2019-11-19 04:00:00',FALSE,'06:00', '14:00',FALSE,'CLINICAL_CENTER_ADMIN');

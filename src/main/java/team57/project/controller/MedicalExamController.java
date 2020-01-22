@@ -20,21 +20,11 @@ import java.util.Set;
 public class MedicalExamController {
     @Autowired
     private MedicalExamService medicalExamService;
-    @Autowired
-    private PatientService patientService;
 
     @RequestMapping(value = "/getMedicalExam/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ROLE_DOCTOR') or hasRole('ROLE_NURSE') or hasRole('ROLE_PATIENT')")
     public List<MedicalExamDTO> getMedicalExam(@PathVariable("id") Long id) {
-        Patient p = this.patientService.findOne(id);
-
-        System.out.println("TEEEEEEEEEEEESTT");
-        System.out.println("TEEEEEEEEEEEESTT");
-        System.out.println("TEEEEEEEEEEEESTT");
-        System.out.println(p.getName());
-      //  System.out.println(p.getMedicalExams().toString());
-        //System.out.println(this.medicalExamService.findByPatientId(id));
-        List<MedicalExam> medicalExams = this.medicalExamService.findAll();
+        List<MedicalExam> medicalExams = this.medicalExamService.findByPatientId(id);
         List<MedicalExamDTO> examsDTO = new ArrayList<MedicalExamDTO>();
         for(MedicalExam exam : medicalExams){
             MedicalExamDTO dto = new MedicalExamDTO();
@@ -42,12 +32,10 @@ public class MedicalExamController {
 
             dto.setDoctor(exam.getDoctor().getName());
             dto.setEndTime(exam.getEndTime());
-            dto.setExamRoom(exam.getExamRoom().getName());
             dto.setStartTime(exam.getStartTime());
             dto.setExamType(exam.getExamType().getName());
             examsDTO.add(dto);
         }
-        System.out.println(examsDTO);
         return examsDTO;
     }
 }
