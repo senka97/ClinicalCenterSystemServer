@@ -27,8 +27,9 @@ public class SurgeryController {
         for (Surgery surgery : surgeries) {
             SurgeryDTO dto = new SurgeryDTO();
             dto.setDate(surgery.getDate().toString());
-            dto.setEndTime(surgery.getEndTime());
             dto.setStartTime(surgery.getStartTime());
+            dto.setEndTime(surgery.getEndTime());
+
             dto.setSurgeryType(surgery.getSurgeryType().getName());
             surgeryDTO.add(dto);
         }
