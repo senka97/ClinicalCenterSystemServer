@@ -17,13 +17,11 @@ public class PrescriptionService {
         return prescriptionRepository.findUnverified(clinic_id);
     }
 
-    public Prescription findOne(Long id)
-    {
+    public Prescription findOne(Long id) {
         return prescriptionRepository.findById(id).orElse(null);
     }
 
-    public Prescription save(Prescription p)
-    {
+    public Prescription save(Prescription p) {
         return prescriptionRepository.save(p);
     }
 }

@@ -1,8 +1,6 @@
 package team57.project.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -36,7 +34,7 @@ public class Patient extends User {
     public void setMedicalRecord(MedicalRecord medicalRecord) {
         this.medicalRecord = medicalRecord;
     }
-
+    @JsonIgnore
     public Set<Surgery> getSurgeries() {
         return surgeries;
     }
@@ -44,7 +42,7 @@ public class Patient extends User {
     public void setSurgeries(Set<Surgery> surgeries) {
         this.surgeries = surgeries;
     }
-
+    @JsonIgnore
     public Set<MedicalExam> getMedicalExams() {
         return medicalExams;
     }

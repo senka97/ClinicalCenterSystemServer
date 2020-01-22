@@ -1,16 +1,9 @@
 package team57.project.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
 import javax.persistence.*;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -122,6 +115,7 @@ public class Doctor extends User {
         this.examTypes = examTypes;
     }
 
+    @JsonIgnore
     public Set<Surgery> getSurgeries() {
         return surgeries;
     }
@@ -139,6 +133,7 @@ public class Doctor extends User {
         this.surgeryTypes = surgeryTypes;
     }
 
+    @JsonIgnore
     public Set<MedicalExam> getMedicalExams() {
         return medicalExams;
     }
@@ -188,8 +183,6 @@ public class Doctor extends User {
     public void setRemoved(boolean removed) {
         this.removed = removed;
     }
-
-
 
 
 }

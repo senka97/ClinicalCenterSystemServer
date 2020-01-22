@@ -3,7 +3,6 @@ package team57.project.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.Set;
 @Entity
 public class Prescription {
     @Id
@@ -88,4 +87,5 @@ public class Prescription {
     public void setClinic(Clinic clinic) {
         this.clinic = clinic;
     }
+
 }

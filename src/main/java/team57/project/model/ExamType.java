@@ -91,6 +91,7 @@ public class ExamType {
         this.discount = discount;
     }
 
+    @JsonIgnore
     public Set<Doctor> getDoctors() {
         return doctors;
     }
@@ -99,6 +100,7 @@ public class ExamType {
         this.doctors = doctors;
     }
 
+    @JsonIgnore
     public Set<Clinic> getClinics() {
         return clinics;
     }

@@ -71,30 +71,32 @@ public class ExamTypeController {
               }
        }
 
-       @GetMapping(value="/getTypesForReg/{idClinic}", produces="application/json")
-       @PreAuthorize("hasRole('CLINIC_ADMIN')")
-       public ResponseEntity<?> getTypesForReg(@PathVariable("idClinic") Long idClinic){
 
-              try{
-                     Clinic clinic = clinicService.findOne(idClinic);
-                     TypeRegDoctor typeRegDoctor = new TypeRegDoctor();
-                     for(ExamType et: clinic.getExamTypes()){
-                            if(!et.isRemoved()){
-                                   typeRegDoctor.getExamTypeRegs().add(new ExamTypeReg(et));
-                            }
-                     }
-                     for(SurgeryType st: clinic.getSurgeryTypes()){
-                            if(!st.isRemoved()){
-                                   typeRegDoctor.getSurgeryTypeRegs().add(new SurgeryTypeReg(st));
-                            }
-                     }
+    @GetMapping(value = "/getTypesForReg/{idClinic}", produces = "application/json")
+    @PreAuthorize("hasRole('CLINIC_ADMIN')")
+    public ResponseEntity<?> getTypesForReg(@PathVariable("idClinic") Long idClinic) {
 
-                     return new ResponseEntity(typeRegDoctor,HttpStatus.OK);
-              }catch(NullPointerException e){
+        try {
+            Clinic clinic = clinicService.findOne(idClinic);
+            TypeRegDoctor typeRegDoctor = new TypeRegDoctor();
+            for (ExamType et : clinic.getExamTypes()) {
+                if (!et.isRemoved()) {
+                    typeRegDoctor.getExamTypeRegs().add(new ExamTypeReg(et));
+                }
+            }
+            for (SurgeryType st : clinic.getSurgeryTypes()) {
+                if (!st.isRemoved()) {
+                    typeRegDoctor.getSurgeryTypeRegs().add(new SurgeryTypeReg(st));
+                }
+            }
 
-                     return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-              }
-       }
+            return new ResponseEntity(typeRegDoctor, HttpStatus.OK);
+        } catch (NullPointerException e) {
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
 
        @PostMapping(value="/addExamType/{idClinic}", consumes="application/json")
        @PreAuthorize("hasRole('CLINIC_ADMIN')")
