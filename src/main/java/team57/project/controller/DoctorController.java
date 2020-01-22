@@ -1,7 +1,5 @@
 package team57.project.controller;
 
-import jdk.nashorn.internal.runtime.regexp.RegExp;
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +12,6 @@ import team57.project.model.Doctor;
 import team57.project.service.ClinicService;
 import team57.project.service.impl.DoctorServiceImpl;
 
-import javax.xml.ws.Response;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -66,8 +61,8 @@ public class DoctorController {
         doctorDTO.getAddress().equals("") || doctorDTO.getAddress() == null || doctorDTO.getCity().equals("") || doctorDTO.getCity() == null ||
         doctorDTO.getCountry().equals("") || doctorDTO.getCountry() == null || doctorDTO.getEmail().equals("") || doctorDTO.getEmail() == null ||
         doctorDTO.getPassword().equals("") || doctorDTO.getPassword() == null || doctorDTO.getPhoneNumber().equals("") || doctorDTO.getPhoneNumber() == null ||
-                !isSerialNumber(doctorDTO.getSerialNumber())){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("All fields are mandatory. Serial number must contain 13 numbers.");
+                !isSerialNumber(doctorDTO.getSerialNumber()) || doctorDTO.getExamTypesId().size() == 0 || doctorDTO.getSurgeryTypesId().size() == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("All fields are mandatory. Serial number must contain 13 numbers. Doctor must have at least one exam type or surgery type.");
         }
 
         try{

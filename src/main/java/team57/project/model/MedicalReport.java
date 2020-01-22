@@ -17,8 +17,8 @@ public class MedicalReport {
     private Time time;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Diagnose> diagnoses;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Prescription prescription;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Prescription> prescriptions;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Doctor doctor;
 

@@ -1,8 +1,9 @@
 package team57.project.dto;
-
 import team57.project.model.Doctor;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DoctorDTO {
 
@@ -16,9 +17,11 @@ public class DoctorDTO {
     private String country;
     private String phoneNumber;
     private String serialNumber;
-
     private LocalTime workingHoursStart;
     private LocalTime workingHoursEnd;
+
+    private List<Long> examTypesId; //ovo za registrovanje doktora
+    private List<Long> surgeryTypesId;
 
     public DoctorDTO(){
 
@@ -37,6 +40,8 @@ public class DoctorDTO {
         this.serialNumber = serialNumber;
         this.workingHoursStart = workingHoursStart;
         this.workingHoursEnd = workingHoursEnd;
+        this.examTypesId = new ArrayList<Long>();
+        this.surgeryTypesId = new ArrayList<Long>();
 
     }
 
@@ -52,6 +57,8 @@ public class DoctorDTO {
         this.serialNumber = doctor.getSerialNumber();
         this.workingHoursStart = doctor.getWorkingHoursStart();
         this.workingHoursEnd = doctor.getWorkingHoursEnd();
+        this.examTypesId = new ArrayList<Long>();
+        this.surgeryTypesId = new ArrayList<Long>();
     }
 
     public Long getId() {
@@ -149,4 +156,21 @@ public class DoctorDTO {
     public void setWorkingHoursEnd(LocalTime workingHoursEnd) {
         this.workingHoursEnd = workingHoursEnd;
     }
+
+    public List<Long> getExamTypesId() {
+        return examTypesId;
+    }
+
+    public void setExamTypesId(List<Long> examTypesId) {
+        this.examTypesId = examTypesId;
+    }
+
+    public List<Long> getSurgeryTypesId() {
+        return surgeryTypesId;
+    }
+
+    public void setSurgeryTypesId(List<Long> surgeryTypesId) {
+        this.surgeryTypesId = surgeryTypesId;
+    }
+
 }

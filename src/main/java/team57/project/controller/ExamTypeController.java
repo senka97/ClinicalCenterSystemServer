@@ -7,8 +7,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import team57.project.dto.ExamTypeDTO;
+import team57.project.dto.ExamTypeReg;
+import team57.project.dto.SurgeryTypeReg;
+import team57.project.dto.TypeRegDoctor;
 import team57.project.model.Clinic;
 import team57.project.model.ExamType;
+import team57.project.model.SurgeryType;
 import team57.project.service.ClinicService;
 import team57.project.service.impl.ExamTypeServiceImpl;
 
@@ -66,6 +70,33 @@ public class ExamTypeController {
                      return ResponseEntity.notFound().build();
               }
        }
+
+
+    @GetMapping(value = "/getTypesForReg/{idClinic}", produces = "application/json")
+    @PreAuthorize("hasRole('CLINIC_ADMIN')")
+    public ResponseEntity<?> getTypesForReg(@PathVariable("idClinic") Long idClinic) {
+
+        try {
+            Clinic clinic = clinicService.findOne(idClinic);
+            TypeRegDoctor typeRegDoctor = new TypeRegDoctor();
+            for (ExamType et : clinic.getExamTypes()) {
+                if (!et.isRemoved()) {
+                    typeRegDoctor.getExamTypeRegs().add(new ExamTypeReg(et));
+                }
+            }
+            for (SurgeryType st : clinic.getSurgeryTypes()) {
+                if (!st.isRemoved()) {
+                    typeRegDoctor.getSurgeryTypeRegs().add(new SurgeryTypeReg(st));
+                }
+            }
+
+            return new ResponseEntity(typeRegDoctor, HttpStatus.OK);
+        } catch (NullPointerException e) {
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
 
        @PostMapping(value="/addExamType/{idClinic}", consumes="application/json")
        @PreAuthorize("hasRole('CLINIC_ADMIN')")
