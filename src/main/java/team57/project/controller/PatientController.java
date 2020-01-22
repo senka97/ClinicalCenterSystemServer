@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import team57.project.dto.DiagnosisDTO;
 import team57.project.dto.MedicalRecordDTO;
 import team57.project.dto.MedicationDTO;
-import team57.project.model.Diagnose;
-import team57.project.model.MedicalRecord;
-import team57.project.model.Medication;
-import team57.project.model.Patient;
+import team57.project.model.*;
 import team57.project.service.DiagnosisService;
 import team57.project.service.MedicationService;
 import team57.project.service.PatientService;
@@ -121,5 +118,7 @@ public class PatientController {
     public Set<Diagnose> getPatientChronicCon(@PathVariable("id") Long id) {
         return this.patientService.findOne(id).getMedicalRecord().getChronicConditions();
     }
+
+
 
 }

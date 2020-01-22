@@ -104,7 +104,7 @@ public class Clinic {
         this.rooms = rooms;
     }
 
-
+    @JsonIgnore
     public Set<ClinicAdmin> getClinicAdmins() {
         return clinicAdmins;
     }
