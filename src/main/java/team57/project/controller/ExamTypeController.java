@@ -6,10 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import team57.project.dto.ExamTypeDTO;
-import team57.project.dto.ExamTypeReg;
-import team57.project.dto.SurgeryTypeReg;
-import team57.project.dto.TypeRegDoctor;
+import team57.project.dto.*;
 import team57.project.model.Clinic;
 import team57.project.model.ExamType;
 import team57.project.model.SurgeryType;
@@ -169,5 +166,24 @@ public class ExamTypeController {
 
                      return ResponseEntity.notFound().build();
               }
+       }
+
+       @GetMapping(value="/getExamPrice/{idClinic}", produces="application/json")
+       @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN') or hasRole('ROLE_PATIENT')")
+       public ResponseEntity<?> getExamPrice(@PathVariable("idClinic") Long idClinic){
+
+              try{
+                     Clinic clinic = this.clinicService.findOne(idClinic);
+                     List<PriceTag> examPrice = new ArrayList<PriceTag>();
+                     for(ExamType et: clinic.getExamTypes()){
+                            if(!et.isRemoved()){
+                                   examPrice.add(new PriceTag(et.getName(),et.getPrice(),et.getDiscount()));
+                            }
+                     }
+                     return new ResponseEntity(examPrice, HttpStatus.OK);
+              } catch (NullPointerException e){
+                     return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+              }
+
        }
 }
