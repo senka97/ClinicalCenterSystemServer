@@ -119,6 +119,13 @@ public class PatientController {
         return this.patientService.findOne(id).getMedicalRecord().getChronicConditions();
     }
 
+    @RequestMapping(value = "/getRatedDoctors/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    public List<Doctor> getRatedDoctors(@PathVariable("id") Long id) {
+
+        return this.patientService.leftDoctors(id);
+    }
+
 
 
 }

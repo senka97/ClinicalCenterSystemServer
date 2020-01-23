@@ -22,6 +22,8 @@ public class Patient extends User {
     private Set<MedicalExam> medicalExams;
     @OneToMany(mappedBy = "patient",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<FastAppointment> fastAppointments;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Doctor> ratedDoctors;
 
     public Patient(String name, String surname, String email, String password, String address, String city, String country, String phoneNumber, String serialNumber) {
         super(name, surname, email, password, address, city, country, phoneNumber, serialNumber);
@@ -66,5 +68,14 @@ public class Patient extends User {
 
     public void setActivatedAccount(String activatedAccount) {
         this.activatedAccount = activatedAccount;
+    }
+
+    @JsonIgnore
+    public Set<Doctor> getDoctors() {
+        return ratedDoctors;
+    }
+
+    public void setDoctors(Set<Doctor> doctors) {
+        this.ratedDoctors = doctors;
     }
 }
