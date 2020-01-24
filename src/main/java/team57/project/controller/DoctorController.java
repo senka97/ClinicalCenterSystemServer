@@ -124,6 +124,32 @@ public class DoctorController {
 
     }
 
+    //transakcija treba pacijenta update
+    @PutMapping(value = "/rateDoctor/{id}", consumes = "application/json", produces = "application/json")
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    public ResponseEntity<?> rateDoctor(@PathVariable("id") Long id, @RequestBody Double rate) {
+
+        try {
+            Doctor d = this.doctorService.findOne(id);
+            System.out.println(d);
+            System.out.println("Rate: " + rate);
+            System.out.println("Before: " + d.getRating() * d.getNumberOfReviews());
+            Double rated = d.getRating() * d.getNumberOfReviews() + rate;
+            System.out.println("After: " + rated);
+            d.setNumberOfReviews(d.getNumberOfReviews() + 1);
+            rated = rated / d.getNumberOfReviews();
+            d.setRating(rated);
+            System.out.println("Final: " + d.getRating() + "  " + d.getNumberOfReviews());
+            //   this.doctorService.save()
+
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (NullPointerException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+
+    }
+
     private boolean isSerialNumber(String n){
         if (Pattern.matches("[0-9]+", n) && n.length() == 13) {
             return true;

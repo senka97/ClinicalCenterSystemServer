@@ -50,7 +50,7 @@ public class PatientController {
         return this.patientService.findOne(id);
     }
     @RequestMapping(value = "/patientMedicalRecord/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('ROLE_DOCTOR') or hasRole('ROLE_PATIENT')")
+    @PreAuthorize("hasRole('ROLE_DOCTOR') or hasRole('ROLE_PATIENT') or hasRole('ROLE_NURSE')")
     public MedicalRecord getPatientMedicalRecord(@PathVariable("id") Long id) {
 
         return this.patientService.findPatientMedicalRecord(id);

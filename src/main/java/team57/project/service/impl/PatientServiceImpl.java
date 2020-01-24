@@ -36,7 +36,9 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Patient save(Patient p) {return patientRepostiory.save(p); }
+    public Patient save(Patient p) {
+        return patientRepostiory.save(p);
+    }
 
     @Override
     public MedicalRecord findPatientMedicalRecord(Long id) {
@@ -78,19 +80,22 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public List<Doctor> leftDoctors(Long id) {
-        List<Long> doctors = this.medicalExamRepository.findDoctors(id);
-        List<Doctor> leftDoct = new ArrayList<Doctor>();
-        for (Long docId : doctors) {
-            Doctor d = this.doctorRepository.findById(docId).orElse(null);
-            if (d != null) {
-                leftDoct.add(d);
-            }
 
+        //Razmisliti o transakc
+        Patient p = this.patientRepostiory.findById(id).orElse(null);
+        List<Doctor> leftDoct = new ArrayList<Doctor>();
+        if (p != null) {
+            List<Long> doctors = this.medicalExamRepository.findDoctors(id);
+
+            for (Long docId : doctors) {
+                Doctor d = this.doctorRepository.findById(docId).orElse(null);
+                if (d != null) {
+                    if (!p.getDoctors().contains(d)) {
+                        leftDoct.add(d);
+                    }
+                }
+            }
         }
-        System.out.println(doctors);
-        System.out.println(leftDoct);
         return leftDoct;
     }
-
-
 }
