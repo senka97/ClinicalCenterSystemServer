@@ -48,6 +48,23 @@ public class ClinicController {
         return new ResponseEntity<>(clinicsDTO, HttpStatus.OK);
     }
 
+    @GetMapping(value="/getClinic/{id}", produces="application/json")
+    @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
+    public ResponseEntity<?> getClinic(@PathVariable("id") Long id)
+    {
+         try{
+             Clinic clinic = clinicService.findOne(id);
+             ClinicDTO clinicDTO = new ClinicDTO(clinic);
+             return new ResponseEntity<>(clinicDTO, HttpStatus.OK);
+
+         }catch(NullPointerException e){
+             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+         }
+
+
+    }
+
+
     @RequestMapping(value = "/editClinic/{id}", method = PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
     public ResponseEntity<?> editClinic(@PathVariable("id") Long id, @RequestBody ClinicDTO clinicDTO) {

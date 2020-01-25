@@ -26,6 +26,8 @@ public class ExamType {
     private Set<Clinic> clinics;
     @Column(name = "removed", nullable = false)
     private boolean removed;
+    @Column(name = "duration",nullable = false)
+    private int duration;
 
     public ExamType(){
 
@@ -39,6 +41,7 @@ public class ExamType {
         this.doctors = doctors;
         this.clinics = clinics;
         this.removed = false;
+        this.duration = 1;
     }
 
     public ExamType(String name, String description, double price, double discount) {
@@ -49,6 +52,7 @@ public class ExamType {
         this.doctors = new HashSet<>();
         this.clinics = new HashSet<>();
         this.removed = false;
+        this.duration = 1;
     }
 
     public Long getId() {
@@ -115,5 +119,13 @@ public class ExamType {
 
     public void setRemoved(boolean removed) {
         this.removed = removed;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 }
