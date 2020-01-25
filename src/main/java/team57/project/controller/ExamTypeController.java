@@ -37,7 +37,7 @@ public class ExamTypeController {
                             return ResponseEntity.status(HttpStatus.GONE).build();
                      }
 
-                     ExamTypeDTO examTypeDTO = new ExamTypeDTO(examType.getId(),examType.getName(),examType.getDescription(),examType.getPrice(), examType.getDiscount());
+                     ExamTypeDTO examTypeDTO = new ExamTypeDTO(examType.getId(),examType.getName(),examType.getDescription(),examType.getPrice(), examType.getDiscount(),examType.getDuration());
                      return new ResponseEntity(examTypeDTO, HttpStatus.OK);
 
               } catch(NullPointerException e){

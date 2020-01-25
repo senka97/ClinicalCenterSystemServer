@@ -9,17 +9,19 @@ public class SurgeryTypeDTO {
     private String description;
     private double price;
     private double discount;
+    private int duration;
 
     public SurgeryTypeDTO(){
 
     }
 
-    public SurgeryTypeDTO(Long id, String name, String description, double price, double discount) {
+    public SurgeryTypeDTO(Long id, String name, String description, double price, double discount, int duration) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.discount = discount;
+        this.duration = duration;
     }
 
     public SurgeryTypeDTO(SurgeryType surgeryType){
@@ -28,6 +30,7 @@ public class SurgeryTypeDTO {
         this.description = surgeryType.getDescription();
         this.discount = surgeryType.getDiscount();
         this.price = surgeryType.getPrice();
+        this.duration = surgeryType.getDuration();
     }
 
     public Long getId() {
@@ -68,5 +71,13 @@ public class SurgeryTypeDTO {
 
     public void setDiscount(double discount) {
         this.discount = discount;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 }

@@ -38,7 +38,7 @@ public class SurgeryTypeController {
                 return ResponseEntity.status(HttpStatus.GONE).build();
             }
 
-            SurgeryTypeDTO surgeryTypeDTO = new SurgeryTypeDTO(surgeryType.getId(),surgeryType.getName(),surgeryType.getDescription(),surgeryType.getPrice(), surgeryType.getDiscount());
+            SurgeryTypeDTO surgeryTypeDTO = new SurgeryTypeDTO(surgeryType.getId(),surgeryType.getName(),surgeryType.getDescription(),surgeryType.getPrice(), surgeryType.getDiscount(),surgeryType.getDuration());
             return new ResponseEntity(surgeryTypeDTO, HttpStatus.OK);
 
         } catch(NullPointerException e){
