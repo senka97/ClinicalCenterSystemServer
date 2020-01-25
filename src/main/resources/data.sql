@@ -78,4 +78,4 @@ insert into medical_report_prescriptions (medical_report_id, prescriptions_id) v
 insert into request_for_absence (start_date,end_date,serial_number,type) value ('2019-10-15','2019-11-01','032163256332','paid vacation');
 insert into surgery (date,start_time, end_time,patient_id,surgery_type_id) value ('2019-04-12','12:45:00','15:45:00',5,1);
 insert into doctors_surgeries (doctor_id, surgery_id) value (3,1);
-insert into user_rated_doctors (patient_id, rated_doctors_id) value (5, 3);
+

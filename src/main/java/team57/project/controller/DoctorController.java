@@ -7,9 +7,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import team57.project.dto.DoctorDTO;
 import team57.project.dto.DoctorSearch;
+import team57.project.dto.RateDTO;
 import team57.project.model.Clinic;
 import team57.project.model.Doctor;
 import team57.project.service.ClinicService;
+import team57.project.service.PatientService;
 import team57.project.service.impl.DoctorServiceImpl;
 
 import java.util.List;
@@ -24,6 +26,8 @@ public class DoctorController {
     private DoctorServiceImpl doctorService;
     @Autowired
     private ClinicService clinicService;
+    @Autowired
+    private PatientService patientService;
 
     @GetMapping(value="/getDoctor/{id}", produces="application/json")
     @PreAuthorize("hasRole('CLINIC_ADMIN')")
@@ -127,21 +131,10 @@ public class DoctorController {
     //transakcija treba pacijenta update
     @PutMapping(value = "/rateDoctor/{id}", consumes = "application/json", produces = "application/json")
     @PreAuthorize("hasRole('ROLE_PATIENT')")
-    public ResponseEntity<?> rateDoctor(@PathVariable("id") Long id, @RequestBody Double rate) {
+    public ResponseEntity<?> rateDoctor(@PathVariable("id") Long id, @RequestBody RateDTO rate) {
 
         try {
-            Doctor d = this.doctorService.findOne(id);
-            System.out.println(d);
-            System.out.println("Rate: " + rate);
-            System.out.println("Before: " + d.getRating() * d.getNumberOfReviews());
-            Double rated = d.getRating() * d.getNumberOfReviews() + rate;
-            System.out.println("After: " + rated);
-            d.setNumberOfReviews(d.getNumberOfReviews() + 1);
-            rated = rated / d.getNumberOfReviews();
-            d.setRating(rated);
-            System.out.println("Final: " + d.getRating() + "  " + d.getNumberOfReviews());
-            //   this.doctorService.save()
-
+            this.doctorService.rateDoctor(id, rate);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (NullPointerException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

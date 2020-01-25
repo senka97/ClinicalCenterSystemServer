@@ -14,6 +14,7 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="type", discriminatorType = DiscriminatorType.STRING)
 public class User implements UserDetails {
+//    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,7 +63,9 @@ public class User implements UserDetails {
     @Column(name = "passwordChanged")
     private boolean passwordChanged = false;
 
-    //getters and setters
+//    @Version
+//    private Long version;
+//    //getters and setters
 
     public Long getId() {
         return id;
@@ -204,6 +207,13 @@ public class User implements UserDetails {
         this.passwordChanged = passwordChanged;
     }
 
+    //    public Long getVersion() {
+//        return version;
+//    }
+//
+//    public void setVersion(Long version) {
+//        this.version = version;
+//    }
     public User(){
 
     }
