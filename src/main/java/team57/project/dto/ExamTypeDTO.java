@@ -9,6 +9,7 @@ public class ExamTypeDTO {
     private String description;
     private double price;
     private double discount;
+    private int duration;
 
     public ExamTypeDTO(){
 
@@ -20,14 +21,16 @@ public class ExamTypeDTO {
         this.description = examType.getDescription();
         this.price = examType.getPrice();
         this.discount = examType.getDiscount();
+        this.duration = examType.getDuration();
     }
 
-    public ExamTypeDTO(Long id, String name, String description, double price, double discount) {
+    public ExamTypeDTO(Long id, String name, String description, double price, double discount, int duration) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.discount = discount;
+        this.duration = duration;
     }
 
     public Long getId() {
@@ -68,5 +71,13 @@ public class ExamTypeDTO {
 
     public void setDiscount(double discount) {
         this.discount = discount;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 }

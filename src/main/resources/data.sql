@@ -34,12 +34,12 @@ insert into user_authority(user_id, authority_id) value (4,5);
 insert into user_authority(user_id, authority_id) value (5,3);
 
 
-insert into exam_type (name, description, price,discount,removed) value ('CT snimanje glave', 'Snimanje glave',10000,10, FALSE);
-insert into exam_type (name, description, price,discount,removed) value ('Ultrazvuk kicenog stuba', 'Kompletan ultrazvuk celog kicmenog stuba.',15000, 10, FALSE);
-insert into exam_type (name, description, price,discount,removed) value ('Provera motornih sposobnosti', 'Provera motornih sposobnosti uz pomoc savremenih uredjaja.',7000,10, FALSE);
-insert into surgery_type(name,description,price,discount,removed) value ('Operacija slepog creva','Najnovija laserska metoda.',100000,5,FALSE);
-insert into surgery_type(name,description,price,discount,removed) value ('Operacija ledjnih prsljena','Najnovija laserska metoda.',90000,5,FALSE);
-insert into surgery_type(name,description,price,discount,removed) value ('Operacija kicmene mozdine','Najnovija laserska metoda.',150000,5,FALSE);
+insert into exam_type (name, description, price,discount,removed,duration) value ('CT snimanje glave', 'Snimanje glave',10000,10, FALSE,1);
+insert into exam_type (name, description, price,discount,removed,duration) value ('Ultrazvuk kicenog stuba', 'Kompletan ultrazvuk celog kicmenog stuba.',15000, 10, FALSE,1);
+insert into exam_type (name, description, price,discount,removed,duration) value ('Provera motornih sposobnosti', 'Provera motornih sposobnosti uz pomoc savremenih uredjaja.',7000,10, FALSE,1);
+insert into surgery_type(name,description,price,discount,removed,duration) value ('Operacija slepog creva','Najnovija laserska metoda.',100000,5,FALSE,1);
+insert into surgery_type(name,description,price,discount,removed,duration) value ('Operacija ledjnih prsljena','Najnovija laserska metoda.',90000,5,FALSE,1);
+insert into surgery_type(name,description,price,discount,removed,duration) value ('Operacija kicmene mozdine','Najnovija laserska metoda.',150000,5,FALSE,1);
 
 insert into doctors_exam_types(doctor_id, exam_type_id) value (3,1);
 insert into doctors_surgery_types(doctor_id, surgery_type_id) value (3,1);

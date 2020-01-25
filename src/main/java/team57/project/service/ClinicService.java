@@ -35,10 +35,10 @@ public class ClinicService {
         List<Clinic> allClinics = this.findAll();
         for(Clinic c : allClinics){
             if(c.getName().equals(name) && c.getId() != id){
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     public void addNewRoom(Clinic clinic, RoomDTO roomDTO) {

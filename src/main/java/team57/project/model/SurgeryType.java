@@ -25,6 +25,8 @@ public class SurgeryType {
     private Set<Clinic> clinics;
     @Column(name = "removed", nullable = false)
     private boolean removed;
+    @Column(name = "duration", nullable = false)
+    private int duration;
 
     public SurgeryType(){
 
@@ -38,6 +40,7 @@ public class SurgeryType {
         this.removed = false;
         this.doctors = new HashSet<>();
         this.clinics = new HashSet<>();
+        this.duration = 1;
     }
 
     public SurgeryType(String name, String description, double price, double discount, Set<Doctor> doctors, Set<Clinic> clinics) {
@@ -48,6 +51,7 @@ public class SurgeryType {
         this.doctors = doctors;
         this.clinics = clinics;
         this.removed = false;
+        this.duration = 1;
     }
 
 
@@ -116,5 +120,13 @@ public class SurgeryType {
 
     public void setRemoved(boolean removed) {
         this.removed = removed;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 }

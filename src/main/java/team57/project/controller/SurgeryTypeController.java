@@ -6,8 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import team57.project.dto.PriceTag;
 import team57.project.dto.SurgeryTypeDTO;
 import team57.project.model.Clinic;
+import team57.project.model.ExamType;
 import team57.project.model.SurgeryType;
 import team57.project.service.ClinicService;
 import team57.project.service.impl.SurgeryTypeServiceImpl;
@@ -36,7 +38,7 @@ public class SurgeryTypeController {
                 return ResponseEntity.status(HttpStatus.GONE).build();
             }
 
-            SurgeryTypeDTO surgeryTypeDTO = new SurgeryTypeDTO(surgeryType.getId(),surgeryType.getName(),surgeryType.getDescription(),surgeryType.getPrice(), surgeryType.getDiscount());
+            SurgeryTypeDTO surgeryTypeDTO = new SurgeryTypeDTO(surgeryType.getId(),surgeryType.getName(),surgeryType.getDescription(),surgeryType.getPrice(), surgeryType.getDiscount(),surgeryType.getDuration());
             return new ResponseEntity(surgeryTypeDTO, HttpStatus.OK);
 
         } catch(NullPointerException e){
@@ -140,5 +142,24 @@ public class SurgeryTypeController {
 
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping(value="/getSurgeryPrice/{idClinic}", produces="application/json")
+    @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN') or hasRole('ROLE_PATIENT')")
+    public ResponseEntity<?> getExamPrice(@PathVariable("idClinic") Long idClinic){
+
+        try{
+            Clinic clinic = this.clinicService.findOne(idClinic);
+            List<PriceTag> surgeryPrice = new ArrayList<PriceTag>();
+            for(SurgeryType st: clinic.getSurgeryTypes()){
+                if(!st.isRemoved()){
+                    surgeryPrice.add(new PriceTag(st.getName(),st.getPrice(),st.getDiscount()));
+                }
+            }
+            return new ResponseEntity(surgeryPrice, HttpStatus.OK);
+        } catch (NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
     }
 }

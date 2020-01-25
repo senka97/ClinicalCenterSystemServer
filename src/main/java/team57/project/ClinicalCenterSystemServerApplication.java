@@ -12,8 +12,6 @@ public class ClinicalCenterSystemServerApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ClinicalCenterSystemServerApplication.class, args);
-        //ClinicAdmin a = ClinicAdmin.builder().clinicId("email").time("sdsdsd").build();
-      //  System.out.println(a);
 
     }
 
