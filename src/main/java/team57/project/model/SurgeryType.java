@@ -96,6 +96,7 @@ public class SurgeryType {
         this.discount = discount;
     }
 
+    @JsonIgnore
     public Set<Doctor> getDoctors() {
         return doctors;
     }
@@ -104,7 +105,7 @@ public class SurgeryType {
         this.doctors = doctors;
     }
 
-
+    @JsonIgnore
     public Set<Clinic> getClinics() {
         return clinics;
     }

@@ -7,7 +7,7 @@ public class ExamTypeReg {
     private Long id;
     private String name;
 
-    public ExamTypeReg(){
+    public ExamTypeReg() {
 
     }
 
@@ -16,7 +16,7 @@ public class ExamTypeReg {
         this.name = name;
     }
 
-    public ExamTypeReg(ExamType examType){
+    public ExamTypeReg(ExamType examType) {
         this.id = examType.getId();
         this.name = examType.getName();
     }

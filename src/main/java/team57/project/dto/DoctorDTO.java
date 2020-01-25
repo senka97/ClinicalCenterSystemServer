@@ -1,5 +1,4 @@
 package team57.project.dto;
-
 import team57.project.model.Doctor;
 
 import java.time.LocalTime;
@@ -18,7 +17,6 @@ public class DoctorDTO {
     private String country;
     private String phoneNumber;
     private String serialNumber;
-
     private LocalTime workingHoursStart;
     private LocalTime workingHoursEnd;
 

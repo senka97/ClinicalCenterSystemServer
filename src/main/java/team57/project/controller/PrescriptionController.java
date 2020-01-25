@@ -1,6 +1,6 @@
 package team57.project.controller;
 
-import com.sun.org.apache.xerces.internal.util.HTTPInputSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +14,7 @@ import team57.project.model.Prescription;
 import team57.project.service.ClinicService;
 import team57.project.service.NurseService;
 import team57.project.service.PrescriptionService;
+
 import java.util.List;
 
 @RestController
@@ -30,10 +31,9 @@ public class PrescriptionController {
     @Autowired
     private ClinicService clinicService;
 
-    @GetMapping( value = "/getPrescriptions", produces = "application/json")
+    @GetMapping(value = "/getPrescriptions", produces = "application/json")
     @PreAuthorize("hasRole('ROLE_NURSE')")
-    public ResponseEntity<?> getPrescriptions()
-    {
+    public ResponseEntity<?> getPrescriptions() {
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
         String email = currentUser.getName();
         Nurse nurse = (Nurse) nurseService.findByEmail(email);
@@ -45,12 +45,11 @@ public class PrescriptionController {
         return new ResponseEntity<>(prescriptions, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/verify/{id}", produces="application/json", consumes = "application/json")
+    @PutMapping(value = "/verify/{id}", produces = "application/json", consumes = "application/json")
     @PreAuthorize("hasRole('ROLE_NURSE')")
-    public ResponseEntity<?> verify(@PathVariable("id") Long id)
-    {
-        Prescription prescription= prescriptionService.findOne(id);
-        if(prescription == null){
+    public ResponseEntity<?> verify(@PathVariable("id") Long id) {
+        Prescription prescription = prescriptionService.findOne(id);
+        if (prescription == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 

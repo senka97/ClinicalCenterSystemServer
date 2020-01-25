@@ -7,7 +7,7 @@ public class SurgeryTypeReg {
     private Long id;
     private String name;
 
-    public SurgeryTypeReg(){
+    public SurgeryTypeReg() {
 
     }
 
@@ -16,7 +16,7 @@ public class SurgeryTypeReg {
         this.name = name;
     }
 
-    public SurgeryTypeReg(SurgeryType surgeryType){
+    public SurgeryTypeReg(SurgeryType surgeryType) {
         this.id = surgeryType.getId();
         this.name = surgeryType.getName();
     }
