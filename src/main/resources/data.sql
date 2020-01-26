@@ -20,6 +20,12 @@ insert into user (name, surname, email, password, address, city, country, phone_
 insert into user (name, surname, email, password, address, city, country, phone_number, serial_number, number_of_reviews, rating, activated_account, enabled, last_password_reset_date, password_changed, working_hours_start, working_hours_end, removed, clinic_id, type) values ('Petar', 'Petrovic', 'amanda.pitt97@gmail.com','$2a$10$.4TlEcGSbL2ibKLkKMBqo.otZTShm8UqMjkpOK3Lpl42y3BH0m56q','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',0,0,-1,TRUE,'2019-11-19 04:00:00',FALSE, '06:00', '14:00', FALSE, 1, 'DOCTOR');
 insert into user (name, surname, email, password, address, city, country, phone_number, serial_number,number_of_reviews, rating, activated_account, enabled, last_password_reset_date, password_changed, working_hours_start, working_hours_end, removed, clinic_id, type) values ('Mira', 'Miric', 'mira@gmail.com','$2a$10$KE8DhbZ9044d9fMIDIJopOc70vGQpjGzKjIRWrVlCDiyoSxJGEJ2G','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',-1,-1,-1,TRUE,'2019-11-19 04:00:00',FALSE,'06:00', '14:00', FALSE, 1, 'NURSE');
 insert into user (name, surname, email, password, address, city, country, phone_number, serial_number,number_of_reviews, rating, activated_account, enabled, last_password_reset_date, password_changed,medical_record_id,working_hours_start, working_hours_end, removed, type) values ('Pera', 'Peric', 'pera@gmail.com','$2a$10$ys.u36Wk7e/9y.dkUb0svOD5I.vaFRtdDwaXQlR5K/O42EYrlWGq6','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',-1,-1,'ACCEPTED',TRUE,'2019-11-19 04:00:00',TRUE,1,'06:00', '14:00', FALSE,'PATIENT');
+insert into user (name, surname, email, password, address, city, country, phone_number, serial_number,
+                  number_of_reviews, rating, activated_account, enabled, last_password_reset_date, password_changed,
+                  working_hours_start, working_hours_end, removed, clinic_id, type)
+values ('Nikola', 'Nikolic', 'nikola@gmail.com', '$2a$10$.4TlEcGSbL2ibKLkKMBqo.otZTShm8UqMjkpOK3Lpl42y3BH0m56q',
+        'Alekse Santica 47', 'Novi Sad', 'Srbija', '0635984156', '032163256332', 0, 0, -1, TRUE, '2019-11-19 04:00:00',
+        FALSE, '06:00', '14:00', FALSE, 1, 'DOCTOR');
 
 insert into user_authority(user_id, authority_id) value (1,1);
 insert into user_authority(user_id, authority_id) value (2,2);
@@ -39,6 +45,10 @@ insert into doctors_exam_types(doctor_id, exam_type_id) value (3,1);
 insert into doctors_surgery_types(doctor_id, surgery_type_id) value (3,1);
 insert into room (name, number,room_type,removed) value ('Room 1',1,'Medical exam',FALSE);
 insert into medical_exam (date, start_time, end_time,reserved,doctor_id,exam_room_id,exam_type_id,patient_id) values ('2018-07-31', '1:05:04','4:34:12',FALSE,3,1,1,5);
+insert into medical_exam (date, start_time, end_time, reserved, doctor_id, exam_room_id, exam_type_id, patient_id)
+values ('2018-08-31', '1:05:04', '5:34:12', FALSE, 3, 1, 1, 5);
+insert into medical_exam (date, start_time, end_time, reserved, doctor_id, exam_room_id, exam_type_id, patient_id)
+values ('2018-05-13', '1:05:04', '5:34:12', FALSE, 6, 1, 1, 5);
 insert into clinic_rooms (clinic_id, rooms_id) value (1,1);
 
 insert into clinics_exam_types (exam_type_id, clinic_id) value (1,1);
@@ -68,3 +78,4 @@ insert into medical_report_prescriptions (medical_report_id, prescriptions_id) v
 insert into request_for_absence (start_date,end_date,serial_number,type) value ('2019-10-15','2019-11-01','032163256332','paid vacation');
 insert into surgery (date,start_time, end_time,patient_id,surgery_type_id) value ('2019-04-12','12:45:00','15:45:00',5,1);
 insert into doctors_surgeries (doctor_id, surgery_id) value (3,1);
+

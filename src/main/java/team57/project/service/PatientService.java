@@ -1,10 +1,7 @@
 package team57.project.service;
 
 import team57.project.dto.MedicalRecordDTO;
-import team57.project.model.Diagnose;
-import team57.project.model.MedicalRecord;
-import team57.project.model.Medication;
-import team57.project.model.Patient;
+import team57.project.model.*;
 
 import java.util.List;
 
@@ -20,6 +17,7 @@ public interface PatientService {
 
     void addChronicCondition(Diagnose diagnose, MedicalRecord record);
 
+    List<Doctor> leftDoctors(Long id);
     Patient save(Patient p);
 
 }

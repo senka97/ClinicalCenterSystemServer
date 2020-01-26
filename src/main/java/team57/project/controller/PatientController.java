@@ -50,7 +50,7 @@ public class PatientController {
         return this.patientService.findOne(id);
     }
     @RequestMapping(value = "/patientMedicalRecord/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('ROLE_DOCTOR') or hasRole('ROLE_PATIENT')")
+    @PreAuthorize("hasRole('ROLE_DOCTOR') or hasRole('ROLE_PATIENT') or hasRole('ROLE_NURSE')")
     public MedicalRecord getPatientMedicalRecord(@PathVariable("id") Long id) {
 
         return this.patientService.findPatientMedicalRecord(id);
@@ -117,6 +117,13 @@ public class PatientController {
     @PreAuthorize("hasRole('ROLE_DOCTOR') or hasRole('ROLE_NURSE') or hasRole('ROLE_PATIENT')")
     public Set<Diagnose> getPatientChronicCon(@PathVariable("id") Long id) {
         return this.patientService.findOne(id).getMedicalRecord().getChronicConditions();
+    }
+
+    @RequestMapping(value = "/getRatedDoctors/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    public List<Doctor> getRatedDoctors(@PathVariable("id") Long id) {
+
+        return this.patientService.leftDoctors(id);
     }
 
 

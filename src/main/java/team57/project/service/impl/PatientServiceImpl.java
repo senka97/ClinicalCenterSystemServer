@@ -3,14 +3,14 @@ package team57.project.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team57.project.dto.MedicalRecordDTO;
-import team57.project.model.Diagnose;
-import team57.project.model.MedicalRecord;
-import team57.project.model.Medication;
-import team57.project.model.Patient;
+import team57.project.model.*;
+import team57.project.repository.DoctorRepository;
+import team57.project.repository.MedicalExamRepository;
 import team57.project.repository.MedicalRecordRepository;
 import team57.project.repository.PatientRepository;
 import team57.project.service.PatientService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,6 +20,11 @@ public class PatientServiceImpl implements PatientService {
     private PatientRepository patientRepostiory;
     @Autowired
     private MedicalRecordRepository medicalRecordRepository;
+    @Autowired
+    private MedicalExamRepository medicalExamRepository;
+    @Autowired
+    private DoctorRepository doctorRepository;
+
     @Override
     public List<Patient> findAll() {
         return patientRepostiory.findAll();
@@ -31,7 +36,9 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Patient save(Patient p) {return patientRepostiory.save(p); }
+    public Patient save(Patient p) {
+        return patientRepostiory.save(p);
+    }
 
     @Override
     public MedicalRecord findPatientMedicalRecord(Long id) {
@@ -71,5 +78,24 @@ public class PatientServiceImpl implements PatientService {
         }
     }
 
+    @Override
+    public List<Doctor> leftDoctors(Long id) {
 
+        //Razmisliti o transakc
+        Patient p = this.patientRepostiory.findById(id).orElse(null);
+        List<Doctor> leftDoct = new ArrayList<Doctor>();
+        if (p != null) {
+            List<Long> doctors = this.medicalExamRepository.findDoctors(id);
+
+            for (Long docId : doctors) {
+                Doctor d = this.doctorRepository.findById(docId).orElse(null);
+                if (d != null) {
+                    if (!p.getDoctors().contains(d)) {
+                        leftDoct.add(d);
+                    }
+                }
+            }
+        }
+        return leftDoct;
+    }
 }
