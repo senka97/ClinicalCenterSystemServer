@@ -5,19 +5,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import team57.project.dto.DoctorDTO;
 import team57.project.dto.DoctorSearch;
+import team57.project.dto.RateDTO;
 import team57.project.model.*;
 import team57.project.repository.DoctorRepository;
+import team57.project.repository.PatientRepository;
 import team57.project.service.DoctorService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 @Service
+//@Transactional(readOnly = true)
 public class DoctorServiceImpl implements DoctorService {
 
     @Autowired
     private DoctorRepository doctorRepository;
+    @Autowired
+    private PatientRepository patientRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -156,6 +160,40 @@ public class DoctorServiceImpl implements DoctorService {
         return doctorsAll;
     }
 
+    @Override
+    public Doctor save(Doctor d) {
+        return this.doctorRepository.save(d);
+    }
+
+    @Override
+    //  @Transactional()
+    public Doctor rateDoctor(Long doctorId, RateDTO rate) {
+        try {
+            System.out.println("Test");
+
+            System.out.println(rate);
+            Patient p = this.patientRepository.findById(rate.getPatient_id()).orElse(null);
+            System.out.println(p);
+            Doctor d = this.doctorRepository.findById(doctorId).orElse(null);
+
+            System.out.println("Rate: " + rate);
+            System.out.println("Before: " + d.getRating() * d.getNumberOfReviews());
+            Double rated = d.getRating() * d.getNumberOfReviews() + rate.getRate();
+            System.out.println("After: " + rated);
+            d.setNumberOfReviews(d.getNumberOfReviews() + 1);
+            rated = rated / d.getNumberOfReviews();
+            d.setRating(rated);
+            System.out.println("Final: " + d.getRating() + "  " + d.getNumberOfReviews());
+            this.doctorRepository.save(d);
+            p.getDoctors().add(d);
+            System.out.println(p);
+            this.patientRepository.save(p);
+            return d;
+        } catch (NullPointerException e) {
+            return null;
+        }
+
+    }
 
 
 }

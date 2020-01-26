@@ -10,4 +10,8 @@ public interface MedicalExamRepository extends JpaRepository<MedicalExam, Long> 
 
     @Query(value = "SELECT * FROM medical_exam e WHERE e.patient_id = ?1", nativeQuery = true)
     List<MedicalExam> findMedicalExamByPatient(Long patientId);
+
+    //all unique doctors for each patient
+    @Query(value = "SELECT DISTINCT doctor_id FROM medical_exam e WHERE e.patient_id = ?1", nativeQuery = true)
+    List<Long> findDoctors(Long patientId);
 }

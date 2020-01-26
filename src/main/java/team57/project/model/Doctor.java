@@ -11,6 +11,7 @@ import java.util.Set;
 @DiscriminatorValue("DOCTOR")
 public class Doctor extends User {
 
+
     @Column(name = "rating", nullable = true, columnDefinition = "double default -1")
     private double rating; //( rating  * reviews + new rating)/(reviews + 1)
 
