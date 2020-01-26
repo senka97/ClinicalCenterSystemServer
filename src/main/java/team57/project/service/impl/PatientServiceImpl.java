@@ -43,9 +43,10 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public void updateMedicalRecord(MedicalRecordDTO medicalRecordDTO, MedicalRecord record) {
         if (record != null) {
+            record.setDateOfBirth(medicalRecordDTO.getDateOfBirth());
             record.setHeight(medicalRecordDTO.getHeight());
             record.setWeight(medicalRecordDTO.getWeight());
-            record.setOrganDonor(medicalRecordDTO.isOrganDonor());
+            record.setOrganDonor(medicalRecordDTO.getOrganDonor());
             record.setBloodType(medicalRecordDTO.getBloodType());
             record.setDiopter(medicalRecordDTO.getDiopter());
 //                record.setChronicConditions(

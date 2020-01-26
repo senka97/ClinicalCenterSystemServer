@@ -10,14 +10,16 @@ public class MedicalRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "dateOfBirth", nullable = true)
+    private String dateOfBirth;
     @Column(name = "organDonor", nullable = true)
-    private boolean organDonor;
+    private String organDonor; //Yes or No
     @Column(name = "height", nullable = true)
     private double height;
     @Column(name = "weight", nullable = true)
     private double weight;
     @Column(name = "diopter", nullable = true)
-    private double diopter;
+    private String diopter;
     @Column(name = "bloodType", nullable = true)
     private String bloodType;
     @ManyToMany(cascade = CascadeType.ALL)
@@ -37,11 +39,11 @@ public class MedicalRecord {
         this.id = id;
     }
 
-    public boolean isOrganDonor() {
+    public String getOrganDonor() {
         return organDonor;
     }
 
-    public void setOrganDonor(boolean organDonor) {
+    public void setOrganDonor(String organDonor) {
         this.organDonor = organDonor;
     }
 
@@ -61,11 +63,11 @@ public class MedicalRecord {
         this.weight = weight;
     }
 
-    public double getDiopter() {
+    public String getDiopter() {
         return diopter;
     }
 
-    public void setDiopter(double diopter) {
+    public void setDiopter(String diopter) {
         this.diopter = diopter;
     }
 
@@ -99,5 +101,13 @@ public class MedicalRecord {
 
     public void setMedicalReports(Set<MedicalReport> medicalReports) {
         this.medicalReports = medicalReports;
+    }
+
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 }

@@ -10,7 +10,7 @@ insert into diagnose (code, description) values ('#00000023', 'Sinusitis');
 insert into diagnose (code, description) values ('#0B048020', 'Pneumonia');
 insert into diagnose (code, description) values ('#A0000023', 'Gastritis');
 insert into diagnose (code, description) values ('#ABC00800', 'Cystitis');
-insert into medical_record (organ_donor,height,weight,diopter,blood_type) value (true,182,70,0.0,'A-');
+insert into medical_record (organ_donor,height,weight,diopter,blood_type,date_of_birth) value ('Yes',182,70,'L-0; R-0','A-','04.09.1997.');
 insert into clinic (name, address,description,rating,number_of_reviews) value ('Neurologija', 'Narodnog Fronta 76 Novi Sad', 'Klinika za neurologiju',4.5,10);
 insert into clinic (name, address,description,rating,number_of_reviews) value ('Rehabilitacija', 'Kralja Konstantina 33 Novi Sad', 'Klinika za rehabilitaciju',3,1);
 insert into clinic (name, address,description,rating,number_of_reviews) value ('Pulmologija', 'Brace Ribnikar 49 Novi Sad', 'Klinika za pulmologiju',4,2);

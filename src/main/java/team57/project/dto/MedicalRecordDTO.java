@@ -9,10 +9,11 @@ import java.util.Set;
 public class MedicalRecordDTO {
 
     private Long id;
-    private boolean organDonor;
+    private String dateOfBirth;
+    private String organDonor;
     private double height;
     private double weight;
-    private double diopter;
+    private String diopter;
     private String bloodType;
     private Set<Medication> allergicToMedications;
     private Set<Diagnose> chronicConditions; //codes of diagnoses
@@ -22,8 +23,9 @@ public class MedicalRecordDTO {
 
     }
 
-    public MedicalRecordDTO(Long id, boolean organDonor, double height, double weight, double diopter, String bloodType, Set<Medication> allergicToMedications, Set<Diagnose> chronicConditions, Set<MedicalReport> medicalReports) {
+    public MedicalRecordDTO(Long id, String dateOfBirth, String organDonor, double height, double weight, String diopter, String bloodType, Set<Medication> allergicToMedications, Set<Diagnose> chronicConditions, Set<MedicalReport> medicalReports) {
         this.id = id;
+        this.dateOfBirth = dateOfBirth;
         this.organDonor = organDonor;
         this.height = height;
         this.weight = weight;
@@ -42,11 +44,19 @@ public class MedicalRecordDTO {
         this.id = id;
     }
 
-    public boolean isOrganDonor() {
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getOrganDonor() {
         return organDonor;
     }
 
-    public void setOrganDonor(boolean organDonor) {
+    public void setOrganDonor(String organDonor) {
         this.organDonor = organDonor;
     }
 
@@ -66,11 +76,11 @@ public class MedicalRecordDTO {
         this.weight = weight;
     }
 
-    public double getDiopter() {
+    public String getDiopter() {
         return diopter;
     }
 
-    public void setDiopter(double diopter) {
+    public void setDiopter(String diopter) {
         this.diopter = diopter;
     }
 
