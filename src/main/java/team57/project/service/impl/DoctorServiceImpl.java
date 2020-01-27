@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import team57.project.dto.DoctorDTO;
+import team57.project.dto.DoctorRating;
 import team57.project.dto.DoctorSearch;
 import team57.project.dto.RateDTO;
 import team57.project.model.*;
@@ -159,6 +160,20 @@ public class DoctorServiceImpl implements DoctorService {
         }
         return doctorsAll;
     }
+
+    @Override
+    public List<DoctorRating> getAllDoctorsRating(Long idClinic) {
+        List<DoctorRating> doctorsAll = new ArrayList<DoctorRating>();
+        List<Doctor> doctors = new ArrayList<Doctor>();
+        doctors = doctorRepository.findDoctors(idClinic);
+        for(Doctor doctor: doctors){
+            if(!doctor.isRemoved()){
+                doctorsAll.add(new DoctorRating(doctor));
+            }
+        }
+        return doctorsAll;
+    }
+
 
     @Override
     public Doctor save(Doctor d) {

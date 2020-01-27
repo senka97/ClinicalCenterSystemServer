@@ -5,15 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import team57.project.dto.DoctorDTO;
-import team57.project.dto.DoctorSearch;
-import team57.project.dto.RateDTO;
+import team57.project.dto.*;
 import team57.project.model.Clinic;
 import team57.project.model.Doctor;
 import team57.project.service.ClinicService;
 import team57.project.service.PatientService;
 import team57.project.service.impl.DoctorServiceImpl;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -56,6 +55,22 @@ public class DoctorController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+    @GetMapping(value="/getAllDoctorsRating/{idClinic}", produces="application/json")
+    @PreAuthorize("hasRole('CLINIC_ADMIN') or hasRole('ROLE_PATIENT')")
+    public ResponseEntity<?> getAllDoctorsRating(@PathVariable("idClinic") Long idClinic){
+
+        try{
+            Clinic clinic = clinicService.findOne(idClinic);
+            List<DoctorRating> doctorsAll = doctorService.getAllDoctorsRating(idClinic);
+            doctorsAll.sort(Comparator.comparingDouble(DoctorRating::getRating).reversed());
+            return new ResponseEntity<List<DoctorRating>>(doctorsAll,HttpStatus.OK);
+        }catch(NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+
 
     @PostMapping(value="/addDoctor/{idClinic}", consumes = "application/json")
     @PreAuthorize("hasRole('CLINIC_ADMIN')")
