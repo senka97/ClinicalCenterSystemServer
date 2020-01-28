@@ -49,7 +49,7 @@ public class ClinicController {
     }
 
     @GetMapping(value="/getClinic/{id}", produces="application/json")
-    @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN') or hasRole('ROLE_PATIENT')")
     public ResponseEntity<?> getClinic(@PathVariable("id") Long id)
     {
          try{

@@ -188,4 +188,23 @@ public class ExamTypeController {
               }
 
        }
+
+    @GetMapping(value="/getExamTypesForRes/{idClinic}", produces="application/json")
+    @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN') or hasRole('ROLE_PATIENT')")
+    public ResponseEntity<?> getExamTypesForReg(@PathVariable("idClinic") Long idClinic){
+
+        try{
+            Clinic clinic = this.clinicService.findOne(idClinic);
+            List<ExamTypeReg> examTypes = new ArrayList<ExamTypeReg>();
+            for(ExamType et: clinic.getExamTypes()){
+                if(!et.isRemoved()){
+                    examTypes.add(new ExamTypeReg(et));
+                }
+            }
+            return new ResponseEntity(examTypes, HttpStatus.OK);
+        } catch (NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+    }
 }

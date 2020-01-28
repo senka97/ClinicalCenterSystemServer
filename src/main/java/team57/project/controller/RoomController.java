@@ -5,13 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import team57.project.dto.ClinicDTO;
 import team57.project.dto.RoomDTO;
 import team57.project.model.Clinic;
 import team57.project.model.Room;
+import team57.project.service.ClinicService;
 import team57.project.service.impl.RoomServiceImpl;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -21,6 +22,8 @@ public class RoomController {
 
     @Autowired
     private RoomServiceImpl roomService;
+    @Autowired
+    private ClinicService clinicService;
 
     @GetMapping(value="/getRoom/{id}", produces="application/json")
     @PreAuthorize("hasRole('CLINIC_ADMIN')")
@@ -34,6 +37,29 @@ public class RoomController {
 
             RoomDTO roomDTO = new RoomDTO(room.getId(),room.getName(),room.getNumber(),room.getRoomType(), room.isRemoved());
             return new ResponseEntity(roomDTO, HttpStatus.OK);
+
+        } catch(NullPointerException e){
+
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping(value="/getRooms/{idClinic}", produces="application/json")
+    @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN') or hasRole('ROLE_PATIENT')")
+    public ResponseEntity<?> getRooms(@PathVariable("idClinic") Long idClinic)
+    {
+        try {
+            Clinic clinic = clinicService.findOne(idClinic);
+            List<RoomDTO> roomsDTO = new ArrayList<RoomDTO>();
+            for(Room room : clinic.getRooms()) {
+                if (!room.isRemoved()) {
+                    roomsDTO.add(new RoomDTO(room));
+                }
+            }
+
+            roomsDTO.sort(Comparator.comparing(RoomDTO::getRoomType));
+
+            return new ResponseEntity(roomsDTO, HttpStatus.OK);
 
         } catch(NullPointerException e){
 
