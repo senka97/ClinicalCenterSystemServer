@@ -23,6 +23,8 @@ public class PatientServiceImpl implements PatientService {
     private DoctorRepository doctorRepository;
     @Autowired
     private MedicalReportRepository medicalReportRepository;
+    @Autowired
+    private ClinicRepository clinicRepository;
 
     @Override
     public List<Patient> findAll() {
@@ -97,6 +99,32 @@ public class PatientServiceImpl implements PatientService {
             }
         }
         return leftDoct;
+    }
+
+    @Override
+    public List<Clinic> leftClinics(Long id) {
+        Patient p = this.patientRepostiory.findById(id).orElse(null);
+        List<Clinic> leftClin = new ArrayList<Clinic>();
+        System.out.println(p);
+        if (p != null) {
+            List<Long> clinics = this.clinicRepository.patientClinics(id);
+            System.out.println(clinics);
+
+
+            for (Long cl_id : clinics) {
+                   Clinic c =  this.clinicRepository.findById(cl_id).orElseGet(null);
+                    if(c != null){
+                        if (!p.getClinics().contains(c)) {
+                            System.out.println(c);
+
+                            leftClin.add(c);
+                        }
+                    }
+
+
+            }
+        }
+        return leftClin;
     }
 
     @Override

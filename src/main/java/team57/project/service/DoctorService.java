@@ -2,6 +2,7 @@ package team57.project.service;
 
 
 import team57.project.dto.DoctorDTO;
+import team57.project.dto.DoctorRating;
 import team57.project.dto.DoctorSearch;
 import team57.project.dto.RateDTO;
 import team57.project.model.Clinic;
@@ -18,6 +19,7 @@ public interface DoctorService {
     boolean removeDoctor(Doctor doctor);
     List<DoctorSearch> searchForDoctors(DoctorSearch doctorSearch, Long clinicId);
     List<DoctorSearch> getAllDoctors(Long idClinic);
+    List<DoctorRating> getAllDoctorsRating(Long idClinic);
 
     Doctor save(Doctor d);
 

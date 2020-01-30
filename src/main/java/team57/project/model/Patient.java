@@ -22,8 +22,12 @@ public class Patient extends User {
     private Set<MedicalExam> medicalExams;
     @OneToMany(mappedBy = "patient",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<FastAppointment> fastAppointments;
+    @ManyToMany(mappedBy = "patients",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Clinic> allClinics;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Doctor> ratedDoctors;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Clinic> ratedClinics;
 
     public Patient(String name, String surname, String email, String password, String address, String city, String country, String phoneNumber, String serialNumber) {
         super(name, surname, email, password, address, city, country, phoneNumber, serialNumber);
@@ -36,6 +40,15 @@ public class Patient extends User {
     public void setMedicalRecord(MedicalRecord medicalRecord) {
         this.medicalRecord = medicalRecord;
     }
+    @JsonIgnore
+    public Set<Clinic> getAllClinics() {
+        return allClinics;
+    }
+
+    public void setAllClinics(Set<Clinic> allClinics) {
+        this.allClinics = allClinics;
+    }
+
     @JsonIgnore
     public Set<Surgery> getSurgeries() {
         return surgeries;
@@ -78,4 +91,14 @@ public class Patient extends User {
     public void setDoctors(Set<Doctor> doctors) {
         this.ratedDoctors = doctors;
     }
+
+    @JsonIgnore
+    public Set<Clinic> getClinics() {
+        return ratedClinics;
+    }
+
+    public void setClinics(Set<Clinic> clinics) {
+        this.ratedClinics = clinics;
+    }
+
 }

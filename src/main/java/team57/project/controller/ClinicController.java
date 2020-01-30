@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import team57.project.dto.ClinicDTO;
+import team57.project.dto.RateDTO;
 import team57.project.dto.RoomDTO;
 import team57.project.dto.UserRequest;
 import team57.project.exception.ResourceConflictException;
@@ -49,7 +50,7 @@ public class ClinicController {
     }
 
     @GetMapping(value="/getClinic/{id}", produces="application/json")
-    @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN') or hasRole('ROLE_PATIENT')")
     public ResponseEntity<?> getClinic(@PathVariable("id") Long id)
     {
          try{
@@ -145,6 +146,20 @@ public class ClinicController {
         }catch(NullPointerException e) {
 
             return ResponseEntity.notFound().build();
+        }
+
+
+    }
+
+    @PutMapping(value = "/rateClinic/{id}", consumes = "application/json", produces = "application/json")
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    public ResponseEntity<?> rateClinic(@PathVariable("id") Long id, @RequestBody RateDTO rate) {
+
+        try {
+            this.clinicService.rateClinic(id, rate);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (NullPointerException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
 
