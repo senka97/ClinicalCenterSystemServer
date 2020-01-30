@@ -124,7 +124,7 @@ public class FastAppointment {
         this.done = done;
     }
 
-
+    @JsonIgnore
     public Clinic getClinic() {
         return clinic;
     }
