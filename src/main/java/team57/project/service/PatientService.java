@@ -18,6 +18,7 @@ public interface PatientService {
     void addChronicCondition(Diagnose diagnose, MedicalRecord record);
 
     List<Doctor> leftDoctors(Long id);
+    List<Clinic> leftClinics(Long id);
     Patient save(Patient p);
 
 }

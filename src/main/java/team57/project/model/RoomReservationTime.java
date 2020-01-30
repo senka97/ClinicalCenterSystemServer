@@ -1,5 +1,6 @@
 package team57.project.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.mapping.Join;
 
 import javax.persistence.*;
@@ -39,7 +40,7 @@ public class RoomReservationTime {
     public void setId(Long id) {
         this.id = id;
     }
-
+    @JsonIgnore
     public Room getRoom() {
         return room;
     }
