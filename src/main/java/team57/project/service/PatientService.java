@@ -20,4 +20,6 @@ public interface PatientService {
     List<Doctor> leftDoctors(Long id);
     Patient save(Patient p);
 
+    List<MedicalReport> getMedicalReports(Long id);
+
 }

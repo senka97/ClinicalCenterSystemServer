@@ -1,5 +1,6 @@
 package team57.project.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,6 +29,7 @@ public class MedicalRecord {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "medical_record_chronic_condition", joinColumns = @JoinColumn(name = "medicalRecord_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "diagnose_id", referencedColumnName = "id"))
     private Set<Diagnose> chronicConditions; //codes of diagnoses
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<MedicalReport> medicalReports; //obje
 

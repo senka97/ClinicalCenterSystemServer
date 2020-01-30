@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team57.project.dto.MedicalRecordDTO;
 import team57.project.model.*;
-import team57.project.repository.DoctorRepository;
-import team57.project.repository.MedicalExamRepository;
-import team57.project.repository.MedicalRecordRepository;
-import team57.project.repository.PatientRepository;
+import team57.project.repository.*;
 import team57.project.service.PatientService;
 
 import java.util.ArrayList;
@@ -24,6 +21,8 @@ public class PatientServiceImpl implements PatientService {
     private MedicalExamRepository medicalExamRepository;
     @Autowired
     private DoctorRepository doctorRepository;
+    @Autowired
+    private MedicalReportRepository medicalReportRepository;
 
     @Override
     public List<Patient> findAll() {
@@ -98,5 +97,13 @@ public class PatientServiceImpl implements PatientService {
             }
         }
         return leftDoct;
+    }
+
+    @Override
+    public List<MedicalReport> getMedicalReports(Long id)
+    {
+        Patient p = patientRepostiory.findById(id).orElse(null);
+        Long medicalRecordId = p.getMedicalRecord().getId();
+        return medicalReportRepository.getMedicalReports(medicalRecordId);
     }
 }
