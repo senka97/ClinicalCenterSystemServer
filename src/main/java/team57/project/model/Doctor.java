@@ -54,6 +54,9 @@ public class Doctor extends User {
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Absence> absences;
 
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<TermDoctor> terms;
+
 
     public Doctor(){
         super();
@@ -70,6 +73,7 @@ public class Doctor extends User {
         this.removed = false;
         this.examTypes = new HashSet<ExamType>();
         this.surgeryTypes = new HashSet<SurgeryType>();
+        this.terms = new HashSet<TermDoctor>();
     }
 
 
@@ -185,5 +189,12 @@ public class Doctor extends User {
         this.removed = removed;
     }
 
+    @JsonIgnore
+    public Set<TermDoctor> getTerms() {
+        return terms;
+    }
 
+    public void setTerms(Set<TermDoctor> terms) {
+        this.terms = terms;
+    }
 }

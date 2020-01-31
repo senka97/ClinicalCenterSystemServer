@@ -42,6 +42,12 @@ insert into surgery_type(name,description,price,discount,removed,duration) value
 insert into surgery_type(name,description,price,discount,removed,duration) value ('Operacija kicmene mozdine','Najnovija laserska metoda.',150000,5,FALSE,1);
 
 insert into doctors_exam_types(doctor_id, exam_type_id) value (3,1);
+insert into doctors_exam_types(doctor_id, exam_type_id) value (3,2);
+insert into doctors_exam_types(doctor_id, exam_type_id) value (3,3);
+insert into doctors_exam_types(doctor_id, exam_type_id) value (6,1);
+insert into doctors_exam_types(doctor_id, exam_type_id) value (6,2);
+insert into doctors_exam_types(doctor_id, exam_type_id) value (6,3);
+
 insert into doctors_surgery_types(doctor_id, surgery_type_id) value (3,1);
 insert into room (name, number,room_type,removed) value ('Room 1',1,'Medical exam',FALSE);
 insert into medical_exam (date, start_time, end_time,reserved,doctor_id,exam_room_id,exam_type_id,patient_id) values ('2018-07-31', '1:05:04','4:34:12',FALSE,3,1,1,5);
@@ -58,8 +64,8 @@ insert into clinics_surgery_types(surgery_type_id, clinic_id) value (1,1);
 insert into clinics_surgery_types(surgery_type_id, clinic_id) value (2,1);
 insert into clinics_surgery_types(surgery_type_id, clinic_id) value (3,1);
 
-insert into fast_appointment(date_time, done, duration, price, clinic_id, doctor_id, exam_type_id, patient_id, room_id) values ('2020-12-02 13:45:00', FALSE, 45, 5000, 1, 3, 1, 5, 1);
-insert into room_reservation_time(start_date_time, end_date_time, done, room_id) value ('2020-12-02 13:45:00','2020-12-02 14:30:00', FALSE, 1);
+-- insert into fast_appointment(date_time, done, duration, price, clinic_id, doctor_id, exam_type_id, patient_id, room_id) values ('2020-12-02 13:45:00', FALSE, 45, 5000, 1, 3, 1, 5, 1);
+-- insert into room_reservation_time(start_date_time, end_date_time, done, room_id) value ('2020-12-02 13:45:00','2020-12-02 14:30:00', FALSE, 1);
 
 
 insert into medical_report (description,date,time,doctor_id) value ('Ceste migrene.','2019-04-07','12:45:00',3);
@@ -75,7 +81,6 @@ insert into medical_report_prescriptions (medical_report_id, prescriptions_id) v
 insert into medical_report_prescriptions (medical_report_id, prescriptions_id) value(1,2);
 insert into medical_report_prescriptions (medical_report_id, prescriptions_id) value(1,3);
 
-insert into request_for_absence (start_date,end_date,serial_number,type) value ('2019-10-15','2019-11-01','032163256332','paid vacation');
 insert into surgery (date,start_time, end_time,patient_id,surgery_type_id) value ('2019-04-12','12:45:00','15:45:00',5,1);
 insert into doctors_surgeries (doctor_id, surgery_id) value (3,1);
 
