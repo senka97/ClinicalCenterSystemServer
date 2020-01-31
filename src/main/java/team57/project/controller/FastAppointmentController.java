@@ -8,12 +8,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import team57.project.dto.AllFastAppointments;
 import team57.project.dto.FARequest;
+import team57.project.dto.FastAppointmentDTO;
 import team57.project.model.Clinic;
 import team57.project.service.ClinicService;
 import team57.project.service.impl.FastAppointmentServiceImpl;
 
 import javax.persistence.RollbackException;
 import javax.xml.ws.Response;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "api/fastAppointments")
@@ -56,6 +58,18 @@ public class FastAppointmentController {
             AllFastAppointments allFAs = fastAppointmentService.getAllFA(clinic);
             return new ResponseEntity(allFAs,HttpStatus.OK);
         } catch (NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @GetMapping(value="/getFreeFA/{id}", produces = "application/json")
+    public ResponseEntity<?> getFreeFA(@PathVariable("id") Long idClinic){
+
+        try {
+            Clinic clinic = clinicService.findOne(idClinic);
+            List<FastAppointmentDTO> freeFastAppointments = fastAppointmentService.getFreeFA(clinic);
+            return new ResponseEntity(freeFastAppointments,HttpStatus.OK);
+        } catch(NullPointerException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }

@@ -90,8 +90,19 @@ public class FastAppointmentServiceImpl implements FastAppointmentService {
         AllFastAppointments allFAs = new AllFastAppointments(finishedDTO,scheduledDTO,freeDTO);
         return allFAs;
 
+    }
 
+    @Override
+    public List<FastAppointmentDTO> getFreeFA(Clinic clinic) {
 
+        List<FastAppointmentDTO> freeFADTO = new ArrayList<FastAppointmentDTO>();
+        List<FastAppointment> freeFA = fastAppointmentRepository.findFree(clinic.getId(),LocalDate.now(),LocalTime.now());
+
+        for(FastAppointment fa: freeFA){
+            freeFADTO.add(new FastAppointmentDTO(fa));
+        }
+
+        return freeFADTO;
     }
 
 
