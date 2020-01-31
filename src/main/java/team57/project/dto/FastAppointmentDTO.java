@@ -7,6 +7,7 @@ import java.time.LocalTime;
 
 public class FastAppointmentDTO {
 
+    private Long id;
     private LocalDate date;
     private LocalTime time;
     private String nameExamType;
@@ -21,6 +22,7 @@ public class FastAppointmentDTO {
     }
 
     public FastAppointmentDTO(FastAppointment fa){
+        this.id = fa.getId();
         this.date = fa.getDateFA();
         this.time = fa.getTimeFA();
         this.nameExamType = fa.getExamType().getName();
@@ -33,6 +35,14 @@ public class FastAppointmentDTO {
         this.nameAndNumberRoom = fa.getRoom().getName() + " (No. " + fa.getRoom().getNumber() +")";
         this.price = fa.getPrice();
         this.discount = fa.getDiscount();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public LocalDate getDate() {

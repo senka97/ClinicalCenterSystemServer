@@ -43,11 +43,11 @@ public class FastAppointment {
     private Clinic clinic; //da bi se kod pacijenta u prikazu istorije pregleda videlo u kojoj je klinici
 
     /*@Version
-    private int version;
+    private int version;*/
 
     public FastAppointment(){
 
-    }*/
+    }
 
     public FastAppointment(LocalDate dateFA,LocalTime timeFA, int duration, ExamType examType, Room room, Doctor doctor, Patient patient, double price, double discount, boolean reserved, Clinic clinic) {
         this.dateFA = dateFA;
