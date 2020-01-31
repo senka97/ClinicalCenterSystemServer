@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team57.project.dto.MedicalRecordDTO;
 import team57.project.model.*;
-import team57.project.repository.DoctorRepository;
-import team57.project.repository.MedicalExamRepository;
-import team57.project.repository.MedicalRecordRepository;
-import team57.project.repository.PatientRepository;
+import team57.project.repository.*;
 import team57.project.service.PatientService;
 
 import java.util.ArrayList;
@@ -24,6 +21,8 @@ public class PatientServiceImpl implements PatientService {
     private MedicalExamRepository medicalExamRepository;
     @Autowired
     private DoctorRepository doctorRepository;
+    @Autowired
+    private ClinicRepository clinicRepository;
 
     @Override
     public List<Patient> findAll() {
@@ -98,5 +97,31 @@ public class PatientServiceImpl implements PatientService {
             }
         }
         return leftDoct;
+    }
+
+    @Override
+    public List<Clinic> leftClinics(Long id) {
+        Patient p = this.patientRepostiory.findById(id).orElse(null);
+        List<Clinic> leftClin = new ArrayList<Clinic>();
+        System.out.println(p);
+        if (p != null) {
+            List<Long> clinics = this.clinicRepository.patientClinics(id);
+            System.out.println(clinics);
+
+
+            for (Long cl_id : clinics) {
+                   Clinic c =  this.clinicRepository.findById(cl_id).orElseGet(null);
+                    if(c != null){
+                        if (!p.getClinics().contains(c)) {
+                            System.out.println(c);
+
+                            leftClin.add(c);
+                        }
+                    }
+
+
+            }
+        }
+        return leftClin;
     }
 }

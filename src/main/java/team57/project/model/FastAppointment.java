@@ -42,12 +42,12 @@ public class FastAppointment {
     @JoinColumn(name="clinic_id", nullable=false)
     private Clinic clinic; //da bi se kod pacijenta u prikazu istorije pregleda videlo u kojoj je klinici
 
-    @Version
+    /*@Version
     private int version;
 
     public FastAppointment(){
 
-    }
+    }*/
 
     public FastAppointment(LocalDate dateFA,LocalTime timeFA, int duration, ExamType examType, Room room, Doctor doctor, Patient patient, double price, double discount, boolean reserved, Clinic clinic) {
         this.dateFA = dateFA;
@@ -151,14 +151,16 @@ public class FastAppointment {
         this.reserved = reserved;
     }
 
-    public int getVersion() {
+    /*public int getVersion() {
         return version;
     }
 
     public void setVersion(int version) {
         this.version = version;
-    }
+    }*/
 
+
+    @JsonIgnore
     public Clinic getClinic() {
         return clinic;
     }

@@ -28,4 +28,6 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     @Query(value = "select d from Doctor d where d.id=?1")
     Doctor findDoctor(Long idDoctor);
 
+
+
 }
