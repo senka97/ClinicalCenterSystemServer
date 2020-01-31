@@ -1,6 +1,9 @@
 package team57.project.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -16,6 +19,10 @@ public class Room {
     private String roomType; //Medical exam or Surgery
     @Column(name = "removed", nullable = false)
     private boolean removed;
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<TermRoom> terms;
+
+
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<RoomReservationTime> roomReservationTimes;
     //@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -33,6 +40,7 @@ public class Room {
         this.number = number;
         this.roomType = roomType;
         this.removed = removed;
+        this.terms = new HashSet<TermRoom>();
     }
 
     public Long getId() {
@@ -82,7 +90,15 @@ public class Room {
         this.roomType = roomType;
     }
 
+    public Set<TermRoom> getTerms() {
+        return terms;
+    }
 
+    public void setTerms(Set<TermRoom> terms) {
+        this.terms = terms;
+    }
+
+    @JsonIgnore
     public Set<RoomReservationTime> getRoomReservationTimes() {
         return roomReservationTimes;
     }

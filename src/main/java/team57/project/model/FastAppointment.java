@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 public class FastAppointment {
@@ -12,8 +14,10 @@ public class FastAppointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="dateTime", nullable = false)
-    private LocalDateTime dateTime; //dd-MM-yyyy hh:mm:ss , this will be converted from String with localDateTime.parse
+    @Column(name="dateFA", nullable = false)
+    private LocalDate dateFA; //dd-MM-yyyy hh:mm:ss , this will be converted from String with localDateTime.parse
+    @Column(name="timeFA", nullable = false)
+    private LocalTime timeFA;
     @Column(name="duration", nullable = false)
     private int duration; //in minutes
     @ManyToOne // one way relationship
@@ -30,25 +34,32 @@ public class FastAppointment {
     private Patient patient;
     @Column(name="price", nullable = false)
     private double price;
-    @Column(name="done", nullable = false)
-    private boolean done;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER) // two way relationship, clinic has a list of all its fast appointments
+    @Column(name="discount", nullable = false)
+    private double discount;
+    @Column(name="reserved", nullable = false)
+    private boolean reserved;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) // two way relationship, clinic has a list of all its fast appointments
     @JoinColumn(name="clinic_id", nullable=false)
     private Clinic clinic; //da bi se kod pacijenta u prikazu istorije pregleda videlo u kojoj je klinici
 
+    /*@Version
+    private int version;
+
     public FastAppointment(){
 
-    }
+    }*/
 
-    public FastAppointment(LocalDateTime dateTime, int duration, ExamType examType, Room room, Doctor doctor, Patient patient, double price, boolean done, Clinic clinic) {
-        this.dateTime = dateTime;
+    public FastAppointment(LocalDate dateFA,LocalTime timeFA, int duration, ExamType examType, Room room, Doctor doctor, Patient patient, double price, double discount, boolean reserved, Clinic clinic) {
+        this.dateFA = dateFA;
+        this.timeFA = timeFA;
         this.duration = duration;
         this.examType = examType;
         this.room = room;
         this.doctor = doctor;
         this.patient = patient;
         this.price = price;
-        this.done = done;
+        this.discount = discount;
+        this.reserved = reserved;
         this.clinic = clinic;
     }
 
@@ -60,12 +71,28 @@ public class FastAppointment {
         this.id = id;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDate getDateFA() {
+        return dateFA;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDateFA(LocalDate dateFA) {
+        this.dateFA = dateFA;
+    }
+
+    public LocalTime getTimeFA() {
+        return timeFA;
+    }
+
+    public void setTimeFA(LocalTime timeFA) {
+        this.timeFA = timeFA;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
     }
 
     public int getDuration() {
@@ -116,13 +143,22 @@ public class FastAppointment {
         this.price = price;
     }
 
-    public boolean isDone() {
-        return done;
+    public boolean isReserved() {
+        return reserved;
     }
 
-    public void setDone(boolean done) {
-        this.done = done;
+    public void setReserved(boolean reserved) {
+        this.reserved = reserved;
     }
+
+    /*public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }*/
+
 
     @JsonIgnore
     public Clinic getClinic() {

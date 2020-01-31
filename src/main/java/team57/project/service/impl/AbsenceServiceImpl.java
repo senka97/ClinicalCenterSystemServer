@@ -1,16 +1,19 @@
 package team57.project.service.impl;
 
+import com.fasterxml.jackson.databind.ser.impl.FailingSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team57.project.dto.AbsenceRequest;
 import team57.project.model.*;
 import team57.project.repository.AbsenceRepository;
 import team57.project.repository.ClinicRepository;
+import team57.project.repository.TermDoctorRepository;
 import team57.project.service.AbsenceService;
 import team57.project.service.ClinicService;
 import team57.project.service.EmailService;
 
 import javax.mail.MessagingException;
+import java.util.List;
 
 @Service
 public class AbsenceServiceImpl implements AbsenceService {
@@ -21,6 +24,8 @@ public class AbsenceServiceImpl implements AbsenceService {
     private ClinicRepository clinicRepository;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private TermDoctorRepository termDoctorRepository;
 
     @Override
     public Absence findOne(Long id) {
@@ -31,9 +36,9 @@ public class AbsenceServiceImpl implements AbsenceService {
     public boolean sendRequestDoctor(Doctor doctor, AbsenceRequest absenceRequest) {
 
         for(FastAppointment fa: doctor.getFastAppointments()){
-            if(fa.getDateTime().toLocalDate().isAfter(absenceRequest.getStartDate().minusDays(1)) &&
-            fa.getDateTime().toLocalDate().isBefore(absenceRequest.getEndDate().plusDays(1))){
-                   return false;
+            if(fa.getDateFA().isAfter(absenceRequest.getStartDate().minusDays(1)) &&
+            fa.getDateFA().isBefore(absenceRequest.getEndDate().plusDays(1))){
+                return false;
             }
         }
         //ovde treba jos proveriti za obicne preglede i operacije
@@ -50,17 +55,24 @@ public class AbsenceServiceImpl implements AbsenceService {
     }
 
     @Override
-    public boolean approveAbsence(Absence absence) {
+    public String approveAbsence(Absence absence) {
+
+        if(absence.getDoctor() != null){
+            List<TermDoctor> scheduledTerms = this.termDoctorRepository.checkScheduledTerms(absence.getDoctor().getId(),absence.getStartDate(),absence.getEndDate());
+            if(scheduledTerms.size() != 0){
+                return "This doctor can't be absent in that period because he/she has scheduled medical exams or surgeries.";
+            }
+        }
 
         try{
             emailService.sendMessageApproved(absence);
         } catch (Exception e) {
-            return false;
+            return "Something went wrong with sending email notification. Please try again.";
         }
 
         absence.setStatusOfAbsence("APPROVED");
         absenceRepository.save(absence);
-        return true;
+        return null;
 
     }
 
