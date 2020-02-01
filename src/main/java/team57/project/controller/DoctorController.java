@@ -158,6 +158,28 @@ public class DoctorController {
 
     }
 
+    @PostMapping(value = "/getFreeDoctors/{clinicId}", consumes = "application/json", produces = "application/json")
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    public ResponseEntity<?> getFreeDoctors(@RequestBody AvailableDoctorRequest adr, @PathVariable("clinicId") Long clinicId) {
+
+        System.out.println("Testiranje" + adr + clinicId);
+        if (adr.getIdExamType() == null || adr.getDate() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exam type and date are mandatory.");
+        }
+        if (adr.getDate().getDayOfWeek().getValue() == 6 || adr.getDate().getDayOfWeek().getValue() == 7) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You can't reserve a doctor at the weekend.");
+        }
+        try {
+            Clinic clinic = clinicService.findOne(clinicId);
+            List<DoctorRating> freeDoctors = doctorService.findFreeDoctors(clinic, adr);
+            return new ResponseEntity(freeDoctors, HttpStatus.OK);
+
+        } catch (NullPointerException e) {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+
+
+    }
     @PostMapping(value="/getAvailableDoctors/{clinicId}", consumes="application/json", produces = "application/json")
     @PreAuthorize("hasRole('CLINIC_ADMIN')")
     public ResponseEntity<?> getAvailableDoctors(@RequestBody AvailableDoctorRequest adr, @PathVariable("clinicId") Long clinicId){
@@ -179,6 +201,7 @@ public class DoctorController {
 
 
     }
+
 
     private boolean isSerialNumber(String n){
         if (Pattern.matches("[0-9]+", n) && n.length() == 13) {

@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import team57.project.model.Doctor;
 
 import javax.persistence.LockModeType;
-import javax.print.Doc;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -32,6 +31,9 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     @Query(value = "select d from Doctor d where d.id=?1")
     Doctor findDoctor(Long idDoctor);
 
+
+    @Query(value = "select DISTINCT d from Clinic as c inner join c.doctors d inner join d.terms t inner join d.examTypes e where c.id=?1 and e.id=?2 and  t.dateTerm = ?3 and t.free=true")
+    List<Doctor> getFreeDoctors(Long idClinic, Long idET, LocalDate date);
 
 
 }

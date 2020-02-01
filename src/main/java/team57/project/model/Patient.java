@@ -22,7 +22,7 @@ public class Patient extends User {
     private Set<MedicalExam> medicalExams;
     @OneToMany(mappedBy = "patient",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<FastAppointment> fastAppointments;
-    @ManyToMany(mappedBy = "patients",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "patients", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Clinic> allClinics;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Doctor> ratedDoctors;

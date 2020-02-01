@@ -12,10 +12,8 @@ import team57.project.service.DoctorService;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 @Service
 //@Transactional(readOnly = true)
@@ -235,21 +233,47 @@ public class DoctorServiceImpl implements DoctorService {
 
         doctors = doctorRepository.getAvailableDoctors(clinic.getId(),adr.getIdExamType(),adr.getDate(),adr.getTime());
         for(Doctor doctor: doctors){
-            boolean isAbsent = false;
-            for(Absence a : doctor.getAbsences()){
-                if(a.getStatusOfAbsence().equals("APPROVED")) {
-                    if (a.getStartDate().minusDays(1).isBefore(adr.getDate()) && a.getEndDate().plusDays(1).isAfter(adr.getDate())) {
-                        isAbsent = true;
-                    }
-                }
-            }
-            if(!isAbsent){
+            boolean isAbsent = isDoctorAbsent(adr, doctor);
+            if (!isAbsent) {
                 doctorsFA.add(new DoctorFA(doctor));
             }
         }
 
         return doctorsFA;
 
+    }
+
+
+    @Override
+    public List<DoctorRating> findFreeDoctors(Clinic clinic, AvailableDoctorRequest adr) {
+
+        List<DoctorRating> doctorsRating = new ArrayList<>();
+        List<Doctor> doctors = new ArrayList<>();
+
+        //doctors that have 1 or more free terms
+        doctors = this.doctorRepository.getFreeDoctors(clinic.getId(), adr.getIdExamType(), adr.getDate());
+        for (Doctor doctor : doctors) {
+
+            boolean isAbsent = isDoctorAbsent(adr, doctor);
+            if (!isAbsent) {
+                doctorsRating.add(new DoctorRating(doctor));
+            }
+        }
+
+
+        return doctorsRating;
+    }
+
+    private boolean isDoctorAbsent(AvailableDoctorRequest adr, Doctor doctor) {
+        boolean isAbsent = false;
+        for (Absence a : doctor.getAbsences()) {
+            if (a.getStatusOfAbsence().equals("APPROVED")) {
+                if (a.getStartDate().minusDays(1).isBefore(adr.getDate()) && a.getEndDate().plusDays(1).isAfter(adr.getDate())) {
+                    isAbsent = true;
+                }
+            }
+        }
+        return isAbsent;
     }
 
 

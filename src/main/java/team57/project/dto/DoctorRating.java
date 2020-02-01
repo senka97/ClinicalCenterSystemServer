@@ -8,6 +8,7 @@ public class DoctorRating {
     private String name;
     private String surname;
     private double rating;
+    private double numberOfReviews;
 
     public DoctorRating(){
 
@@ -18,6 +19,15 @@ public class DoctorRating {
         this.name = doctor.getName();
         this.surname = doctor.getSurname();
         this.rating = doctor.getRating();
+        this.numberOfReviews = doctor.getNumberOfReviews();
+    }
+
+    public double getNumberOfReviews() {
+        return numberOfReviews;
+    }
+
+    public void setNumberOfReviews(double numberOfReviews) {
+        this.numberOfReviews = numberOfReviews;
     }
 
     public String getName() {
