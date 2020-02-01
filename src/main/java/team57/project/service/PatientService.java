@@ -9,6 +9,7 @@ public interface PatientService {
 
     List<Patient> findAll();
     Patient findOne(Long id);
+    Patient findOneByEmail(String email);
     MedicalRecord findPatientMedicalRecord(Long id);
 
     void updateMedicalRecord(MedicalRecordDTO medicalRecordDTO, MedicalRecord record);

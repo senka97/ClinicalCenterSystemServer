@@ -158,6 +158,28 @@ public class DoctorController {
 
     }
 
+    @PostMapping(value="/getAvailableDoctors/{clinicId}", consumes="application/json", produces = "application/json")
+    @PreAuthorize("hasRole('CLINIC_ADMIN')")
+    public ResponseEntity<?> getAvailableDoctors(@RequestBody AvailableDoctorRequest adr, @PathVariable("clinicId") Long clinicId){
+
+        if(adr.getIdExamType() == null || adr.getDate() == null || adr.getTime() == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exam type, date and time are mandatory.");
+        }
+        if(adr.getDate().getDayOfWeek().getValue() == 6 || adr.getDate().getDayOfWeek().getValue() == 7){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You can't reserve a doctor at the weekend.");
+        }
+        try{
+            Clinic clinic = clinicService.findOne(clinicId);
+            List<DoctorFA> availableDoctors = doctorService.findAvailableDoctors(clinic,adr);
+            return new ResponseEntity(availableDoctors,HttpStatus.OK);
+
+        }catch(NullPointerException e){
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+
+
+    }
+
     private boolean isSerialNumber(String n){
         if (Pattern.matches("[0-9]+", n) && n.length() == 13) {
             return true;
