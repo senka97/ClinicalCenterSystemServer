@@ -41,6 +41,12 @@ public class FastAppointmentServiceImpl implements FastAppointmentService {
         return fastAppointmentRepository.findFAWithExamType(id, LocalDateTime.now());
     }*/
 
+
+    @Override
+    public FastAppointment findOne(Long id) {
+        return fastAppointmentRepository.findById(id).orElse(null);
+    }
+
     @Override
     @Transactional
     public void addNewFA(Clinic clinic, FARequest faRequest) {
@@ -103,6 +109,15 @@ public class FastAppointmentServiceImpl implements FastAppointmentService {
         }
 
         return freeFADTO;
+    }
+
+    @Override
+    @Transactional
+    public void reserveFA(FastAppointment fa, Patient patient) throws Exception {
+
+        fa.setPatient(patient);
+        fa.setReserved(true);
+        fastAppointmentRepository.save(fa);
     }
 
 

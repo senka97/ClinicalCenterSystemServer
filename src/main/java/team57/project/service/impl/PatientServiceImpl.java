@@ -35,6 +35,12 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    public Patient findOneByEmail(String email) {
+        return patientRepostiory.findByEmail(email);
+    }
+
+
+    @Override
     public Patient save(Patient p) {
         return patientRepostiory.save(p);
     }

@@ -90,6 +90,7 @@ public class Room {
         this.roomType = roomType;
     }
 
+    @JsonIgnore
     public Set<TermRoom> getTerms() {
         return terms;
     }

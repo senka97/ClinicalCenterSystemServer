@@ -191,7 +191,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    //@Transactional()
+    @Transactional
     public Doctor rateDoctor(Long doctorId, RateDTO rate) {
         try {
             System.out.println("Test");
