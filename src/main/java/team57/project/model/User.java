@@ -63,8 +63,8 @@ public class User implements UserDetails {
     @Column(name = "passwordChanged")
     private boolean passwordChanged = false;
 
-    /*@Version
-    private int version;*/
+    @Version
+    private Long version;
 
 
     public Long getId() {
@@ -207,13 +207,13 @@ public class User implements UserDetails {
         this.passwordChanged = passwordChanged;
     }
 
-    /*    public int getVersion() {
-       return version;
-   }
+    public Long getVersion() {
+        return version;
+    }
 
-   public void setVersion(int version) {
-       this.version = version;
-  }*/
+    public void setVersion(Long version) {
+        this.version = version;
+    }
 
     public User(){
 
