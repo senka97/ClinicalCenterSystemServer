@@ -5,5 +5,4 @@ import team57.project.model.ExamType;
 
 public interface ExamTypeRepository extends JpaRepository<ExamType, Long> {
 
-
 }

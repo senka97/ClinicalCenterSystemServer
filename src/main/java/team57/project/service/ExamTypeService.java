@@ -7,10 +7,13 @@ import team57.project.model.Clinic;
 import team57.project.model.ExamType;
 import team57.project.model.Room;
 
+import java.util.List;
+
 public interface ExamTypeService {
 
     ExamType findOne(Long id);
     boolean addExamType(Clinic clinic, ExamTypeDTO examTypeDTO);
     String updateExamType(ExamType examType, ExamTypeDTO examTypeDTO, Clinic clinic);
     boolean removeExamType(ExamType examType, Clinic clinic);
+    List<ExamType> findAll();
 }

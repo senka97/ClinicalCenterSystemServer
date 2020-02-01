@@ -15,7 +15,8 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     @Query(value = "SELECT * FROM User d WHERE d.clinic_id = ?1 AND d.type = 'DOCTOR'", nativeQuery = true)
     List<Doctor> findDoctors(Long idClinic);
 
-
+   @Query(value = "SELECT * FROM User d WHERE d.clinic_id = ?1 AND d.type = 'DOCTOR'", nativeQuery = true)
+   List<Doctor> searchDoctors(Long idClinic,String name, String surname);
 
 
 
