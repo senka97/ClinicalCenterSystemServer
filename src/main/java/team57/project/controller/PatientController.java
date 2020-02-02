@@ -5,20 +5,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import team57.project.dto.DiagnosisDTO;
-import team57.project.dto.MedicalRecordDTO;
-import team57.project.dto.MedicationDTO;
+import team57.project.dto.*;
 import team57.project.model.*;
 import team57.project.service.DiagnosisService;
 import team57.project.service.MedicationService;
+import team57.project.service.NurseService;
 import team57.project.service.PatientService;
+import team57.project.service.impl.DoctorServiceImpl;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Pattern;
 
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
@@ -33,15 +37,44 @@ public class PatientController {
     private MedicationService medicationService;
     @Autowired
     private DiagnosisService diagnosisService;
+    @Autowired
+    private DoctorServiceImpl doctorService;
+    @Autowired
+    private NurseService nurseService;
 
     @RequestMapping(value = "/allSorted", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ROLE_DOCTOR') or hasRole('ROLE_NURSE')")
-    public List<Patient> getAllPatients() {
+    public ResponseEntity<?> getAllPatients() {
 
-        List<Patient> sortedPatients = this.patientService.findAll();
-        sortedPatients.sort(Comparator.comparing(Patient::getName));
-        return sortedPatients;
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+        List<UserDTO> sortedPatients =  patientService.findAllInClinic(currentUser);
+        return new ResponseEntity(sortedPatients,HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/searchPatients", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_DOCTOR')")
+    public ResponseEntity<?> searchPatients(@RequestBody PatientSearch patientSearch) {
+
+        if((patientSearch.getName().equals("") || patientSearch.getName()==null) && (patientSearch.getSurname().equals("") || patientSearch.getSurname() == null) && (
+                patientSearch.getSerialNumber().equals("") || patientSearch.getSerialNumber() == null)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You have to enter at least one valid information for search.");
+        }
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+        List<UserDTO> searchPatients = patientService.searchPatients(currentUser,patientSearch);
+        return new ResponseEntity(searchPatients,HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/getAllCities", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_DOCTOR')")
+    public ResponseEntity<?> getAllCities() {
+
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+        List<String> cities = patientService.getAllCities(currentUser);
+        return new ResponseEntity(cities,HttpStatus.OK);
+    }
+
+
+
 
     @RequestMapping(value = "/patient/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ROLE_DOCTOR') or hasRole('ROLE_NURSE')")
@@ -132,5 +165,12 @@ public class PatientController {
         return this.patientService.leftClinics(id);
     }
 
+    private boolean isSerialNumber(String n){
+        if (Pattern.matches("[0-9]+", n) && n.length() == 13) {
+            return true;
+        }else{
+            return false;
+        }
 
+    }
 }

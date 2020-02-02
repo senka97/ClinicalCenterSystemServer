@@ -1,14 +1,21 @@
 package team57.project.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import team57.project.dto.DoctorSearch;
 import team57.project.dto.MedicalRecordDTO;
+import team57.project.dto.PatientSearch;
+import team57.project.dto.UserDTO;
 import team57.project.model.*;
 import team57.project.repository.*;
 import team57.project.service.PatientService;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PatientServiceImpl implements PatientService {
@@ -23,6 +30,8 @@ public class PatientServiceImpl implements PatientService {
     private DoctorRepository doctorRepository;
     @Autowired
     private ClinicRepository clinicRepository;
+    @Autowired
+    private NurseRepository nurseRepository;
 
     @Override
     public List<Patient> findAll() {
@@ -44,6 +53,7 @@ public class PatientServiceImpl implements PatientService {
     public Patient save(Patient p) {
         return patientRepostiory.save(p);
     }
+
 
     @Override
     public MedicalRecord findPatientMedicalRecord(Long id) {
@@ -130,4 +140,86 @@ public class PatientServiceImpl implements PatientService {
         }
         return leftClin;
     }
+
+    @Override
+    public List<UserDTO> findAllInClinic(Authentication currentUser) {
+        List<UserDTO> sortedPatients = new ArrayList<UserDTO>();
+        String email = currentUser.getName();
+        List<Authority> authorities = (List<Authority>) currentUser.getAuthorities();
+        Authority authority = authorities.get(0);
+        String role = authority.getName();
+        if(role.equals("ROLE_DOCTOR")){
+            Doctor doctor = doctorRepository.findByEmail(email);
+            Set<Patient> patients = doctor.getClinic().getPatients();
+            for(Patient patient:patients){
+                sortedPatients.add(new UserDTO(patient.getId(),patient.getName(),patient.getSurname(),patient.getEmail(),null,patient.getAddress(),patient.getCity(),patient.getCountry(),patient.getPhoneNumber(),patient.getSerialNumber()));
+            }
+        }else{
+            Nurse nurse = nurseRepository.findByEmail(email);
+            Set<Patient> patients = nurse.getClinic().getPatients();
+            for(Patient patient:patients){
+                sortedPatients.add(new UserDTO(patient.getId(),patient.getName(),patient.getSurname(),patient.getEmail(),null,patient.getAddress(),patient.getCity(),patient.getCountry(),patient.getPhoneNumber(),patient.getSerialNumber()));
+            }
+        }
+
+        sortedPatients.sort(Comparator.comparing(UserDTO::getName));
+        return sortedPatients;
+    }
+
+    @Override
+    public List<UserDTO> searchPatients(Authentication currentUser, PatientSearch patientSearch) {
+        List<UserDTO> sortedPatients = new ArrayList<UserDTO>();
+        String email = currentUser.getName();
+        Doctor doctor = doctorRepository.findByEmail(email);
+        Set<Patient> patients = doctor.getClinic().getPatients();
+
+        for(Patient patient : patients){
+            if(!patient.getActivatedAccount().equals("ACCEPTED"))
+                continue;
+            boolean nameCorrect = true;
+            boolean surnameCorrect = true;
+            boolean serialNumberCorrect = true;
+            if(!patientSearch.getName().equals("") && patientSearch.getName() != null){
+                if(patient.getName().toLowerCase().contains(patientSearch.getName().toLowerCase())){
+                    nameCorrect = true;
+                }else{
+                    nameCorrect = false;
+                }
+            }
+            if(!patientSearch.getSurname().equals("") && patientSearch.getSurname() != null){
+                if(patient.getSurname().toLowerCase().contains(patientSearch.getSurname().toLowerCase())){
+                    surnameCorrect = true;
+                }else{
+                    surnameCorrect = false;
+                }
+            }
+            if(!patientSearch.getSerialNumber().equals("") && patientSearch.getSerialNumber() != null){
+
+                if(patient.getSerialNumber().startsWith(patientSearch.getSerialNumber())){
+                    serialNumberCorrect = true;
+                }else{
+                    serialNumberCorrect = false;
+                }
+            }
+            if(nameCorrect && surnameCorrect && serialNumberCorrect){
+                sortedPatients.add(new UserDTO(patient.getId(),patient.getName(),patient.getSurname(),patient.getEmail(),null,patient.getAddress(),patient.getCity(),patient.getCountry(),patient.getPhoneNumber(),patient.getSerialNumber()));
+            }
+
+        }
+
+        sortedPatients.sort(Comparator.comparing(UserDTO::getName));
+        return sortedPatients;
+    }
+
+    @Override
+    public List<String> getAllCities(Authentication currentUser) {
+        String email = currentUser.getName();
+        Doctor doctor = doctorRepository.findByEmail(email);
+        Set<Patient> patients = doctor.getClinic().getPatients();
+        List<String> cities = patientRepostiory.getAllCities();
+        return cities;
+
+    }
+
+
 }

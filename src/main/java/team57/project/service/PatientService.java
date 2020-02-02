@@ -1,6 +1,9 @@
 package team57.project.service;
 
+import org.springframework.security.core.Authentication;
 import team57.project.dto.MedicalRecordDTO;
+import team57.project.dto.PatientSearch;
+import team57.project.dto.UserDTO;
 import team57.project.model.*;
 
 import java.util.List;
@@ -21,5 +24,9 @@ public interface PatientService {
     List<Doctor> leftDoctors(Long id);
     List<Clinic> leftClinics(Long id);
     Patient save(Patient p);
+
+    List<UserDTO> findAllInClinic(Authentication currentUser);
+    List<UserDTO> searchPatients(Authentication currentUser, PatientSearch patientSearch);
+    List<String> getAllCities(Authentication currentUser);
 
 }

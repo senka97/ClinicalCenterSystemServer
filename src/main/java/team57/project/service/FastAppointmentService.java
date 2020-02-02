@@ -18,6 +18,6 @@ public interface FastAppointmentService {
     void addNewFA(Clinic clinic, FARequest faRequest);
     AllFastAppointments getAllFA(Clinic clinic);
     List<FastAppointmentDTO> getFreeFA(Clinic clinic);
-    void reserveFA(FastAppointment fa,Patient patient) throws Exception;
+    String reserveFA(FastAppointment fa,Patient patient) throws Exception;
 
 }
