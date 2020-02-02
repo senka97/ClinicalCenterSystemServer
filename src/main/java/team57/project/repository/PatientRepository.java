@@ -13,6 +13,9 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     @Query(value = "SELECT * FROM User p WHERE p.enabled = true AND p.type = 'PATIENT'", nativeQuery = true)
     List<Patient> findAll();
 
+    @Query(value = "select distinct p.city from Patient p")
+    List<String> getAllCities();
+
 
 
 

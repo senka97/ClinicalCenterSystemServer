@@ -10,10 +10,14 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import team57.project.event.OnRegistrationSuccessEvent;
 import team57.project.model.Absence;
+import team57.project.model.FastAppointment;
+import team57.project.model.Patient;
 import team57.project.model.User;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.UUID;
 
 @Service
@@ -99,6 +103,18 @@ public class EmailService {
         mail.setText("Hello, " + name + "!\n\n" + message + "\n\nBest regards,\nClinic admin");
         mail.setTo(email);
         mail.setSubject("Clinical Center System - absence request");
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        javaMailSender.send(mail);
+    }
+
+    @Async
+    public void sendFAReservation(Patient patient, FastAppointment fa) throws MailException, InterruptedException, MessagingException{
+        String date = fa.getDateFA().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+        String time = fa.getTimeFA().format(DateTimeFormatter.ofPattern("hh:mm"));
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setText("Hello, " + patient.getName() + "!\n\n" + "You have successfully reserved the medical exam - " + fa.getExamType().getName() + " on " + date + " at " + time + "."  + "\n\nBest regards,\nClinic admin");
+        mail.setTo(patient.getEmail());
+        mail.setSubject("Clinical Center System - Medical exam reservation");
         mail.setFrom(env.getProperty("spring.mail.username"));
         javaMailSender.send(mail);
     }

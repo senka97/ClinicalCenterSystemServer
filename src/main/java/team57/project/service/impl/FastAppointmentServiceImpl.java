@@ -7,9 +7,13 @@ import team57.project.dto.FARequest;
 import team57.project.dto.FastAppointmentDTO;
 import team57.project.model.*;
 import team57.project.repository.*;
+import team57.project.service.ClinicService;
+import team57.project.service.EmailService;
 import team57.project.service.FastAppointmentService;
 
 
+import javax.mail.MessagingException;
+import javax.persistence.OptimisticLockException;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,6 +38,10 @@ public class FastAppointmentServiceImpl implements FastAppointmentService {
     private ExamTypeServiceImpl examTypeService;
     @Autowired
     private TermRoomRepository termRoomRepository;
+    @Autowired
+    private EmailService emailService;
+    @Autowired
+    private ClinicService clinicService;
 
 
     /*public Collection<FastAppointment> findFAWithExamType(Long id, LocalDateTime now){
@@ -113,11 +121,23 @@ public class FastAppointmentServiceImpl implements FastAppointmentService {
 
     @Override
     @Transactional
-    public void reserveFA(FastAppointment fa, Patient patient) throws Exception {
+    public String reserveFA(FastAppointment fa, Patient patient) throws OptimisticLockException {
 
         fa.setPatient(patient);
         fa.setReserved(true);
         fastAppointmentRepository.save(fa);
+        Clinic clinic = fa.getClinic();
+        if(!clinic.getPatients().contains(patient)) {
+            clinic.getPatients().add(patient);
+        }
+        clinicService.saveClinic(clinic);
+        try {
+            emailService.sendFAReservation(patient, fa);
+        }catch(Exception e){
+            return "Something went wrong with sending an email.";
+       }
+
+        return null;
     }
 
 

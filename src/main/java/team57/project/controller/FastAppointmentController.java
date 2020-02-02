@@ -18,6 +18,7 @@ import team57.project.service.ClinicService;
 import team57.project.service.impl.FastAppointmentServiceImpl;
 import team57.project.service.impl.PatientServiceImpl;
 
+import javax.persistence.OptimisticLockException;
 import javax.persistence.RollbackException;
 import javax.xml.ws.Response;
 import java.util.List;
@@ -94,10 +95,14 @@ public class FastAppointmentController {
             Patient patient = (Patient) patientService.findOneByEmail(email);
 
             try {
-                fastAppointmentService.reserveFA(fa, patient);
-                return ResponseEntity.status(HttpStatus.OK).build();
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Somebody has just reserved this medical exam.");
+                String msg = fastAppointmentService.reserveFA(fa, patient);
+                if(msg == null) {
+                    return ResponseEntity.status(HttpStatus.OK).build();
+                }else{
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(msg);
+                }
+            } catch (OptimisticLockException e1) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Somebody has just reserved this medical exam.");
             }
 
         } catch (NullPointerException e) {
