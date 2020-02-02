@@ -201,6 +201,31 @@ public class DoctorController {
 
 
     }
+    @PostMapping(value="/getAvailableTerms/{id}", consumes="application/json", produces = "application/json")
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    public ResponseEntity<?> getAvailableTerms(@RequestBody AvailableDoctorRequest adr, @PathVariable("id") Long doctorId){
+
+        if(adr.getIdExamType() == null || adr.getDate() == null ){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exam type and date are mandatory.");
+        }
+        if(adr.getDate().getDayOfWeek().getValue() == 6 || adr.getDate().getDayOfWeek().getValue() == 7){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You can't reserve a doctor at the weekend.");
+        }
+        try{
+            List<AppointmentDTO> appointments = this.doctorService.findFreeTerms(doctorId,adr);
+            for(AppointmentDTO app : appointments){
+                System.out.println(app.getDoctorId() + app.getTime());
+            }
+
+            return new ResponseEntity(appointments,HttpStatus.OK);
+
+        }catch(NullPointerException e){
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+
+
+    }
+
 
 
     private boolean isSerialNumber(String n){

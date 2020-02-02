@@ -2,15 +2,12 @@ package team57.project.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import team57.project.dto.ClinicDTO;
-import team57.project.dto.RateDTO;
-import team57.project.dto.RoomDTO;
-import team57.project.model.Clinic;
-import team57.project.model.Patient;
-import team57.project.model.Room;
+import team57.project.dto.*;
+import team57.project.model.*;
 import team57.project.repository.ClinicRepository;
 import team57.project.repository.PatientRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -89,5 +86,47 @@ public class ClinicService {
             return null;
         }
 
+    }
+
+    public List<ClinicDTO> findFreeClinics(AvailableDoctorRequest adr) {
+
+        System.out.println(adr);
+        List<ClinicDTO> clinicDTOS = new ArrayList<>();
+        List<Clinic> clinics = new ArrayList<>();
+
+        //doctors that have 1 or more free terms
+        clinics = this.clinicRepository.getFreeClinics(adr.getIdExamType(),adr.getDate());
+
+        for (Clinic c : clinics) {
+            for ( Doctor doctor : c.getDoctors()){
+                boolean isAbsent = isDoctorAbsent(adr, doctor);
+                if (!isAbsent) {
+                    boolean add = true;
+                    for(ClinicDTO dto : clinicDTOS){
+                        if(dto.getId().equals(c.getId())){
+                            add = false;
+                        }
+                    }
+                    if(add)
+                        clinicDTOS.add(new ClinicDTO(c.getId(),c.getName(),c.getAddress(),c.getDescription(),c.getRating(),c.getNumberOfReviews()));
+
+                }
+            }
+
+        }
+        System.out.println(clinicDTOS);
+
+        return clinicDTOS;
+    }
+    private boolean isDoctorAbsent(AvailableDoctorRequest adr, Doctor doctor) {
+        boolean isAbsent = false;
+        for (Absence a : doctor.getAbsences()) {
+            if (a.getStatusOfAbsence().equals("APPROVED")) {
+                if (a.getStartDate().minusDays(1).isBefore(adr.getDate()) && a.getEndDate().plusDays(1).isAfter(adr.getDate())) {
+                    isAbsent = true;
+                }
+            }
+        }
+        return isAbsent;
     }
 }

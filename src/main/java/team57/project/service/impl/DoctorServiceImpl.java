@@ -8,6 +8,7 @@ import team57.project.dto.*;
 import team57.project.model.*;
 import team57.project.repository.DoctorRepository;
 import team57.project.repository.PatientRepository;
+import team57.project.repository.TermDoctorRepository;
 import team57.project.service.DoctorService;
 
 import javax.transaction.Transactional;
@@ -27,6 +28,8 @@ public class DoctorServiceImpl implements DoctorService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthorityServiceImpl authService;
+    @Autowired
+    private TermDoctorRepository termDoctorRepository;
 
 
     @Override
@@ -262,6 +265,17 @@ public class DoctorServiceImpl implements DoctorService {
 
 
         return doctorsRating;
+    }
+
+    @Override
+    public List<AppointmentDTO> findFreeTerms(Long doctorId, AvailableDoctorRequest adr) {
+        List<AppointmentDTO> appointments = new ArrayList<>();
+        List<TermDoctor> terms = this.termDoctorRepository.getFreeTerms(doctorId,adr.getIdExamType(),adr.getDate());
+        for(TermDoctor term : terms){
+            appointments.add(new AppointmentDTO(term));
+        }
+
+        return appointments;
     }
 
     private boolean isDoctorAbsent(AvailableDoctorRequest adr, Doctor doctor) {
