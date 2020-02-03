@@ -9,10 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-import team57.project.dto.ClinicDTO;
-import team57.project.dto.RateDTO;
-import team57.project.dto.RoomDTO;
-import team57.project.dto.UserRequest;
+import team57.project.dto.*;
 import team57.project.exception.ResourceConflictException;
 import team57.project.model.Clinic;
 import team57.project.model.Room;
@@ -160,6 +157,28 @@ public class ClinicController {
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (NullPointerException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+
+    }
+    @PutMapping(value = "/getFreeClinics", consumes = "application/json", produces = "application/json")
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    public ResponseEntity<?> getFreeClinics(@RequestBody AvailableDoctorRequest adr) {
+
+        System.out.println("Testiranje" + adr);
+        if (adr.getIdExamType() == null || adr.getDate() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exam type and date are mandatory.");
+        }
+        if (adr.getDate().getDayOfWeek().getValue() == 6 || adr.getDate().getDayOfWeek().getValue() == 7) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You can't reserve a doctor at the weekend.");
+        }
+        try {
+
+            List<ClinicDTO> freeClinics = this.clinicService.findFreeClinics(adr);
+            return new ResponseEntity(freeClinics, HttpStatus.OK);
+
+        } catch (NullPointerException e) {
+            return ResponseEntity.status(HttpStatus.OK).build();
         }
 
 

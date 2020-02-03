@@ -207,4 +207,25 @@ public class ExamTypeController {
         }
 
     }
+    @GetMapping(value="/getAllExamTypes", produces="application/json")
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    public ResponseEntity<?> getAllExamTypes()
+    {
+        try {
+            List<ExamType> examTypes = this.examTypeService.findAll();
+            List<ExamTypeDTO> examTypesDTO = new ArrayList<>();
+            for(ExamType examType: examTypes){
+                if(!examType.isRemoved()){
+                    examTypesDTO.add(new ExamTypeDTO(examType));
+                }
+            }
+            return new ResponseEntity(examTypesDTO, HttpStatus.OK);
+
+        } catch(NullPointerException e){
+
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
 }

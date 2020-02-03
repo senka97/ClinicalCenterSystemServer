@@ -13,7 +13,9 @@ import team57.project.service.ExamTypeService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.time.LocalTime;
+
 
 @Service
 public class ExamTypeServiceImpl implements ExamTypeService {
@@ -107,5 +109,10 @@ public class ExamTypeServiceImpl implements ExamTypeService {
             examType.setRemoved(true);
             examTypeRepository.save(examType);
             return true;
+    }
+
+    @Override
+    public List<ExamType> findAll() {
+        return this.examTypeRepository.findAll();
     }
 }

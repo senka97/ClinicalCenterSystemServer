@@ -5,7 +5,6 @@ import team57.project.dto.*;
 import team57.project.model.Clinic;
 import team57.project.model.Doctor;
 
-import java.util.HashSet;
 import java.util.List;
 
 public interface DoctorService {
@@ -25,4 +24,9 @@ public interface DoctorService {
     void probaZaScheduling();
 
     List<DoctorFA> findAvailableDoctors(Clinic clinic,AvailableDoctorRequest adr);
+
+
+    List<DoctorRating> findFreeDoctors(Clinic clinic, AvailableDoctorRequest adr);
+    List<AppointmentDTO> findFreeTerms(Long doctorId, AvailableDoctorRequest adr);
+
 }
