@@ -9,11 +9,13 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import team57.project.event.OnRegistrationSuccessEvent;
-import team57.project.model.Absence;
-import team57.project.model.User;
+import team57.project.model.*;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -101,5 +103,37 @@ public class EmailService {
         mail.setSubject("Clinical Center System - absence request");
         mail.setFrom(env.getProperty("spring.mail.username"));
         javaMailSender.send(mail);
+    }
+
+    @Async
+    public void sendFAReservation(Patient patient, FastAppointment fa) throws MailException, InterruptedException, MessagingException{
+        String date = fa.getDateFA().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+        String time = fa.getTimeFA().format(DateTimeFormatter.ofPattern("hh:mm"));
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setText("Hello, " + patient.getName() + "!\n\n" + "You have successfully reserved the medical exam - " + fa.getExamType().getName() + " on " + date + " at " + time + "."  + "\n\nBest regards,\nClinic admin");
+        mail.setTo(patient.getEmail());
+        mail.setSubject("Clinical Center System - Medical exam reservation");
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        javaMailSender.send(mail);
+    }
+    @Async
+    public void notificationAppointmentReq(Patient patient, Doctor doctor, MedicalExam medicalExam, Set<ClinicAdmin> admins) throws MailException, InterruptedException, MessagingException{
+
+        String date = medicalExam.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+
+        String time = medicalExam.getStartTime().format(DateTimeFormatter.ofPattern("hh:mm"));
+        SimpleMailMessage mail = new SimpleMailMessage();
+        for(ClinicAdmin admin : admins){
+            mail.setText("Hello, " + admin.getName() + "!\n\n" + "Patient : " + patient.getName() + " " + patient.getSurname() +
+                    " with serial number : " + patient.getSerialNumber() + " has send request for appoinment!\n\n" +
+                   "Appointment: \n Date: " + date + "\nTime: " + time + "\n Doctor: " + doctor.getName() + " "
+                    + doctor.getSurname() + "\n Doctor id: " + doctor.getId());
+            mail.setTo(admin.getEmail());
+            mail.setSubject("Request for appointment");
+            mail.setFrom(env.getProperty("spring.mail.username"));
+            javaMailSender.send(mail);
+
+        }
+
     }
 }

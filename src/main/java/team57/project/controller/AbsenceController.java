@@ -135,11 +135,12 @@ public class AbsenceController {
             if(!absence.getStatusOfAbsence().equals("REQUESTED")){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This absence request has already been completed.");
             }
-            if(absenceService.approveAbsence(absence)){
+            String msg = absenceService.approveAbsence(absence);
+            if(msg == null){
                 return ResponseEntity.status(HttpStatus.OK).build();
 
             }else{
-                return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Something went wrong with sending email notification. Please try again.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(msg);
             }
 
         }catch(NullPointerException e){

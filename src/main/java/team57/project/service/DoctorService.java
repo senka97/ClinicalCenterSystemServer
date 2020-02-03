@@ -1,10 +1,7 @@
 package team57.project.service;
 
 
-import team57.project.dto.DoctorDTO;
-import team57.project.dto.DoctorRating;
-import team57.project.dto.DoctorSearch;
-import team57.project.dto.RateDTO;
+import team57.project.dto.*;
 import team57.project.model.Clinic;
 import team57.project.model.Doctor;
 
@@ -24,4 +21,12 @@ public interface DoctorService {
     Doctor save(Doctor d);
 
     Doctor rateDoctor(Long doctorId, RateDTO rate);
+    void probaZaScheduling();
+
+    List<DoctorFA> findAvailableDoctors(Clinic clinic,AvailableDoctorRequest adr);
+
+
+    List<DoctorRating> findFreeDoctors(Clinic clinic, AvailableDoctorRequest adr);
+    List<AppointmentDTO> findFreeTerms(Long doctorId, AvailableDoctorRequest adr);
+
 }

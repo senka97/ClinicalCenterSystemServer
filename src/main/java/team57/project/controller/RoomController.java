@@ -5,7 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import team57.project.dto.AvailableRoomRequest;
 import team57.project.dto.RoomDTO;
+import team57.project.dto.RoomFA;
 import team57.project.model.Clinic;
 import team57.project.model.Room;
 import team57.project.service.ClinicService;
@@ -110,6 +112,27 @@ public class RoomController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The room can't be removed because it is reserved" +
                         " for the upcoming exam or surgery.");
             }
+
+        } catch(NullPointerException e){
+
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping(value="/getAvailableRooms/{id}")
+    @PreAuthorize("hasRole('CLINIC_ADMIN')")
+    public ResponseEntity<?> getAvailableRooms(@PathVariable("id") Long id, @RequestBody AvailableRoomRequest arq)
+    {
+        if(arq.getDate() == null || arq.getTime() == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Date and time are mandatory.");
+        }
+        if(arq.getDate().getDayOfWeek().getValue() == 6 || arq.getDate().getDayOfWeek().getValue() == 7){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You can't reserve a room at the weekend.");
+        }
+        try {
+            Clinic clinic = clinicService.findOne(id);
+            List<RoomFA> availableRooms = roomService.findAvailableRooms(clinic,arq);
+            return new ResponseEntity(availableRooms,HttpStatus.OK);
 
         } catch(NullPointerException e){
 

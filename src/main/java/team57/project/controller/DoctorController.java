@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import team57.project.dto.*;
 import team57.project.model.Clinic;
 import team57.project.model.Doctor;
+import team57.project.model.ExamType;
 import team57.project.service.ClinicService;
+import team57.project.service.ExamTypeService;
 import team57.project.service.PatientService;
 import team57.project.service.impl.DoctorServiceImpl;
 
@@ -27,6 +29,8 @@ public class DoctorController {
     private ClinicService clinicService;
     @Autowired
     private PatientService patientService;
+    @Autowired
+    private ExamTypeService examTypeService;
 
     @GetMapping(value="/getDoctor/{id}", produces="application/json")
     @PreAuthorize("hasRole('CLINIC_ADMIN')")
@@ -157,6 +161,77 @@ public class DoctorController {
 
 
     }
+
+    @PostMapping(value = "/getFreeDoctors/{clinicId}", consumes = "application/json", produces = "application/json")
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    public ResponseEntity<?> getFreeDoctors(@RequestBody AvailableDoctorRequest adr, @PathVariable("clinicId") Long clinicId) {
+
+        System.out.println("Testiranje" + adr + clinicId);
+        if (adr.getIdExamType() == null || adr.getDate() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exam type and date are mandatory.");
+        }
+        if (adr.getDate().getDayOfWeek().getValue() == 6 || adr.getDate().getDayOfWeek().getValue() == 7) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You can't reserve a doctor at the weekend.");
+        }
+        try {
+            Clinic clinic = clinicService.findOne(clinicId);
+            List<DoctorRating> freeDoctors = doctorService.findFreeDoctors(clinic, adr);
+            return new ResponseEntity(freeDoctors, HttpStatus.OK);
+
+        } catch (NullPointerException e) {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+
+
+    }
+    @PostMapping(value="/getAvailableDoctors/{clinicId}", consumes="application/json", produces = "application/json")
+    @PreAuthorize("hasRole('CLINIC_ADMIN')")
+    public ResponseEntity<?> getAvailableDoctors(@RequestBody AvailableDoctorRequest adr, @PathVariable("clinicId") Long clinicId){
+
+        if(adr.getIdExamType() == null || adr.getDate() == null || adr.getTime() == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exam type, date and time are mandatory.");
+        }
+        if(adr.getDate().getDayOfWeek().getValue() == 6 || adr.getDate().getDayOfWeek().getValue() == 7){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You can't reserve a doctor at the weekend.");
+        }
+        try{
+            Clinic clinic = clinicService.findOne(clinicId);
+            List<DoctorFA> availableDoctors = doctorService.findAvailableDoctors(clinic,adr);
+            return new ResponseEntity(availableDoctors,HttpStatus.OK);
+
+        }catch(NullPointerException e){
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+
+
+    }
+    @PostMapping(value="/getAvailableTerms/{id}", consumes="application/json", produces = "application/json")
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    public ResponseEntity<?> getAvailableTerms(@RequestBody AvailableDoctorRequest adr, @PathVariable("id") Long doctorId){
+
+        if(adr.getIdExamType() == null || adr.getDate() == null ){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exam type and date are mandatory.");
+        }
+        if(adr.getDate().getDayOfWeek().getValue() == 6 || adr.getDate().getDayOfWeek().getValue() == 7){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You can't reserve a doctor at the weekend.");
+        }
+        try{
+            List<AppointmentDTO> appointments = this.doctorService.findFreeTerms(doctorId,adr);
+            ExamType type = this.examTypeService.findOne(adr.getIdExamType());
+            for(AppointmentDTO app : appointments){
+                app.setType(type.getName());
+            }
+
+            return new ResponseEntity(appointments,HttpStatus.OK);
+
+        }catch(NullPointerException e){
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+
+
+    }
+
+
 
     private boolean isSerialNumber(String n){
         if (Pattern.matches("[0-9]+", n) && n.length() == 13) {

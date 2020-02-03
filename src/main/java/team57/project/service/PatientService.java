@@ -1,6 +1,10 @@
 package team57.project.service;
 
+import org.springframework.security.core.Authentication;
+import team57.project.dto.AppointmentDTO;
 import team57.project.dto.MedicalRecordDTO;
+import team57.project.dto.PatientSearch;
+import team57.project.dto.UserDTO;
 import team57.project.model.*;
 
 import java.util.List;
@@ -9,6 +13,7 @@ public interface PatientService {
 
     List<Patient> findAll();
     Patient findOne(Long id);
+    Patient findOneByEmail(String email);
     MedicalRecord findPatientMedicalRecord(Long id);
 
     void updateMedicalRecord(MedicalRecordDTO medicalRecordDTO, MedicalRecord record);
@@ -23,4 +28,10 @@ public interface PatientService {
 
     List<MedicalReport> getMedicalReports(Long id);
 
+    List<UserDTO> findAllInClinic(Authentication currentUser);
+    List<UserDTO> searchPatients(Authentication currentUser, PatientSearch patientSearch);
+    List<String> getAllCities(Authentication currentUser);
+
+
+    MedicalExam sendAppointment(AppointmentDTO appointmentDTO, Long patientId);
 }

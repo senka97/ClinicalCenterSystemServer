@@ -1,18 +1,19 @@
 package team57.project.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import team57.project.dto.DoctorDTO;
-import team57.project.dto.DoctorRating;
-import team57.project.dto.DoctorSearch;
-import team57.project.dto.RateDTO;
+import team57.project.dto.*;
 import team57.project.model.*;
 import team57.project.repository.DoctorRepository;
 import team57.project.repository.PatientRepository;
+import team57.project.repository.TermDoctorRepository;
 import team57.project.service.DoctorService;
 
-import java.time.LocalDateTime;
+import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 @Service
@@ -27,6 +28,8 @@ public class DoctorServiceImpl implements DoctorService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthorityServiceImpl authService;
+    @Autowired
+    private TermDoctorRepository termDoctorRepository;
 
 
     @Override
@@ -92,9 +95,17 @@ public class DoctorServiceImpl implements DoctorService {
     public boolean removeDoctor(Doctor doctor) {
 
         for(FastAppointment fa: doctor.getFastAppointments()){
-            if(fa.getDateTime().isAfter(LocalDateTime.now()) || (fa.getDateTime().isBefore(LocalDateTime.now()) &&
+            /*if(fa.getDateTime().isAfter(LocalDateTime.now()) || (fa.getDateTime().isBefore(LocalDateTime.now()) &&
                     fa.getDateTime().plusMinutes(fa.getDuration()).isAfter(LocalDateTime.now()))){
                 return false;
+            }*/
+            if(fa.getDateFA().isAfter(LocalDate.now())){ //ako je u buducnosti odmah vrati false
+                return false;
+            }else if(fa.getDateFA().equals(LocalDate.now())){ //ako je danas proveri vreme
+                //if((fa.getTimeFA().isBefore(LocalTime.now()) && fa.getTimeFA().plusHours(1).isAfter(LocalTime.now())) || (fa.getTimeFA().equals(LocalTime.now()))){
+                if((fa.getTimeFA().plusHours(1).isAfter(LocalTime.now()))){ //dovoljno je proveriti samo da li je kraj pregleda posle sadasnjeg trenutka
+                    return false;
+                }
             }
         }
 
@@ -181,7 +192,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    //  @Transactional()
+    @Transactional
     public Doctor rateDoctor(Long doctorId, RateDTO rate) {
         try {
             System.out.println("Test");
@@ -208,6 +219,75 @@ public class DoctorServiceImpl implements DoctorService {
             return null;
         }
 
+    }
+
+
+
+    @Override
+    @Scheduled(cron = "${doctor.cron}")
+    public void probaZaScheduling() {
+        //System.out.println("sada");
+    }
+
+    @Override
+    public List<DoctorFA> findAvailableDoctors(Clinic clinic, AvailableDoctorRequest adr) {
+        List<DoctorFA> doctorsFA = new ArrayList<DoctorFA>();
+        List<Doctor> doctors = new ArrayList<Doctor>();
+
+        doctors = doctorRepository.getAvailableDoctors(clinic.getId(),adr.getIdExamType(),adr.getDate(),adr.getTime());
+        for(Doctor doctor: doctors){
+            boolean isAbsent = isDoctorAbsent(adr, doctor);
+            if (!isAbsent) {
+                doctorsFA.add(new DoctorFA(doctor));
+            }
+        }
+
+        return doctorsFA;
+
+    }
+
+
+    @Override
+    public List<DoctorRating> findFreeDoctors(Clinic clinic, AvailableDoctorRequest adr) {
+
+        List<DoctorRating> doctorsRating = new ArrayList<>();
+        List<Doctor> doctors = new ArrayList<>();
+
+        //doctors that have 1 or more free terms
+        doctors = this.doctorRepository.getFreeDoctors(clinic.getId(), adr.getIdExamType(), adr.getDate());
+        for (Doctor doctor : doctors) {
+
+            boolean isAbsent = isDoctorAbsent(adr, doctor);
+            if (!isAbsent) {
+                doctorsRating.add(new DoctorRating(doctor));
+            }
+        }
+
+
+        return doctorsRating;
+    }
+
+    @Override
+    public List<AppointmentDTO> findFreeTerms(Long doctorId, AvailableDoctorRequest adr) {
+        List<AppointmentDTO> appointments = new ArrayList<>();
+        List<TermDoctor> terms = this.termDoctorRepository.getFreeTerms(doctorId,adr.getIdExamType(),adr.getDate());
+        for(TermDoctor term : terms){
+            appointments.add(new AppointmentDTO(term));
+        }
+
+        return appointments;
+    }
+
+    private boolean isDoctorAbsent(AvailableDoctorRequest adr, Doctor doctor) {
+        boolean isAbsent = false;
+        for (Absence a : doctor.getAbsences()) {
+            if (a.getStatusOfAbsence().equals("APPROVED")) {
+                if (a.getStartDate().minusDays(1).isBefore(adr.getDate()) && a.getEndDate().plusDays(1).isAfter(adr.getDate())) {
+                    isAbsent = true;
+                }
+            }
+        }
+        return isAbsent;
     }
 
 

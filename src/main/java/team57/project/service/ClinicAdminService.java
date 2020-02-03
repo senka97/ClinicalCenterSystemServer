@@ -8,6 +8,8 @@ import team57.project.model.Clinic;
 import team57.project.model.ClinicAdmin;
 import team57.project.repository.ClinicAdminRepository;
 
+import java.util.Set;
+
 @Service
 public class ClinicAdminService {
 
@@ -30,6 +32,11 @@ public class ClinicAdminService {
         String email = currentUser.getName();
         ClinicAdmin clinicAdmin = clinicAdminRepository.findByEmail(email);
         return clinicAdmin.getClinic();
+
+    }
+
+    public Set<ClinicAdmin> findClinicAdmins(Long clinicId){
+        return this.clinicAdminRepository.getClinicAdmins(clinicId);
 
     }
 }
