@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import team57.project.dto.*;
 import team57.project.model.Clinic;
 import team57.project.model.Doctor;
+import team57.project.model.ExamType;
 import team57.project.service.ClinicService;
+import team57.project.service.ExamTypeService;
 import team57.project.service.PatientService;
 import team57.project.service.impl.DoctorServiceImpl;
 
@@ -27,6 +29,8 @@ public class DoctorController {
     private ClinicService clinicService;
     @Autowired
     private PatientService patientService;
+    @Autowired
+    private ExamTypeService examTypeService;
 
     @GetMapping(value="/getDoctor/{id}", produces="application/json")
     @PreAuthorize("hasRole('CLINIC_ADMIN')")
@@ -213,8 +217,9 @@ public class DoctorController {
         }
         try{
             List<AppointmentDTO> appointments = this.doctorService.findFreeTerms(doctorId,adr);
+            ExamType type = this.examTypeService.findOne(adr.getIdExamType());
             for(AppointmentDTO app : appointments){
-                System.out.println(app.getDoctorId() + app.getTime());
+                app.setType(type.getName());
             }
 
             return new ResponseEntity(appointments,HttpStatus.OK);
