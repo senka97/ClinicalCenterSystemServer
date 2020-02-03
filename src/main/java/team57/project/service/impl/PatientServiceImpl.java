@@ -134,4 +134,6 @@ public class PatientServiceImpl implements PatientService {
         Long medicalRecordId = p.getMedicalRecord().getId();
         return medicalReportRepository.getMedicalReports(medicalRecordId);
     }
+
+
 }

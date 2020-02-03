@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import team57.project.dto.*;
 import team57.project.model.*;
 import team57.project.service.DiagnosisService;
+import team57.project.service.MedicalRecordService;
 import team57.project.service.MedicationService;
 import team57.project.service.PatientService;
 
@@ -32,6 +33,8 @@ public class PatientController {
     private MedicationService medicationService;
     @Autowired
     private DiagnosisService diagnosisService;
+    @Autowired
+    private MedicalRecordService medicalRecordService;
 
     @RequestMapping(value = "/allSorted", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ROLE_DOCTOR') or hasRole('ROLE_NURSE')")
@@ -153,5 +156,20 @@ public class PatientController {
         return new ResponseEntity<>(reportsDTO, HttpStatus.OK);
     }
 
+    @DeleteMapping(value = "/deleteChronicCondition/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_DOCTOR')")
+    public ResponseEntity<?> deleteDiagnosis(@PathVariable("id") Long id, @RequestBody DiagnosisDTO diagnose) {
+        MedicalRecord record = this.patientService.findPatientMedicalRecord(id);
+        this.medicalRecordService.deleteChronicCondition(this.diagnosisService.findOne(diagnose.getId()),record);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/deleteAllergicMedication/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_DOCTOR')")
+    public ResponseEntity<?> deleteAllergicMedication(@PathVariable("id") Long id, @RequestBody MedicationDTO medication) {
+        MedicalRecord record = this.patientService.findPatientMedicalRecord(id);
+        this.medicalRecordService.deleteAllergicMedication(this.medicationService.findOne(medication.getId()),record);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }

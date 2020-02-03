@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.HashSet;
 import java.util.Set;
 @Entity
 public class MedicalReport {
@@ -18,17 +19,19 @@ public class MedicalReport {
     @Column(name = "time", nullable = false)
     private Time time;
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name = "medical_report_diagnoses", joinColumns = @JoinColumn(name = "medicalReport_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "diagnoses_id", referencedColumnName = "id"))
     private Set<Diagnose> diagnoses;
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Set<Prescription> prescriptions;
     //@JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Doctor doctor;
 
     public MedicalReport(){
-
+        diagnoses = new HashSet<>();
+        prescriptions = new HashSet<>();
     }
 
     public Long getId() {

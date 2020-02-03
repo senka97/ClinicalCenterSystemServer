@@ -1,8 +1,11 @@
 package team57.project.dto;
 
+import team57.project.model.Diagnose;
 import team57.project.model.Doctor;
+import team57.project.model.Medication;
 
 import java.sql.Time;
+import java.util.ArrayList;
 
 public class MedicalReportDTO {
 
@@ -11,6 +14,8 @@ public class MedicalReportDTO {
     private String date;
     private Time time;
     private DoctorDTO doctor;
+    private ArrayList<Medication> medications;
+    private ArrayList<Diagnose> diagnoses;
 
     public MedicalReportDTO()
     {
@@ -55,4 +60,21 @@ public class MedicalReportDTO {
     public void setDoctor(DoctorDTO doctor) {
         this.doctor = doctor;
     }
+
+    public ArrayList<Medication> getMedications() {
+        return medications;
+    }
+
+    public void setMedications(ArrayList<Medication> medications) {
+        this.medications = medications;
+    }
+
+    public ArrayList<Diagnose> getDiagnoses() {
+        return diagnoses;
+    }
+
+    public void setDiagnoses(ArrayList<Diagnose> diagnoses) {
+        this.diagnoses = diagnoses;
+    }
+
 }

@@ -59,22 +59,26 @@ insert into room_reservation_time(start_date_time, end_date_time, done, room_id)
 
 
 insert into medical_report (description,date,time,doctor_id) value ('Ceste migrene.','2019-03-07','12:00:00',3);
-insert into medical_report (description,date,time,doctor_id) value ('Ucestala zeludacna kiselina.','2019-04-07','13:00:00',3);
+insert into medical_report (description,date,time,doctor_id) value ('Ucestala zeludacna kiselina.','2019-04-07','13:00:00',6);
 
 insert into medication (code, description) value ('#ABC12300','Bensedin 500 mg');
 insert into medication (code, description) value ('#AF000025','Nolpaza 40 mg');
 insert into medication (code, description) value ('#AB250020','Vitamin D 2000 UI');
 insert into medication (code, description) value ('#BD803021','Ciprocinal 500 mg');
-insert into prescription (verified, medication_id, nurse_id, patient_id, doctor_id, clinic_id) value (FALSE,1,null,5,3,1);
+insert into prescription (verified, medication_id, nurse_id, patient_id, doctor_id, clinic_id) value (TRUE,1,4,5,6,2);
 insert into prescription (verified, medication_id, nurse_id, patient_id, doctor_id, clinic_id) value (FALSE,2,null,5,3,1);
-insert into prescription (verified, medication_id, nurse_id, patient_id, doctor_id, clinic_id) value (FALSE,3,null,5,3,2);
+insert into prescription (verified, medication_id, nurse_id, patient_id, doctor_id, clinic_id) value (FALSE,3,null,5,3,1);
 
 insert into medical_record_medical_reports (medical_record_id, medical_reports_id) value (1,1);
 insert into medical_record_medical_reports (medical_record_id, medical_reports_id) value (1,2);
 
 insert into medical_report_prescriptions (medical_report_id, prescriptions_id) value(1,1);
-insert into medical_report_prescriptions (medical_report_id, prescriptions_id) value(1,2);
-insert into medical_report_prescriptions (medical_report_id, prescriptions_id) value(1,3);
+insert into medical_report_prescriptions (medical_report_id, prescriptions_id) value(2,2);
+insert into medical_report_prescriptions (medical_report_id, prescriptions_id) value(2,3);
+
+insert into medical_report_diagnoses (medical_report_id, diagnoses_id) value (1,1);
+insert into medical_report_diagnoses (medical_report_id, diagnoses_id) value (2,1);
+insert into medical_report_diagnoses (medical_report_id, diagnoses_id) value (2,2);
 
 insert into request_for_absence (start_date,end_date,serial_number,type) value ('2019-10-15','2019-11-01','032163256332','paid vacation');
 insert into surgery (date,start_time, end_time,patient_id,surgery_type_id) value ('2019-04-12','12:45:00','15:45:00',5,1);
