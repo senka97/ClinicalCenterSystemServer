@@ -4,14 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import team57.project.dto.DoctorSearch;
-import team57.project.dto.MedicalRecordDTO;
-import team57.project.dto.PatientSearch;
-import team57.project.dto.UserDTO;
+import team57.project.dto.*;
 import team57.project.model.*;
 import team57.project.repository.*;
+import team57.project.service.ClinicAdminService;
+import team57.project.service.EmailService;
 import team57.project.service.PatientService;
 
+import javax.print.Doc;
+import javax.transaction.Transactional;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -32,6 +35,16 @@ public class PatientServiceImpl implements PatientService {
     private ClinicRepository clinicRepository;
     @Autowired
     private NurseRepository nurseRepository;
+    @Autowired
+    private TermDoctorRepository termDoctorRepository;
+    @Autowired
+    private ExamTypeRepository examTypeRepository;
+    @Autowired
+    private EmailService emailService;
+    @Autowired
+    private ClinicAdminService clinicAdminService;
+
+
 
     @Override
     public List<Patient> findAll() {
@@ -218,6 +231,53 @@ public class PatientServiceImpl implements PatientService {
         Set<Patient> patients = doctor.getClinic().getPatients();
         List<String> cities = patientRepostiory.getAllCities();
         return cities;
+
+    }
+
+    @Override
+    @Transactional
+    public MedicalExam sendAppointment(AppointmentDTO appointmentDTO, Long patientId) {
+        try{
+            Patient p = patientRepostiory.findById(patientId).orElse(null);
+            Doctor d = this.doctorRepository.findById(appointmentDTO.getDoctorId()).orElse(null);
+            //Lock term
+            TermDoctor termDoctor = this.termDoctorRepository.findById(appointmentDTO.getId()).orElseGet(null);
+
+            //Make request for appointment
+            MedicalExam examRequest = new MedicalExam(termDoctor);
+            ExamType examType = this.examTypeRepository.findByName(appointmentDTO.getTime());
+            examRequest.setExamType(examType);
+            examRequest.setDoctor(d);
+            examRequest.setPatient(p);
+            examRequest.setExamRoom(null);
+
+
+            //Make term occupied
+            termDoctor.setFree(false);
+            if(p != null){
+                p.getMedicalExams().add(examRequest);
+            }
+            this.medicalExamRepository.save(examRequest);
+            this.patientRepostiory.save(p);
+            this.termDoctorRepository.save(termDoctor);
+            System.out.println("Clinic id : " + d.getClinic().getId() );
+            Clinic c = this.clinicRepository.getOne(d.getClinic().getId());
+
+            Set<ClinicAdmin> admins = clinicAdminService.findClinicAdmins(c.getId());
+            System.out.println(admins.toString());
+            for(ClinicAdmin a : admins){
+                System.out.println("Admin" + a.getEmail() + a.getName() + a.getId() );
+            }
+            //send notification to admin
+            this.emailService.notificationAppointmentReq(p,d,examRequest,admins);
+
+        return  examRequest;
+
+        }catch (Exception e){
+        return null;
+        }
+
+
 
     }
 

@@ -1,13 +1,14 @@
 package team57.project.dto;
 
 import java.sql.Time;
+import java.time.LocalTime;
 
 public class MedicalExamDTO {
 
     private Long id;
     private String date;
-    private Time startTime;
-    private Time endTime;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private String examType;
     private String doctor;
 
@@ -29,19 +30,19 @@ public class MedicalExamDTO {
         this.date = date;
     }
 
-    public Time getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Time startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
-    public Time getEndTime() {
+    public LocalTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Time endTime) {
+    public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
 

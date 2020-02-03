@@ -1,6 +1,7 @@
 package team57.project.service;
 
 import org.springframework.security.core.Authentication;
+import team57.project.dto.AppointmentDTO;
 import team57.project.dto.MedicalRecordDTO;
 import team57.project.dto.PatientSearch;
 import team57.project.dto.UserDTO;
@@ -29,4 +30,6 @@ public interface PatientService {
     List<UserDTO> searchPatients(Authentication currentUser, PatientSearch patientSearch);
     List<String> getAllCities(Authentication currentUser);
 
+
+    MedicalExam sendAppointment(AppointmentDTO appointmentDTO, Long patientId);
 }
