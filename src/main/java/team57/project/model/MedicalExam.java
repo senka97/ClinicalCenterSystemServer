@@ -8,17 +8,20 @@ import javax.persistence.ManyToMany;
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Entity
 public class MedicalExam {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "date", nullable = false)
-    private Date date;
+    private LocalDate date;
     @Column(name = "startTime", nullable = false)
-    private Time startTime;
+    private LocalTime startTime;
     @Column(name = "endTime", nullable = false)
-    private Time endTime;
+    private LocalTime endTime;
     @Column(name = "reserved", nullable = false)
     private Boolean reserved;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -31,6 +34,15 @@ public class MedicalExam {
     private Doctor doctor;
 
     public MedicalExam() {}
+    public MedicalExam(TermDoctor termDoctor){
+        this.date = termDoctor.getDateTerm();
+        this.startTime = termDoctor.getStartTime();
+        this.endTime = termDoctor.getEndTime();
+        this.reserved = true;
+
+
+
+    }
     public Long getId() {
         return id;
     }
@@ -39,27 +51,27 @@ public class MedicalExam {
         this.id = id;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
-    public Time getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Time startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
-    public Time getEndTime() {
+    public LocalTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Time endTime) {
+    public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
 

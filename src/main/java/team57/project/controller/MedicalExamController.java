@@ -8,6 +8,8 @@ import team57.project.dto.MedicalExamDTO;
 import team57.project.model.MedicalExam;
 import team57.project.service.MedicalExamService;
 
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,15 +25,18 @@ public class MedicalExamController {
     public List<MedicalExamDTO> getMedicalExam(@PathVariable("id") Long id) {
         List<MedicalExam> medicalExams = this.medicalExamService.findByPatientId(id);
         List<MedicalExamDTO> examsDTO = new ArrayList<MedicalExamDTO>();
+        System.out.println(medicalExams);
         for(MedicalExam exam : medicalExams){
-            MedicalExamDTO dto = new MedicalExamDTO();
-            dto.setDate(exam.getDate().toLocalDate().toString());
+            if(exam.getExamRoom() != null){
+                MedicalExamDTO dto = new MedicalExamDTO();
+                dto.setDate(exam.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)));
+                dto.setDoctor(exam.getDoctor().getName());
+                dto.setEndTime(exam.getEndTime());
+                dto.setStartTime(exam.getStartTime());
+                dto.setExamType(exam.getExamType().getName());
+                examsDTO.add(dto);
+            }
 
-            dto.setDoctor(exam.getDoctor().getName());
-            dto.setEndTime(exam.getEndTime());
-            dto.setStartTime(exam.getStartTime());
-            dto.setExamType(exam.getExamType().getName());
-            examsDTO.add(dto);
         }
         return examsDTO;
     }
