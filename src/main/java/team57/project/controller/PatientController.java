@@ -172,7 +172,7 @@ public class PatientController {
     }
     @RequestMapping(value = "/getRatedClinics/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ROLE_PATIENT')")
-    public List<Clinic> getRatedClinics(@PathVariable("id") Long id) {
+    public List<ClinicDTO> getRatedClinics(@PathVariable("id") Long id) {
 
         return this.patientService.leftClinics(id);
     }

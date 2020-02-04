@@ -24,6 +24,10 @@ public class MedicalExam {
     private LocalTime endTime;
     @Column(name = "reserved", nullable = false)
     private Boolean reserved;
+    @Column(name = "price", nullable = false)
+    private double price;
+    @Column(name = "discount", nullable = false)
+    private double discount;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private ExamType examType;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -32,6 +36,9 @@ public class MedicalExam {
     private Room examRoom;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Doctor doctor;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) // two way relationship, clinic has a list of all its fast appointments
+    @JoinColumn(name="clinic_id", nullable=false)
+    private Clinic clinic;
 
     public MedicalExam() {}
     public MedicalExam(TermDoctor termDoctor){
@@ -113,5 +120,30 @@ public class MedicalExam {
 
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
+    }
+
+    @JsonIgnore
+    public Clinic getClinic() {
+        return clinic;
+    }
+
+    public void setClinic(Clinic clinic) {
+        this.clinic = clinic;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
     }
 }
