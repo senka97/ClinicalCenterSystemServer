@@ -41,7 +41,7 @@ insert into doctors_exam_types(doctor_id, exam_type_id) value (3,2);
 insert into doctors_exam_types(doctor_id, exam_type_id) value (3,3);
 insert into doctors_exam_types(doctor_id, exam_type_id) value (6,1);
 insert into doctors_exam_types(doctor_id, exam_type_id) value (6,2);
-insert into doctors_exam_types(doctor_id, exam_type_id) value (6,3);
+
 
 insert into doctors_surgery_types(doctor_id, surgery_type_id) value (3,1);
 insert into room (name, number,room_type,removed) value ('Room 1',1,'Medical exam',FALSE);
@@ -56,6 +56,10 @@ insert into clinic_rooms (clinic_id, rooms_id) value (1,1);
 insert into clinics_exam_types (exam_type_id, clinic_id) value (1,1);
 insert into clinics_exam_types (exam_type_id, clinic_id) value (2,1);
 insert into clinics_exam_types (exam_type_id, clinic_id) value (3,1);
+insert into clinics_exam_types (exam_type_id, clinic_id) value (1,3);
+insert into clinics_exam_types (exam_type_id, clinic_id) value (2,3);
+
+
 insert into clinics_surgery_types(surgery_type_id, clinic_id) value (1,1);
 insert into clinics_surgery_types(surgery_type_id, clinic_id) value (2,1);
 insert into clinics_surgery_types(surgery_type_id, clinic_id) value (3,1);
@@ -89,3 +93,8 @@ insert into medical_report_diagnoses (medical_report_id, diagnoses_id) value (2,
 insert into surgery (date,start_time, end_time,patient_id,surgery_type_id,clinic_id,price,discount) value ('2019-04-12','12:45:00','15:45:00',5,1,1,100000,5);
 insert into doctors_surgeries (doctor_id, surgery_id) value (3,1);
 
+insert into medical_record_allergic_medication(medical_record_id,medication_id) values (1,3);
+insert into medical_record_allergic_medication(medical_record_id,medication_id) values (1,4);
+
+insert into medical_record_chronic_condition(medical_record_id, diagnose_id) values (1,3);
+insert into medical_record_chronic_condition(medical_record_id, diagnose_id) values (1,4);

@@ -48,9 +48,7 @@ public class Clinic {
     private Set<Absence> absences;
 
 
-    public Clinic() {
-    }
-
+    public Clinic() {}
     public Long getId() {
         return id;
     }

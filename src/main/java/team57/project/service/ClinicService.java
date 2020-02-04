@@ -7,6 +7,7 @@ import team57.project.model.*;
 import team57.project.repository.ClinicRepository;
 import team57.project.repository.PatientRepository;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -60,8 +61,7 @@ public class ClinicService {
         return clinicRepository.save(clinic);
 
     }
-
-    //Transakcija
+    
     public Clinic rateClinic(Long clinicId, RateDTO rate) {
         try {
 
