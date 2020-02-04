@@ -48,9 +48,7 @@ public class Clinic {
     private Set<Absence> absences;
 
 
-    public void setVersion(Long version) {
-        this.version = version;
-    }
+    public Clinic() {}
     public Long getId() {
         return id;
     }
