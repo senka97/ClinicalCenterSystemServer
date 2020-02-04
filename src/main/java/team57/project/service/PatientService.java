@@ -30,5 +30,5 @@ public interface PatientService {
     List<String> getAllCities(Authentication currentUser);
 
 
-    MedicalExam sendAppointment(AppointmentDTO appointmentDTO, Long patientId);
+    Boolean sendAppointment(AppointmentDTO appointmentDTO, Long patientId);
 }
