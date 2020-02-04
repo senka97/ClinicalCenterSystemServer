@@ -45,9 +45,9 @@ insert into doctors_exam_types(doctor_id, exam_type_id) value (6,3);
 
 insert into doctors_surgery_types(doctor_id, surgery_type_id) value (3,1);
 insert into room (name, number,room_type,removed) value ('Room 1',1,'Medical exam',FALSE);
-insert into medical_exam (date, start_time, end_time,reserved,doctor_id,exam_room_id,exam_type_id,patient_id) values ('2018-07-31', '1:05:04','4:34:12',FALSE,3,1,1,5);
-insert into medical_exam (date, start_time, end_time, reserved, doctor_id, exam_room_id, exam_type_id, patient_id) values ('2018-08-31', '1:05:04', '5:34:12', FALSE, 3, 1, 1, 5);
-insert into medical_exam (date, start_time, end_time, reserved, doctor_id, exam_room_id, exam_type_id, patient_id) values ('2018-05-13', '1:05:04', '5:34:12', FALSE, 6, 1, 1, 5);
+insert into medical_exam (date, start_time, end_time,reserved,doctor_id,exam_room_id,exam_type_id,patient_id,clinic_id,price,discount) values ('2018-07-31', '1:05:04','4:34:12',FALSE,3,1,1,5,1,10000,10);
+insert into medical_exam (date, start_time, end_time, reserved, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount) values ('2018-08-31', '1:05:04', '5:34:12', FALSE, 3, 1, 1, 5,1,10000,10);
+insert into medical_exam (date, start_time, end_time, reserved, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount) values ('2018-05-13', '1:05:04', '5:34:12', FALSE, 6, 1, 1, 5,1,10000,10);
 
 insert into clinic_patients (clinic_id, patient_id) values (1,5);
 insert into clinic_patients (clinic_id, patient_id) values (3,5);
@@ -86,6 +86,6 @@ insert into medical_report_diagnoses (medical_report_id, diagnoses_id) value (1,
 insert into medical_report_diagnoses (medical_report_id, diagnoses_id) value (2,1);
 insert into medical_report_diagnoses (medical_report_id, diagnoses_id) value (2,2);
 
-insert into surgery (date,start_time, end_time,patient_id,surgery_type_id) value ('2019-04-12','12:45:00','15:45:00',5,1);
+insert into surgery (date,start_time, end_time,patient_id,surgery_type_id,clinic_id,price,discount) value ('2019-04-12','12:45:00','15:45:00',5,1,1,100000,5);
 insert into doctors_surgeries (doctor_id, surgery_id) value (3,1);
 

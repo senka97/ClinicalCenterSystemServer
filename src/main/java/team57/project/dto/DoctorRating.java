@@ -9,6 +9,7 @@ public class DoctorRating {
     private String surname;
     private double rating;
     private double numberOfReviews;
+    private String serialNumber;
 
     public DoctorRating(){
 
@@ -20,6 +21,7 @@ public class DoctorRating {
         this.surname = doctor.getSurname();
         this.rating = doctor.getRating();
         this.numberOfReviews = doctor.getNumberOfReviews();
+        this.serialNumber = doctor.getSerialNumber();
     }
 
     public double getNumberOfReviews() {
@@ -60,5 +62,13 @@ public class DoctorRating {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 }

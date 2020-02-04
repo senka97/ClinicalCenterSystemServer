@@ -1,10 +1,13 @@
 package team57.project.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -14,21 +17,28 @@ public class Surgery {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "date", nullable = false)
-    private Date date;
+    private LocalDate date;
     @Column(name = "startTime", nullable = false)
-    private Time startTime;
+    private LocalTime startTime;
     @Column(name = "endTime", nullable = false)
-    private Time endTime;
+    private LocalTime endTime;
+    @Column(name = "price", nullable = false)
+    private double price;
+    @Column(name = "discount", nullable = false)
+    private double discount;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private SurgeryType surgeryType;
     @ManyToMany(mappedBy = "surgeries")
     private Set<Doctor> doctors;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Patient patient;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) // two way relationship, clinic has a list of all its fast appointments
+    @JoinColumn(name="clinic_id", nullable=false)
+    private Clinic clinic;
 
     public Surgery(){}
 
-    public Surgery(Date date, Time startTime, Time endTime, SurgeryType surgeryType, Set<Doctor> doctors, Patient patient) {
+    public Surgery(LocalDate date, LocalTime startTime, LocalTime endTime, SurgeryType surgeryType, Set<Doctor> doctors, Patient patient) {
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -45,27 +55,27 @@ public class Surgery {
         this.id = id;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
-    public Time getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Time startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
-    public Time getEndTime() {
+    public LocalTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Time endTime) {
+    public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
 
@@ -91,5 +101,30 @@ public class Surgery {
 
     public void setPatient(Patient patient) {
         this.patient = patient;
+    }
+
+    @JsonIgnore
+    public Clinic getClinic() {
+        return clinic;
+    }
+
+    public void setClinic(Clinic clinic) {
+        this.clinic = clinic;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
     }
 }

@@ -38,10 +38,12 @@ public class Clinic {
     private Set<SurgeryType> surgeryTypes;
     @ManyToMany(mappedBy = "clinics", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<ExamType> examTypes;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "clinic", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<MedicalExam> medicalExams;
-    @OneToMany(mappedBy = "clinic", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "clinic", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<FastAppointment> fastAppointments;
+    @OneToMany(mappedBy = "clinic", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Surgery> surgeries;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Absence> absences;
 
@@ -176,5 +178,13 @@ public class Clinic {
 
     public void setAbsences(Set<Absence> absences) {
         this.absences = absences;
+    }
+
+    public Set<Surgery> getSurgeries() {
+        return surgeries;
+    }
+
+    public void setSurgeries(Set<Surgery> surgeries) {
+        this.surgeries = surgeries;
     }
 }

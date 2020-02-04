@@ -8,6 +8,7 @@ import team57.project.dto.*;
 import team57.project.model.*;
 import team57.project.repository.*;
 import team57.project.service.ClinicAdminService;
+import team57.project.service.ClinicService;
 import team57.project.service.EmailService;
 import team57.project.service.PatientService;
 
@@ -45,6 +46,8 @@ public class PatientServiceImpl implements PatientService {
     private EmailService emailService;
     @Autowired
     private ClinicAdminService clinicAdminService;
+    @Autowired
+    private ClinicService clinicService;
 
 
 
@@ -131,9 +134,9 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public List<Clinic> leftClinics(Long id) {
+    public List<ClinicDTO> leftClinics(Long id) {
         Patient p = this.patientRepostiory.findById(id).orElse(null);
-        List<Clinic> leftClin = new ArrayList<Clinic>();
+        List<ClinicDTO> leftClin = new ArrayList<ClinicDTO>();
         System.out.println(p);
         if (p != null) {
             List<Long> clinics = this.clinicRepository.patientClinics(id);
@@ -146,7 +149,7 @@ public class PatientServiceImpl implements PatientService {
                         if (!p.getClinics().contains(c)) {
                             System.out.println(c);
 
-                            leftClin.add(c);
+                            leftClin.add(new ClinicDTO(c));
                         }
                     }
 
@@ -257,23 +260,33 @@ public class PatientServiceImpl implements PatientService {
 
             //Make request for appointment
             MedicalExam examRequest = new MedicalExam(termDoctor);
-            ExamType examType = this.examTypeRepository.findByName(appointmentDTO.getTime());
+            ExamType examType = this.examTypeRepository.findByName(appointmentDTO.getType());
             examRequest.setExamType(examType);
             examRequest.setDoctor(d);
             examRequest.setPatient(p);
             examRequest.setExamRoom(null);
-
+            examRequest.setPrice(examType.getPrice());
+            examRequest.setDiscount(examType.getDiscount());
+            //ovo dodala
+            examRequest.setClinic(d.getClinic());
 
             //Make term occupied
             termDoctor.setFree(false);
             if(p != null){
                 p.getMedicalExams().add(examRequest);
             }
+
             this.medicalExamRepository.save(examRequest);
             this.patientRepostiory.save(p);
             this.termDoctorRepository.save(termDoctor);
             System.out.println("Clinic id : " + d.getClinic().getId() );
             Clinic c = this.clinicRepository.getOne(d.getClinic().getId());
+
+            //ovo dodala
+            if(!c.getPatients().contains(p)) {
+                c.getPatients().add(p);
+                clinicRepository.save(c);
+            }
 
             Set<ClinicAdmin> admins = clinicAdminService.findClinicAdmins(c.getId());
             System.out.println(admins.toString());
