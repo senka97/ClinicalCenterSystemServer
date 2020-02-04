@@ -33,6 +33,8 @@ public class PatientServiceImpl implements PatientService {
     @Autowired
     private DoctorRepository doctorRepository;
     @Autowired
+    private MedicalReportRepository medicalReportRepository;
+    @Autowired
     private ClinicRepository clinicRepository;
     @Autowired
     private NurseRepository nurseRepository;
@@ -156,6 +158,16 @@ public class PatientServiceImpl implements PatientService {
         }
         return leftClin;
     }
+
+    @Override
+    public List<MedicalReport> getMedicalReports(Long id)
+    {
+        Patient p = patientRepostiory.findById(id).orElse(null);
+        Long medicalRecordId = p.getMedicalRecord().getId();
+        return medicalReportRepository.getMedicalReports(medicalRecordId);
+    }
+
+
 
     @Override
     public List<UserDTO> findAllInClinic(Authentication currentUser) {

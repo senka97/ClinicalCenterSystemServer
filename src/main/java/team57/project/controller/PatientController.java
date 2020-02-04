@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import team57.project.dto.*;
 import team57.project.model.*;
 import team57.project.service.DiagnosisService;
+import team57.project.service.MedicalRecordService;
 import team57.project.service.MedicationService;
 import team57.project.service.NurseService;
 import team57.project.service.PatientService;
@@ -37,6 +38,8 @@ public class PatientController {
     private MedicationService medicationService;
     @Autowired
     private DiagnosisService diagnosisService;
+    @Autowired
+    private MedicalRecordService medicalRecordService;
     @Autowired
     private DoctorServiceImpl doctorService;
     @Autowired
@@ -82,6 +85,7 @@ public class PatientController {
 
         return this.patientService.findOne(id);
     }
+
     @RequestMapping(value = "/patientMedicalRecord/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ROLE_DOCTOR') or hasRole('ROLE_PATIENT') or hasRole('ROLE_NURSE')")
     public MedicalRecord getPatientMedicalRecord(@PathVariable("id") Long id) {
@@ -177,12 +181,49 @@ public class PatientController {
         return this.patientService.leftClinics(id);
     }
 
-    private boolean isSerialNumber(String n){
+    private boolean isSerialNumber(String n) {
         if (Pattern.matches("[0-9]+", n) && n.length() == 13) {
             return true;
-        }else{
+        } else {
             return false;
         }
-
     }
+    @GetMapping(value = "/getMedicalReports/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_DOCTOR')")
+    public ResponseEntity<?> getMedicalReports(@PathVariable("id") Long id) //patient id
+    {
+        List<MedicalReport> reports=patientService.getMedicalReports(id);
+        List<MedicalReportDTO> reportsDTO = new ArrayList<MedicalReportDTO>();
+
+        for(MedicalReport mr : reports)
+        {
+            MedicalReportDTO dto = new MedicalReportDTO();
+            dto.setId(mr.getId());
+            dto.setDescription(mr.getDescription());
+            dto.setDate(mr.getDate().toLocalDate().toString());
+            dto.setTime(mr.getTime());
+            DoctorDTO doctorDTO = new DoctorDTO(mr.getDoctor());
+            dto.setDoctor(doctorDTO);
+            reportsDTO.add(dto);
+        }
+        return new ResponseEntity<>(reportsDTO, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/deleteChronicCondition/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_DOCTOR')")
+    public ResponseEntity<?> deleteDiagnosis(@PathVariable("id") Long id, @RequestBody DiagnosisDTO diagnose) {
+        MedicalRecord record = this.patientService.findPatientMedicalRecord(id);
+        this.medicalRecordService.deleteChronicCondition(this.diagnosisService.findOne(diagnose.getId()),record);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/deleteAllergicMedication/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_DOCTOR')")
+    public ResponseEntity<?> deleteAllergicMedication(@PathVariable("id") Long id, @RequestBody MedicationDTO medication) {
+        MedicalRecord record = this.patientService.findPatientMedicalRecord(id);
+        this.medicalRecordService.deleteAllergicMedication(this.medicationService.findOne(medication.getId()),record);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
 }

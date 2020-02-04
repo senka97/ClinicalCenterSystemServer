@@ -23,6 +23,8 @@ public interface PatientService {
     List<ClinicDTO> leftClinics(Long id);
     Patient save(Patient p);
 
+    List<MedicalReport> getMedicalReports(Long id);
+
     List<UserDTO> findAllInClinic(Authentication currentUser);
     List<UserDTO> searchPatients(Authentication currentUser, PatientSearch patientSearch);
     List<String> getAllCities(Authentication currentUser);
