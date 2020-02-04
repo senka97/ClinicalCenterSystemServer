@@ -61,8 +61,7 @@ public class ClinicService {
         return clinicRepository.save(clinic);
 
     }
-
-    @Transactional
+    
     public Clinic rateClinic(Long clinicId, RateDTO rate) {
         try {
 

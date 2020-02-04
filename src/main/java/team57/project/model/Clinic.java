@@ -46,14 +46,7 @@ public class Clinic {
     private Set<Surgery> surgeries;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Absence> absences;
-    @Version
-    private Long version;
 
-    public Clinic() {
-    }
-    public Long getVersion() {
-        return version;
-    }
 
     public void setVersion(Long version) {
         this.version = version;
