@@ -30,7 +30,7 @@ insert into user_authority(user_id, authority_id) value (5,3);
 
 
 insert into exam_type (name, description, price,discount,removed,duration) value ('CT snimanje glave', 'Snimanje glave',10000,10, FALSE,1);
-insert into exam_type (name, description, price,discount,removed,duration) value ('Ultrazvuk kicenog stuba', 'Kompletan ultrazvuk celog kicmenog stuba.',15000, 10, FALSE,1);
+insert into exam_type (name, description, price,discount,removed,duration) value ('Ultrazvuk kicmenog stuba', 'Kompletan ultrazvuk celog kicmenog stuba.',15000, 10, FALSE,1);
 insert into exam_type (name, description, price,discount,removed,duration) value ('Provera motornih sposobnosti', 'Provera motornih sposobnosti uz pomoc savremenih uredjaja.',7000,10, FALSE,1);
 insert into surgery_type(name,description,price,discount,removed,duration) value ('Operacija slepog creva','Najnovija laserska metoda.',100000,5,FALSE,1);
 insert into surgery_type(name,description,price,discount,removed,duration) value ('Operacija ledjnih prsljena','Najnovija laserska metoda.',90000,5,FALSE,1);
@@ -45,9 +45,10 @@ insert into doctors_exam_types(doctor_id, exam_type_id) value (6,2);
 
 insert into doctors_surgery_types(doctor_id, surgery_type_id) value (3,1);
 insert into room (name, number,room_type,removed) value ('Room 1',1,'Medical exam',FALSE);
-insert into medical_exam (date, start_time, end_time,reserved,doctor_id,exam_room_id,exam_type_id,patient_id,clinic_id,price,discount) values ('2018-07-31', '8:00:00','2:00:00',FALSE,3,1,1,5,1,10000,10);
-insert into medical_exam (date, start_time, end_time, reserved, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount) values ('2019-08-31', '9:00:00', '2:00:00', FALSE, 3, 1, 1, 5,1,10000,10);
-insert into medical_exam (date, start_time, end_time, reserved, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount) values ('2018-05-13', '10:00:00', '2:00:00', FALSE, 6, 1, 1, 5,1,10000,10);
+insert into room (name, number,room_type,removed) value ('Room 2',2,'Surgery',FALSE);
+insert into medical_exam (date, start_time, end_time,reserved,doctor_id,exam_room_id,exam_type_id,patient_id,clinic_id,price,discount) values ('2020-01-31', '7:00:00','8:00:00',FALSE,3,1,1,5,1,10000,10);
+insert into medical_exam (date, start_time, end_time, reserved, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount) values ('2020-02-05', '8:00:00', '9:00:00', FALSE, 3, 1, 1, 5,1,10000,10);
+insert into medical_exam (date, start_time, end_time, reserved, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount) values ('2020-02-08', '9:00:00', '10:00:00', FALSE, 6, 1, 1, 5,1,10000,10);
 
 insert into clinic_patients (clinic_id, patient_id) values (1,5);
 insert into clinic_patients (clinic_id, patient_id) values (3,5);
@@ -90,8 +91,12 @@ insert into medical_report_diagnoses (medical_report_id, diagnoses_id) value (1,
 insert into medical_report_diagnoses (medical_report_id, diagnoses_id) value (2,1);
 insert into medical_report_diagnoses (medical_report_id, diagnoses_id) value (2,2);
 
-insert into surgery (date,start_time, end_time,patient_id,surgery_type_id,clinic_id,price,discount) value ('2019-04-12','12:45:00','15:45:00',5,1,1,100000,5);
+insert into surgery (date,start_time, end_time,patient_id,surgery_type_id,clinic_id,price,discount,surgery_room_id) value ('2020-02-10','12:00:00','13:00:00',5,1,1,100000,5,2);
+insert into surgery (date,start_time, end_time,patient_id,surgery_type_id,clinic_id,price,discount,surgery_room_id) value ('2020-02-01','8:00:00','9:00:00',5,1,1,100000,5,2);
+insert into surgery (date,start_time, end_time,patient_id,surgery_type_id,clinic_id,price,discount,surgery_room_id) value ('2020-02-20','9:00:00','10:00:00',5,1,1,100000,5,NULL);
 insert into doctors_surgeries (doctor_id, surgery_id) value (3,1);
+insert into doctors_surgeries (doctor_id, surgery_id) value (3,2);
+insert into doctors_surgeries (doctor_id, surgery_id) value (3,3);
 
 insert into medical_record_allergic_medication(medical_record_id,medication_id) values (1,3);
 insert into medical_record_allergic_medication(medical_record_id,medication_id) values (1,4);

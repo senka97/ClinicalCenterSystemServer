@@ -11,10 +11,13 @@ import org.springframework.web.bind.annotation.*;
 import team57.project.dto.AllFastAppointments;
 import team57.project.dto.FARequest;
 import team57.project.dto.FastAppointmentDTO;
+import team57.project.dto.FastAppointmentWKDTO;
 import team57.project.model.Clinic;
+import team57.project.model.Doctor;
 import team57.project.model.FastAppointment;
 import team57.project.model.Patient;
 import team57.project.service.ClinicService;
+import team57.project.service.DoctorService;
 import team57.project.service.impl.FastAppointmentServiceImpl;
 import team57.project.service.impl.PatientServiceImpl;
 
@@ -34,6 +37,8 @@ public class FastAppointmentController {
     private ClinicService clinicService;
     @Autowired
     private PatientServiceImpl patientService;
+    @Autowired
+    private DoctorService doctorService;
 
     @PostMapping(value = "/addNewFA/{idClinic}", consumes = "application/json")
     @PreAuthorize("hasRole('CLINIC_ADMIN')")
@@ -78,6 +83,19 @@ public class FastAppointmentController {
         try {
             Clinic clinic = clinicService.findOne(idClinic);
             List<FastAppointmentDTO> freeFastAppointments = fastAppointmentService.getFreeFA(clinic);
+            return new ResponseEntity(freeFastAppointments, HttpStatus.OK);
+        } catch (NullPointerException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @GetMapping(value = "/getReservedFA/{id}", produces = "application/json")
+    @PreAuthorize("hasRole('DOCTOR')")
+    public ResponseEntity<?> getReservedFA(@PathVariable("id") Long id) {
+
+        try {
+            Doctor doctor= doctorService.findOne(id);
+            List<FastAppointmentWKDTO> freeFastAppointments = fastAppointmentService.getReservedFA(doctor);
             return new ResponseEntity(freeFastAppointments, HttpStatus.OK);
         } catch (NullPointerException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

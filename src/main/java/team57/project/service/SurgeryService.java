@@ -8,4 +8,5 @@ public interface SurgeryService {
     List<Surgery> findAll();
 
     List<Surgery> findByPatientId(Long patientId);
+    List<Surgery> findDoctorsSurgeries(Long doctorID);
 }

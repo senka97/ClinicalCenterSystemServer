@@ -10,4 +10,7 @@ public interface SurgeryRepository extends JpaRepository<Surgery, Long> {
 
     @Query(value = "SELECT * FROM surgery e WHERE e.patient_id = ?1", nativeQuery = true)
     List<Surgery> findPatientSurgery(Long patientId);
+
+    @Query(value = "SELECT * FROM doctors_surgeries d, surgery s WHERE d.doctor_id=?1 and d.surgery_id= s.id  and s.surgery_room_id is not null "  ,nativeQuery = true)
+    List<Surgery> findDoctorsSurgeries(Long doctorId);
 }

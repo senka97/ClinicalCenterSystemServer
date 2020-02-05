@@ -22,4 +22,9 @@ public class SurgeryServiceImpl implements SurgeryService {
     public List<Surgery> findByPatientId(Long patientId) {
         return this.surgeryRepository.findPatientSurgery(patientId);
     }
+
+    @Override
+    public List<Surgery> findDoctorsSurgeries(Long doctorID){
+        return this.surgeryRepository.findDoctorsSurgeries(doctorID);
+    }
 }

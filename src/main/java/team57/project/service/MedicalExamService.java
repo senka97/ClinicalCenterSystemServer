@@ -9,4 +9,6 @@ import java.util.List;
 public interface MedicalExamService {
     List<MedicalExam> findAll();
     List<MedicalExam> findByPatientId(Long patientId);
+
+    List<MedicalExam> findDoctorsExams(Long idDoctor);
 }
