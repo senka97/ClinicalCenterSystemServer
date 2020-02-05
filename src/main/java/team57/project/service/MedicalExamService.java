@@ -18,4 +18,5 @@ public interface MedicalExamService {
     MedicalExam findOne(Long id);
     List<RoomME> getAvailableRooms(MedicalExam me);
     void reserveRoom(MERoomRequest meRoomRequest);
+
 }

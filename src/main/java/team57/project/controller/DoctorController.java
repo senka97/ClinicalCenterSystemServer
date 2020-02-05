@@ -147,7 +147,7 @@ public class DoctorController {
 
     }
 
-    //transakcija treba pacijenta update
+
     @PutMapping(value = "/rateDoctor/{id}", consumes = "application/json", produces = "application/json")
     @PreAuthorize("hasRole('ROLE_PATIENT')")
     public ResponseEntity<?> rateDoctor(@PathVariable("id") Long id, @RequestBody RateDTO rate) {
