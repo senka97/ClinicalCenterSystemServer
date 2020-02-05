@@ -30,4 +30,16 @@ public interface ClinicRepository  extends JpaRepository<Clinic, Long> {
 
      @Query(value = "select s from Clinic c inner join c.surgeries s where c.id=?1 and s.date>=?2 and s.date<=?3")
      List<Surgery> findSIncome(Long id, LocalDate startDate, LocalDate endDate);
+
+     @Query(value = "select me from Clinic c inner join c.medicalExams me where c.id=?1 and me.date=?2")
+     List<MedicalExam> getAllMedicalExams(Long id,LocalDate date);
+
+     @Query(value = "select fa from Clinic c inner join c.fastAppointments fa where c.id=?1 and fa.dateFA=?2")
+     List<FastAppointment> getAllFastAppointments(Long id,LocalDate date);
+
+     @Query(value = "select me from Clinic c inner join c.medicalExams me where c.id=?1 and me.date>=?2 and me.date<=?3")
+     List<MedicalExam> findMEDate(Long id,LocalDate start,LocalDate end);
+
+     @Query(value = "select fa from Clinic c inner join c.fastAppointments fa where c.id=?1 and fa.dateFA>=?2 and fa.dateFA<=?3")
+     List<FastAppointment> findFADate(Long id,LocalDate start,LocalDate end);
 }
