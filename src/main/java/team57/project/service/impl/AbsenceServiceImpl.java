@@ -9,7 +9,6 @@ import team57.project.repository.AbsenceRepository;
 import team57.project.repository.ClinicRepository;
 import team57.project.repository.TermDoctorRepository;
 import team57.project.service.AbsenceService;
-import team57.project.service.ClinicService;
 import team57.project.service.EmailService;
 
 import javax.mail.MessagingException;
@@ -102,6 +101,12 @@ public class AbsenceServiceImpl implements AbsenceService {
         clinic.getAbsences().add(absence);
         clinicRepository.save(clinic);
         return true;
+    }
+
+    @Override
+    public List<Absence> findAllUserAbsences(Long id)
+    {
+        return this.absenceRepository.findAllUserAbsences(id,"APPROVED");
     }
 
 }

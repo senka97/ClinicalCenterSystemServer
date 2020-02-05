@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import team57.project.dto.IncomeDate;
 import team57.project.dto.MedicalExamDTO;
+import team57.project.dto.MedicalExamWKDTO;
 import team57.project.model.Clinic;
 import team57.project.model.MedicalExam;
 import team57.project.service.ClinicService;
@@ -45,6 +46,19 @@ public class MedicalExamController {
                 examsDTO.add(dto);
             }
 
+        }
+        return examsDTO;
+    }
+
+    @RequestMapping(value = "/getDoctorsExams/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_DOCTOR') or hasRole('ROLE_NURSE') or hasRole('ROLE_PATIENT')")
+    public List<MedicalExamWKDTO> getDoctorsExams(@PathVariable("id") Long id) {
+        List<MedicalExam> medicalExams = this.medicalExamService.findDoctorsExams(id);
+        List<MedicalExamWKDTO> examsDTO = new ArrayList<MedicalExamWKDTO>();
+
+        for(MedicalExam exam : medicalExams){
+            MedicalExamWKDTO dto = new MedicalExamWKDTO(exam);
+            examsDTO.add(dto);
         }
         return examsDTO;
     }

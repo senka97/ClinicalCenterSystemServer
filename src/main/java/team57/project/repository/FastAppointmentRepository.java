@@ -21,5 +21,8 @@ public interface FastAppointmentRepository extends JpaRepository<FastAppointment
     @Query(value="select f from FastAppointment f where f.clinic.id=?1 and ((f.dateFA > ?2) or (f.dateFA = ?2 and f.timeFA>?3)) and f.patient is null")
     List<FastAppointment> findFree(Long id, LocalDate nowDate, LocalTime nowTime);
 
+    @Query(value="select * from fast_appointment f where f.doctor_id= ?1 " , nativeQuery = true)
+    List<FastAppointment> findReserved(Long id);
+
 
 }

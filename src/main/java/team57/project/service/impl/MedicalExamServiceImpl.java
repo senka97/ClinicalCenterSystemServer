@@ -27,6 +27,12 @@ public class MedicalExamServiceImpl implements MedicalExamService {
     }
 
     @Override
+    public List<MedicalExam> findDoctorsExams(Long doctorId)
+    {
+        return this.medicalExamRepository.findDoctorsExams(doctorId);
+    }
+
+    @Override
     public double getIncome(Clinic clinic, IncomeDate incomeDate) {
 
         List<FastAppointment> fa = clinicRepository.findFAIncome(clinic.getId(),incomeDate.getStartDate(),incomeDate.getEndDate());

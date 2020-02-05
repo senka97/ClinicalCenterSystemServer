@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import team57.project.dto.AllFastAppointments;
 import team57.project.dto.FARequest;
 import team57.project.dto.FastAppointmentDTO;
+import team57.project.dto.FastAppointmentWKDTO;
 import team57.project.model.*;
 import team57.project.repository.*;
 import team57.project.service.ClinicService;
@@ -114,6 +115,19 @@ public class FastAppointmentServiceImpl implements FastAppointmentService {
 
         for(FastAppointment fa: freeFA){
             freeFADTO.add(new FastAppointmentDTO(fa));
+        }
+
+        return freeFADTO;
+    }
+
+    @Override
+    public List<FastAppointmentWKDTO> getReservedFA(Doctor doctor) {
+
+        List<FastAppointmentWKDTO> freeFADTO = new ArrayList<FastAppointmentWKDTO>();
+        List<FastAppointment> reservedFA = fastAppointmentRepository.findReserved(doctor.getId());
+
+        for(FastAppointment fa: reservedFA){
+            freeFADTO.add(new FastAppointmentWKDTO(fa));
         }
 
         return freeFADTO;
