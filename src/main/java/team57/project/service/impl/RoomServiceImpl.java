@@ -8,6 +8,7 @@ import team57.project.dto.RoomFA;
 import team57.project.model.Clinic;
 import team57.project.model.Room;
 import team57.project.model.RoomReservationTime;
+import team57.project.model.TermRoom;
 import team57.project.repository.RoomRepository;
 import team57.project.service.ClinicService;
 import team57.project.service.RoomService;
@@ -41,8 +42,8 @@ public class RoomServiceImpl implements RoomService {
             }
         }*/
 
-        List<Room> scheduledRooms = roomRepository.findScheduledRooms(room.getId(), LocalDate.now(), LocalTime.now());
-        if(scheduledRooms.size() != 0){
+        List<TermRoom> scheduledTerms = roomRepository.findScheduledTerms(room.getId(), LocalDate.now(), LocalTime.now());
+        if(scheduledTerms.size() != 0){
             return "The room can't be updated because it is reserved " +
                     "for the upcoming exam or surgery.";
         }
@@ -87,8 +88,8 @@ public class RoomServiceImpl implements RoomService {
 
             }
         }*/
-        List<Room> scheduledRooms = roomRepository.findScheduledRooms(room.getId(), LocalDate.now(), LocalTime.now());
-        if(scheduledRooms.size() != 0){
+        List<TermRoom> scheduledTerms = roomRepository.findScheduledTerms(room.getId(), LocalDate.now(), LocalTime.now());
+        if(scheduledTerms.size() != 0){
             return false;
         }
 

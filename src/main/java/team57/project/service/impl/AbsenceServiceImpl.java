@@ -35,13 +35,11 @@ public class AbsenceServiceImpl implements AbsenceService {
     @Override
     public boolean sendRequestDoctor(Doctor doctor, AbsenceRequest absenceRequest) {
 
-        for(FastAppointment fa: doctor.getFastAppointments()){
-            if(fa.getDateFA().isAfter(absenceRequest.getStartDate().minusDays(1)) &&
-            fa.getDateFA().isBefore(absenceRequest.getEndDate().plusDays(1))){
-                return false;
-            }
+
+        List<TermDoctor> scheduledTerms = this.termDoctorRepository.checkScheduledTerms(doctor.getId(),absenceRequest.getStartDate(),absenceRequest.getEndDate());
+        if(scheduledTerms.size() != 0){
+            return false;
         }
-        //ovde treba jos proveriti za obicne preglede i operacije
 
         Absence absence = new Absence(absenceRequest.getTypeOfAbsence(),"REQUESTED",absenceRequest.getStartDate(),absenceRequest.getEndDate());
         absence.setDoctor(doctor);

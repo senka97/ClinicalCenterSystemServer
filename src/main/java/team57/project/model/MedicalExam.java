@@ -22,8 +22,12 @@ public class MedicalExam {
     private LocalTime startTime;
     @Column(name = "endTime", nullable = false)
     private LocalTime endTime;
-    @Column(name = "reserved", nullable = false)
-    private Boolean reserved;
+    @Column(name = "statusME", nullable = false) //REQUESTED,APPROVED,ACCEPTED,REJECTED
+    private String statusME;
+    //REQUESTED - kada pacijent posalje upit adminu za pregledom i soba jos nije dodeljena
+    //APPROVED - soba je dodeljena i pacijent treba da prihvati ili odbije zakazani termin
+    //ACCEPTED - pacijent je prihvatio termin
+    //REJECTED - admin je odbio termin jer je nemoguce naci slobodnu sobu i slobodnog doktora u istom terminu, ili je pacijent odbio odgovor na zahtev
     @Column(name = "price", nullable = false)
     private double price;
     @Column(name = "discount", nullable = false)
@@ -39,13 +43,15 @@ public class MedicalExam {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) // two way relationship, clinic has a list of all its fast appointments
     @JoinColumn(name="clinic_id", nullable=false)
     private Clinic clinic;
+    @Version
+    private Long version;
 
     public MedicalExam() {}
     public MedicalExam(TermDoctor termDoctor){
         this.date = termDoctor.getDateTerm();
         this.startTime = termDoctor.getStartTime();
         this.endTime = termDoctor.getEndTime();
-        this.reserved = true;
+        this.statusME = "REQUESTED";
 
 
 
@@ -82,12 +88,12 @@ public class MedicalExam {
         this.endTime = endTime;
     }
 
-    public Boolean getReserved() {
-        return reserved;
+    public String getStatusME() {
+        return statusME;
     }
 
-    public void setReserved(Boolean reserved) {
-        this.reserved = reserved;
+    public void setStatusME(String statusME) {
+        this.statusME = statusME;
     }
 
     public ExamType getExamType() {
@@ -145,5 +151,13 @@ public class MedicalExam {
 
     public void setDiscount(double discount) {
         this.discount = discount;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

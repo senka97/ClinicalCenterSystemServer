@@ -8,6 +8,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import team57.project.dto.RoomME;
 import team57.project.event.OnRegistrationSuccessEvent;
 import team57.project.model.*;
 
@@ -136,4 +137,17 @@ public class EmailService {
         }
 
     }
+
+    /*@Async
+    public sendNotificationForReservation(MedicalExam me, RoomME roomeME){
+        String date = me.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+        String time = me.getStartTime().format(DateTimeFormatter.ofPattern("hh:mm"));
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setText("Hello, " + me.getPatient().getName() + "!\n\n" + "You have successfully reserved the medical exam - " + me.getExamType().getName() + " on " + date + " at " + time + ". In room " + roomeME.getName() + "."
+             + "If you are okay with all information please click on the link below" + "\n\nhttp"  + "\n\nBest regards,\nClinic admin");
+        mail.setTo(patient.getEmail());
+        mail.setSubject("Clinical Center System - Medical exam reservation");
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        javaMailSender.send(mail);
+    }*/
 }

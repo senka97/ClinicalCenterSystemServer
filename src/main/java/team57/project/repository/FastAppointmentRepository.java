@@ -9,8 +9,6 @@ import java.util.List;
 
 public interface FastAppointmentRepository extends JpaRepository<FastAppointment, Long> {
 
-    //@Query("SELECT fa FROM fast_appointment fa WHERE fa.exam_type_id = ?1 AND fa.date_time > ?2")
-    //Collection<FastAppointment> findFAWithExamType(Long examTypeId, LocalDateTime now);
 
     @Query(value="select f from FastAppointment f where f.clinic.id=?1 and ((f.dateFA < ?2) or (f.dateFA = ?2 and f.timeFA<=?3))")
     List<FastAppointment> findFinished(Long id, LocalDate nowDate, LocalTime nowTime);
@@ -20,6 +18,9 @@ public interface FastAppointmentRepository extends JpaRepository<FastAppointment
 
     @Query(value="select f from FastAppointment f where f.clinic.id=?1 and ((f.dateFA > ?2) or (f.dateFA = ?2 and f.timeFA>?3)) and f.patient is null")
     List<FastAppointment> findFree(Long id, LocalDate nowDate, LocalTime nowTime);
+
+    @Query(value = "select fa from Clinic c inner join c.fastAppointments fa inner join fa.examType et where c.id=?1 and et.id=?2 and (fa.dateFA>?3 or (fa.dateFA = ?3 and fa.timeFA>?4))")
+    List<FastAppointment> findFAWithType(Long idClinic,Long id,LocalDate nowDate, LocalTime nowTime);
 
 
 }
