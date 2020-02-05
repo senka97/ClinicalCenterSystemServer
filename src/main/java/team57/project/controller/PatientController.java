@@ -150,16 +150,18 @@ public class PatientController {
         return new ResponseEntity<MedicalRecord>(record, HttpStatus.OK);
     }
     @RequestMapping(value = "/makeAppointment/{id}", method = PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    @PreAuthorize("hasRole('ROLE_DOCTOR') or hasRole('ROLE_PATIENT')")
     public ResponseEntity<?> makeAppointment(@PathVariable("id") Long id, @RequestBody AppointmentDTO appointmentDTO) {
         try {
-            MedicalExam exam = this.patientService.sendAppointment(appointmentDTO,id);
-            return new ResponseEntity<MedicalExam>(exam, HttpStatus.OK);
-
+            Boolean exam = this.patientService.sendAppointment(appointmentDTO,id);
+            if(exam){
+                return new ResponseEntity<Boolean>(exam, HttpStatus.OK);
+            }else {
+                return new ResponseEntity<>(exam, HttpStatus.GONE);
+            }
         } catch (Exception e){
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
-
     }
 
     @RequestMapping(value = "/getPatientChronicCon/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

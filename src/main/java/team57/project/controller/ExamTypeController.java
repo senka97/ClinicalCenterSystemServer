@@ -11,6 +11,8 @@ import team57.project.model.Clinic;
 import team57.project.model.ExamType;
 import team57.project.model.SurgeryType;
 import team57.project.service.ClinicService;
+import team57.project.service.DoctorService;
+import team57.project.service.impl.DoctorServiceImpl;
 import team57.project.service.impl.ExamTypeServiceImpl;
 
 import java.util.ArrayList;
@@ -26,6 +28,8 @@ public class ExamTypeController {
        private ExamTypeServiceImpl examTypeService;
        @Autowired
        private ClinicService clinicService;
+       @Autowired
+       private DoctorServiceImpl doctorService;
 
        @GetMapping(value="/getExamType/{id}", produces="application/json")
        @PreAuthorize("hasRole('CLINIC_ADMIN')")
@@ -213,6 +217,25 @@ public class ExamTypeController {
     {
         try {
             List<ExamType> examTypes = this.examTypeService.findAll();
+            List<ExamTypeDTO> examTypesDTO = new ArrayList<>();
+            for(ExamType examType: examTypes){
+                if(!examType.isRemoved()){
+                    examTypesDTO.add(new ExamTypeDTO(examType));
+                }
+            }
+            return new ResponseEntity(examTypesDTO, HttpStatus.OK);
+
+        } catch(NullPointerException e){
+
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping(value="/getDoctorExamTypes/{idDoctor}", produces="application/json")
+    @PreAuthorize("hasRole('ROLE_DOCTOR')")
+    public ResponseEntity<?> getDoctorExamTypes(@PathVariable("idDoctor") Long idDoctor)
+    {
+        try {
+            Set<ExamType> examTypes = this.doctorService.findOne(idDoctor).getExamTypes();
             List<ExamTypeDTO> examTypesDTO = new ArrayList<>();
             for(ExamType examType: examTypes){
                 if(!examType.isRemoved()){

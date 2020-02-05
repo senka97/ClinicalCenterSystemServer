@@ -16,6 +16,7 @@ import team57.project.model.Room;
 import team57.project.model.User;
 import team57.project.service.ClinicService;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -181,6 +182,63 @@ public class ClinicController {
             return ResponseEntity.status(HttpStatus.OK).build();
         }
 
+    }
 
+    @PostMapping(value="/getIncome/{id}")
+    @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
+    public ResponseEntity<?> getIncome(@PathVariable("id") Long id, @RequestBody IncomeDate incomeDate){
+
+        if(incomeDate.getStartDate() == null || incomeDate.getEndDate() == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Start date and end date are mandatory.");
+        }
+
+        try{
+            Clinic clinic = clinicService.findOne(id);
+            double income = clinicService.getIncome(clinic,incomeDate);
+            return new ResponseEntity(income,HttpStatus.OK);
+
+        }catch(NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+
+    @PostMapping(value="/getDailyReport/{idClinic}")
+    @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
+    public ResponseEntity<?> getDailyReport(@PathVariable("idClinic") Long id,@RequestBody LocalDate date){
+
+        try{
+            Clinic clinic = clinicService.findOne(id);
+            List<Hour> hours = clinicService.getDailyReport(clinic,date);
+            return new ResponseEntity(hours,HttpStatus.OK);
+        }catch(NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PostMapping(value="/getMonthlyReport/{idClinic}")
+    @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
+    public ResponseEntity<?> getMonthlyReport(@PathVariable("idClinic") Long id,@RequestBody LocalDate date){
+
+        try{
+            Clinic clinic = clinicService.findOne(id);
+            List<Week> weeks = clinicService.getMonthlyReport(clinic,date);
+            return new ResponseEntity(weeks,HttpStatus.OK);
+        }catch(NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PostMapping(value="/getAnnualReport/{idClinic}")
+    @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
+    public ResponseEntity<?> getAnnualReport(@PathVariable("idClinic") Long id,@RequestBody LocalDate date){
+
+        try{
+            Clinic clinic = clinicService.findOne(id);
+            List<Month> months = clinicService.getAnnualReport(clinic,date);
+            return new ResponseEntity(months,HttpStatus.OK);
+        }catch(NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }

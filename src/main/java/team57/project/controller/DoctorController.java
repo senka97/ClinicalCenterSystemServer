@@ -147,7 +147,7 @@ public class DoctorController {
 
     }
 
-    //transakcija treba pacijenta update
+
     @PutMapping(value = "/rateDoctor/{id}", consumes = "application/json", produces = "application/json")
     @PreAuthorize("hasRole('ROLE_PATIENT')")
     public ResponseEntity<?> rateDoctor(@PathVariable("id") Long id, @RequestBody RateDTO rate) {
@@ -206,9 +206,10 @@ public class DoctorController {
 
     }
     @PostMapping(value="/getAvailableTerms/{id}", consumes="application/json", produces = "application/json")
-    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    @PreAuthorize("hasRole('ROLE_DOCTOR') or hasRole('ROLE_PATIENT')")
     public ResponseEntity<?> getAvailableTerms(@RequestBody AvailableDoctorRequest adr, @PathVariable("id") Long doctorId){
 
+        System.out.println("Available terms:");
         if(adr.getIdExamType() == null || adr.getDate() == null ){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exam type and date are mandatory.");
         }

@@ -251,12 +251,19 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Transactional
-    public MedicalExam sendAppointment(AppointmentDTO appointmentDTO, Long patientId) {
+    public Boolean sendAppointment(AppointmentDTO appointmentDTO, Long patientId) {
         try{
             Patient p = patientRepostiory.findById(patientId).orElse(null);
             Doctor d = this.doctorRepository.findById(appointmentDTO.getDoctorId()).orElse(null);
             //Lock term
             TermDoctor termDoctor = this.termDoctorRepository.findById(appointmentDTO.getId()).orElseGet(null);
+
+            //if already taken exit
+            if(!termDoctor.isFree()){
+                System.out.println("Term is already taken!");
+                return false;
+            }
+
 
             //Make request for appointment
             MedicalExam examRequest = new MedicalExam(termDoctor);
@@ -296,10 +303,10 @@ public class PatientServiceImpl implements PatientService {
             //send notification to admin
             this.emailService.notificationAppointmentReq(p,d,examRequest,admins);
 
-        return  examRequest;
+        return  true;
 
         }catch (Exception e){
-        return null;
+        return false;
         }
 
 
