@@ -9,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import team57.project.dto.*;
+import team57.project.dto.IncomeDate;
+import team57.project.dto.MedicalExamDTO;
+import team57.project.dto.MedicalExamWKDTO;
 import team57.project.model.Clinic;
 import team57.project.model.MedicalExam;
 import team57.project.service.ClinicService;
@@ -52,6 +55,7 @@ public class MedicalExamController {
         }
         return examsDTO;
     }
+
 
     @GetMapping(value="/getNumExamRequests/{id}")
     @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
@@ -165,18 +169,28 @@ public class MedicalExamController {
     @PutMapping(value="/rejectExamPatient/{id}", consumes = "application/json")
     @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
     public ResponseEntity<?> rejectExamPatient(@PathVariable("id") Long id) {
-        try{
+        try {
 
             MedicalExam me = medicalExamService.findOne(id);
             medicalExamService.rejectExamPatient(me);
             return ResponseEntity.status(HttpStatus.OK).build();
 
-        }catch(NullPointerException e){
+        } catch (NullPointerException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
+    @RequestMapping(value = "/getDoctorsExams/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_DOCTOR') or hasRole('ROLE_NURSE') or hasRole('ROLE_PATIENT')")
+    public List<MedicalExamWKDTO> getDoctorsExams(@PathVariable("id") Long id) {
+        List<MedicalExam> medicalExams = this.medicalExamService.findDoctorsExams(id);
+        List<MedicalExamWKDTO> examsDTO = new ArrayList<MedicalExamWKDTO>();
 
-
+        for(MedicalExam exam : medicalExams){
+            MedicalExamWKDTO dto = new MedicalExamWKDTO(exam);
+            examsDTO.add(dto);
+        }
+        return examsDTO;
+    }
 
 }

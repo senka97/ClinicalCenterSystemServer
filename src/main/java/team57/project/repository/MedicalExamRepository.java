@@ -29,4 +29,8 @@ public interface MedicalExamRepository extends JpaRepository<MedicalExam, Long> 
 
     @Query(value = "select me from Clinic c inner join c.medicalExams me inner join me.examType et where c.id=?1 and me.statusME <> 'REJECTED' and et.id=?2 and (me.date>?3 or (me.date = ?3 and me.endTime>?4))")
     List<MedicalExam> findExamsWithType(Long idClinic,Long id,LocalDate nowDate,LocalTime nowTime);
+
+    @Query(value = "SELECT * FROM medical_exam e WHERE e.doctor_id = ?1 and e.exam_room_id is not null" , nativeQuery = true)
+    List<MedicalExam> findDoctorsExams(Long doctorId);
+
 }

@@ -3,7 +3,9 @@ package team57.project.service;
 import team57.project.dto.AllFastAppointments;
 import team57.project.dto.FARequest;
 import team57.project.dto.FastAppointmentDTO;
+import team57.project.dto.FastAppointmentWKDTO;
 import team57.project.model.Clinic;
+import team57.project.model.Doctor;
 import team57.project.model.FastAppointment;
 import team57.project.model.Patient;
 
@@ -19,5 +21,5 @@ public interface FastAppointmentService {
     AllFastAppointments getAllFA(Clinic clinic);
     List<FastAppointmentDTO> getFreeFA(Clinic clinic);
     String reserveFA(FastAppointment fa,Patient patient) throws Exception;
-
+    List<FastAppointmentWKDTO> getReservedFA(Doctor doctor);
 }

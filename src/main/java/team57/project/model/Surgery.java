@@ -3,7 +3,7 @@ package team57.project.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-
+import team57.project.model.Room;
 import javax.persistence.*;
 import java.sql.Time;
 import java.time.LocalDate;
@@ -27,6 +27,8 @@ public class Surgery {
     @Column(name = "discount", nullable = false)
     private double discount;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Room surgeryRoom;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private SurgeryType surgeryType;
     @ManyToMany(mappedBy = "surgeries")
     private Set<Doctor> doctors;
@@ -41,13 +43,22 @@ public class Surgery {
 
     public Surgery(){}
 
-    public Surgery(LocalDate date, LocalTime startTime, LocalTime endTime, SurgeryType surgeryType, Set<Doctor> doctors, Patient patient) {
+    public Surgery(LocalDate date, LocalTime startTime, LocalTime endTime, SurgeryType surgeryType, Room surgeryRoom, Set<Doctor> doctors, Patient patient) {
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
         this.surgeryType = surgeryType;
+        this.surgeryRoom = surgeryRoom;
         this.doctors = doctors;
         this.patient = patient;
+    }
+
+    public Room getSurgeryRoom() {
+        return surgeryRoom;
+    }
+
+    public void setSurgeryRoom(Room surgeryRoom) {
+        this.surgeryRoom = surgeryRoom;
     }
 
     public Long getId() {

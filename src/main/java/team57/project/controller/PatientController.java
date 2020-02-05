@@ -150,7 +150,7 @@ public class PatientController {
         return new ResponseEntity<MedicalRecord>(record, HttpStatus.OK);
     }
     @RequestMapping(value = "/makeAppointment/{id}", method = PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    @PreAuthorize("hasRole('ROLE_DOCTOR') or hasRole('ROLE_PATIENT')")
     public ResponseEntity<?> makeAppointment(@PathVariable("id") Long id, @RequestBody AppointmentDTO appointmentDTO) {
         try {
             Boolean exam = this.patientService.sendAppointment(appointmentDTO,id);

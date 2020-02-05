@@ -9,11 +9,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import team57.project.dto.AbsenceDTO;
 import team57.project.dto.AbsenceRequest;
+import team57.project.dto.AbsenceWKDTO;
 import team57.project.dto.DoctorDTO;
 import team57.project.model.*;
 import team57.project.service.ClinicService;
 import team57.project.service.DoctorService;
 import team57.project.service.NurseService;
+import team57.project.service.UserService;
 import team57.project.service.impl.AbsenceServiceImpl;
 import team57.project.service.impl.DoctorServiceImpl;
 
@@ -34,6 +36,8 @@ public class AbsenceController {
     private DoctorServiceImpl doctorService;
     @Autowired
     private NurseService nurseService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping(value="/getAbsence/{id}", produces="application/json")
     @PreAuthorize("hasRole('CLINIC_ADMIN')")
@@ -171,5 +175,26 @@ public class AbsenceController {
         }
     }
 
+
+    @GetMapping(value="/getAllAbsences/{id}", produces="application/json")
+    @PreAuthorize("hasRole('NURSE') or hasRole('DOCTOR')")
+    public ResponseEntity<?> getAllApprovedAbsences(@PathVariable("id") Long id){
+
+        try {
+            User u = userService.findById(id);
+            List<Absence> absences = absenceService.findAllUserAbsences(id);
+            List<AbsenceWKDTO> absencesDTO = new ArrayList<AbsenceWKDTO>();
+           for(Absence absence: absences){
+                AbsenceWKDTO dto = new AbsenceWKDTO(absence);
+                absencesDTO.add(dto);
+            }
+
+            return new ResponseEntity<>(absencesDTO, HttpStatus.OK);
+
+        }catch(NullPointerException e){
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Clinic with that ID doesn't exist in the system");
+        }
+    }
 
 }

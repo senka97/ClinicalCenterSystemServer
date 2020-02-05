@@ -22,5 +22,6 @@ public interface MedicalExamService {
     void acceptExamPatient(MedicalExam me);
     void rejectExamPatient(MedicalExam me);
     void systemReservingRooms() throws MessagingException, InterruptedException;
+    List<MedicalExam> findDoctorsExams(Long idDoctor);
 
 }

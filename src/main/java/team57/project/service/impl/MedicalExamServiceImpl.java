@@ -48,6 +48,13 @@ public class MedicalExamServiceImpl implements MedicalExamService {
         return this.medicalExamRepository.findMedicalExamByPatient(patientId);
     }
 
+    @Override
+    public List<MedicalExam> findDoctorsExams(Long doctorId)
+    {
+        return this.medicalExamRepository.findDoctorsExams(doctorId);
+    }
+
+
 
 
     @Override
