@@ -26,4 +26,10 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     @Query(value = "select t from Room r inner join r.terms t where r.id=?1 and ((t.dateTerm>?2) or (t.dateTerm=?2 and t.endTime > ?3)) and t.free = false")
     List<TermRoom> findScheduledTerms(Long id, LocalDate nowDate, LocalTime nowTime);
+
+    @Query(value = "select r from Clinic c inner join c.rooms r where c.id=?1 and r.removed=false and r.roomType='Medical exam'")
+    List<Room> findRooms(Long clinicId);
+
+    @Query(value = "select r from Clinic c inner join c.rooms r where c.id=?1")
+    List<Room> findAllInClinic(Long id);
 }

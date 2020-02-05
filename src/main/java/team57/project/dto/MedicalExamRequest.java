@@ -11,9 +11,11 @@ public class MedicalExamRequest {
     private LocalDate date;
     private LocalTime startTime;
     private String fullNamePatient;
-    private String fullNameDoctor;
-    private Long idDoctor;
+    //private String fullNameDoctor;
+    //private Long idDoctor;
+    private DoctorFA doctor;
     private String examTypeName;
+    private Long idExamType;
 
     public MedicalExamRequest(){
 
@@ -24,9 +26,11 @@ public class MedicalExamRequest {
         this.date = me.getDate();
         this.startTime = me.getStartTime();
         this.fullNamePatient = me.getPatient().getName() + " " + me.getPatient().getSurname();
-        this.fullNameDoctor = me.getDoctor().getName() + " " + me.getDoctor().getSurname();
-        this.idDoctor = me.getDoctor().getId();
+       // this.fullNameDoctor = me.getDoctor().getName() + " " + me.getDoctor().getSurname();
+       // this.idDoctor = me.getDoctor().getId();
+        this.doctor = new DoctorFA(me.getDoctor());
         this.examTypeName = me.getExamType().getName();
+        this.idExamType = me.getExamType().getId();
     }
 
     public Long getId() {
@@ -61,13 +65,13 @@ public class MedicalExamRequest {
         this.fullNamePatient = fullNamePatient;
     }
 
-    public String getFullNameDoctor() {
+   /* public String getFullNameDoctor() {
         return fullNameDoctor;
     }
 
     public void setFullNameDoctor(String fullNameDoctor) {
         this.fullNameDoctor = fullNameDoctor;
-    }
+    }*/
 
     public String getExamTypeName() {
         return examTypeName;
@@ -77,11 +81,27 @@ public class MedicalExamRequest {
         this.examTypeName = examTypeName;
     }
 
-    public Long getIdDoctor() {
+   /* public Long getIdDoctor() {
         return idDoctor;
     }
 
     public void setIdDoctor(Long idDoctor) {
         this.idDoctor = idDoctor;
+    }*/
+
+    public Long getIdExamType() {
+        return idExamType;
+    }
+
+    public void setIdExamType(Long idExamType) {
+        this.idExamType = idExamType;
+    }
+
+    public DoctorFA getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(DoctorFA doctor) {
+        this.doctor = doctor;
     }
 }

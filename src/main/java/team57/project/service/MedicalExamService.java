@@ -7,16 +7,20 @@ import team57.project.dto.RoomME;
 import team57.project.model.Clinic;
 import team57.project.model.MedicalExam;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 public interface MedicalExamService {
     List<MedicalExam> findAll();
     List<MedicalExam> findByPatientId(Long patientId);
-    double getIncome(Clinic clinic, IncomeDate incomeDate);
     double getNumExamRequests(Clinic clinic);
     List<MedicalExamRequest> findExamRequests(Clinic clinic);
     MedicalExam findOne(Long id);
     List<RoomME> getAvailableRooms(MedicalExam me);
-    void reserveRoom(MERoomRequest meRoomRequest);
+    void reserveRoom(MERoomRequest meRoomRequest) throws MessagingException;
+    void rejectExam(MedicalExam me) throws MessagingException, InterruptedException;
+    void acceptExamPatient(MedicalExam me);
+    void rejectExamPatient(MedicalExam me);
+    void systemReservingRooms() throws MessagingException, InterruptedException;
 
 }

@@ -39,5 +39,8 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     @Query(value = "select t from Doctor d inner join d.terms t where d.id=?1 and ((t.dateTerm>?2) or (t.dateTerm=?2 and t.endTime > ?3)) and t.free = false")
     List<TermDoctor> findScheduledTerms(Long id,LocalDate nowDate,LocalTime nowTime);
 
+    @Query(value = "select d from Clinic c inner join c.doctors d inner join d.examTypes et where c.id=?1 and et.id=?2")
+    List<Doctor> searchDoctorsExamType(Long idClinic,Long idExamType);
+
 
 }

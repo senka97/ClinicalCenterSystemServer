@@ -298,6 +298,19 @@ public class DoctorServiceImpl implements DoctorService {
         return appointments;
     }
 
+    @Override
+    public List<DoctorFA> searchForDoctorsExamTypes(Clinic clinic, ExamType examType) {
+
+        List<Doctor> doctors = doctorRepository.searchDoctorsExamType(clinic.getId(),examType.getId());
+        List<DoctorFA> doctorsFA = new ArrayList<DoctorFA>();
+        for(Doctor d: doctors){
+            doctorsFA.add(new DoctorFA(d));
+        }
+
+        return doctorsFA;
+    }
+
+
     private boolean isDoctorAbsent(AvailableDoctorRequest adr, Doctor doctor) {
         boolean isAbsent = false;
         for (Absence a : doctor.getAbsences()) {

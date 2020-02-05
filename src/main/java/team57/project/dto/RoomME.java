@@ -16,6 +16,7 @@ public class RoomME {
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
+    private String roomType;
 
     public RoomME(){
 
@@ -28,6 +29,17 @@ public class RoomME {
         this.date = me.getDate();
         this.startTime = me.getStartTime();
         this.endTime = me.getEndTime();
+        this.roomType = r.getRoomType();
+    }
+
+    public RoomME(Room r, TermRoom tr){
+        this.id = r.getId();
+        this.name = r.getName();
+        this.number = r.getNumber();
+        this.date = tr.getDateTerm();
+        this.startTime = tr.getStartTime();
+        this.endTime = tr.getEndTime();
+        this.roomType = r.getRoomType();
     }
 
     public Long getId() {
@@ -78,4 +90,11 @@ public class RoomME {
         this.endTime = endTime;
     }
 
+    public String getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(String roomType) {
+        this.roomType = roomType;
+    }
 }

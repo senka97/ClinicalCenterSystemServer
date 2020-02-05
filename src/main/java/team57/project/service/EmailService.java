@@ -8,6 +8,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import team57.project.dto.MedicalExamRequest;
 import team57.project.dto.RoomME;
 import team57.project.event.OnRegistrationSuccessEvent;
 import team57.project.model.*;
@@ -138,16 +139,84 @@ public class EmailService {
 
     }
 
-    /*@Async
-    public sendNotificationForReservation(MedicalExam me, RoomME roomeME){
+    @Async
+    public void sendRejectExam(MedicalExam me) throws MailException, InterruptedException, MessagingException{
         String date = me.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
         String time = me.getStartTime().format(DateTimeFormatter.ofPattern("hh:mm"));
         SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setText("Hello, " + me.getPatient().getName() + "!\n\n" + "You have successfully reserved the medical exam - " + me.getExamType().getName() + " on " + date + " at " + time + ". In room " + roomeME.getName() + "."
-             + "If you are okay with all information please click on the link below" + "\n\nhttp"  + "\n\nBest regards,\nClinic admin");
-        mail.setTo(patient.getEmail());
-        mail.setSubject("Clinical Center System - Medical exam reservation");
+        mail.setText("Hello, " + me.getPatient().getName() + "!\n\n" + "Your request for the medical exam - " + me.getExamType().getName() + " on " + date + " at " + time + " is rejected because currently is not possible to find free doctor and free room in this and the next week."  + "\n\nBest regards,\nClinic admin");
+        mail.setTo(me.getPatient().getEmail());
+        mail.setSubject("Clinical Center System - Medical exam rejection");
         mail.setFrom(env.getProperty("spring.mail.username"));
         javaMailSender.send(mail);
-    }*/
+
+    }
+
+    @Async
+    public void  sendNotificationForReservation(MedicalExamRequest merNew,MedicalExamRequest merOld, RoomME roomeME,String emailP) throws MessagingException {
+        String msg = "";
+        boolean changed = false;
+        if(!merNew.getDate().equals(merOld.getDate()) || !merNew.getStartTime().equals(merOld.getStartTime())){
+            msg += "Date of you reservation for medical exam - " + merNew.getExamTypeName() + " was changed on " + merNew.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) + " at " + merNew.getStartTime().format(DateTimeFormatter.ofPattern("hh:mm"))  + ".<br>";
+            changed = true;
+        }
+        String dateOld = merOld.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+        String timeOld = merOld.getStartTime().format(DateTimeFormatter.ofPattern("hh:mm"));
+
+        String message = "";
+        if(!changed){
+            message += "Hello, " + merNew.getFullNamePatient() + "<br>" + "You have successfully reserved medical exam - " + merNew.getExamTypeName() + " on " + dateOld + " at " + timeOld + " in room " + roomeME.getName() +  ".<br><br>";
+        }else{
+            message += "Hello, " + merNew.getFullNamePatient() + "<br>" +  msg;
+        }
+
+        String urlAccept = "http://localhost:4200/acceptReservation/" +  merNew.getId();
+        String linkAccept = "<a href='" + urlAccept + "'>" + urlAccept + "</a>";
+        String urlReject = "http://localhost:4200/rejectReservation/" +  merNew.getId();
+        String linkReject = "<a href='" + urlReject + "'>" + urlReject + "</a>";
+
+        String finalMessage = message + "If you want this reservation please click on the link below.<br>" + linkAccept + "<br> If you don't want this reservation please click on the link below.<br>" + linkReject + "<br>";
+        finalMessage += "Best regards,<br> Clinic admin.";
+
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+        helper.setText(finalMessage, true);
+        helper.setTo(emailP);
+        helper.setSubject("Clinical Center System account activation.");
+        helper.setFrom(env.getProperty("spring.mail.username"));
+        javaMailSender.send(mimeMessage);
+
+    }
+
+    @Async
+    public void sendPatientRoom(MedicalExam me) throws MailException, InterruptedException, MessagingException{
+
+        String date = me.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+        String time = me.getStartTime().format(DateTimeFormatter.ofPattern("hh:mm"));
+
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setText("Hello, " + me.getPatient().getName() + "!\n\n" + "You have the medical exam - " + me.getExamType().getName() + " on " + date + " at " + time + " in " + me.getExamRoom().getName()  + ".\n\nBest regards,\nClinic admin");
+        mail.setTo(me.getPatient().getEmail());
+        mail.setSubject("Clinical Center System - Room found");
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        javaMailSender.send(mail);
+
+        }
+
+    @Async
+    public void sendDoctorRoom(MedicalExam me) throws MailException, InterruptedException, MessagingException{
+
+        String date = me.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+        String time = me.getStartTime().format(DateTimeFormatter.ofPattern("hh:mm"));
+
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setText("Hello, " + me.getDoctor().getName() + "!\n\n" + "You have the medical exam - " + me.getExamType().getName() + " on " + date + " at " + time + " in " + me.getExamRoom().getName()  + ".\n\nBest regards,\nClinic admin");
+        mail.setTo(me.getDoctor().getEmail());
+        mail.setSubject("Clinical Center System - Room found");
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        javaMailSender.send(mail);
+
+    }
+
+
 }

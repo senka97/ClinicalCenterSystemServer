@@ -14,7 +14,9 @@ import team57.project.model.MedicalExam;
 import team57.project.service.ClinicService;
 import team57.project.service.MedicalExamService;
 
+import javax.mail.MessagingException;
 import javax.persistence.OptimisticLockException;
+import javax.validation.constraints.Null;
 import javax.xml.ws.Response;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -119,7 +121,62 @@ public class MedicalExamController {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("This room has just been reserved for that term.");
             }catch (OptimisticLockException oe){
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Some other admin has just found the room for this medical exam.");
-            }
+            } catch (MessagingException e) {
+              return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Something went wrong with sending email notification.");
+
+        }
 
     }
+
+    @PutMapping(value="/rejectExamAdmin/{id}", consumes = "application/json")
+    @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
+    public ResponseEntity<?> rejectExamAdmin(@PathVariable("id") Long id){
+
+        try{
+            MedicalExam me = medicalExamService.findOne(id);
+            medicalExamService.rejectExam(me);
+            return ResponseEntity.status(HttpStatus.OK).build();
+
+        }catch(NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (InterruptedException e) {
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Something went wrong with sending email notification");
+        } catch (MessagingException e) {
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Something went wrong with sending email notification");
+        }
+
+    }
+
+
+    @PutMapping(value="/acceptExamPatient/{id}", consumes = "application/json")
+    @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
+    public ResponseEntity<?> acceptExamPatient(@PathVariable("id") Long id) {
+        try{
+
+            MedicalExam me = medicalExamService.findOne(id);
+            medicalExamService.acceptExamPatient(me);
+            return ResponseEntity.status(HttpStatus.OK).build();
+
+        }catch(NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PutMapping(value="/rejectExamPatient/{id}", consumes = "application/json")
+    @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
+    public ResponseEntity<?> rejectExamPatient(@PathVariable("id") Long id) {
+        try{
+
+            MedicalExam me = medicalExamService.findOne(id);
+            medicalExamService.rejectExamPatient(me);
+            return ResponseEntity.status(HttpStatus.OK).build();
+
+        }catch(NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+
+
+
 }
