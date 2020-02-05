@@ -49,21 +49,7 @@ public class MedicalExamController {
         return examsDTO;
     }
 
-    @PostMapping(value="/getIncome/{id}")
-    @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
-    public ResponseEntity<?> getIncome(@PathVariable("id") Long id, @RequestBody IncomeDate incomeDate){
 
-        if(incomeDate.getStartDate() == null || incomeDate.getEndDate() == null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Start date and end date are mandatory.");
-        }
 
-        try{
-            Clinic clinic = clinicService.findOne(id);
-            double income = medicalExamService.getIncome(clinic,incomeDate);
-            return new ResponseEntity(income,HttpStatus.OK);
 
-        }catch(NullPointerException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
 }
