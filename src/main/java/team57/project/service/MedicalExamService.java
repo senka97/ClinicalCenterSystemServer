@@ -9,6 +9,6 @@ import java.util.List;
 public interface MedicalExamService {
     List<MedicalExam> findAll();
     List<MedicalExam> findByPatientId(Long patientId);
-    double getIncome(Clinic clinic, IncomeDate incomeDate);
+
     List<MedicalExam> findDoctorsExams(Long idDoctor);
 }
