@@ -7,14 +7,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import team57.project.dto.*;
 import team57.project.dto.IncomeDate;
 import team57.project.dto.MedicalExamDTO;
 import team57.project.dto.MedicalExamWKDTO;
 import team57.project.model.Clinic;
+import team57.project.model.Doctor;
 import team57.project.model.MedicalExam;
 import team57.project.service.ClinicService;
+import team57.project.service.DoctorService;
 import team57.project.service.MedicalExamService;
 
 import javax.mail.MessagingException;
@@ -34,6 +38,8 @@ public class MedicalExamController {
     private MedicalExamService medicalExamService;
     @Autowired
     private ClinicService clinicService;
+    @Autowired
+    private DoctorService doctorService;
 
     @RequestMapping(value = "/getMedicalExam/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ROLE_DOCTOR') or hasRole('ROLE_NURSE') or hasRole('ROLE_PATIENT')")
@@ -188,6 +194,24 @@ public class MedicalExamController {
 
         for(MedicalExam exam : medicalExams){
             MedicalExamWKDTO dto = new MedicalExamWKDTO(exam);
+            examsDTO.add(dto);
+        }
+        return examsDTO;
+    }
+
+    @RequestMapping(value = "/getDoctorPatientExams/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_DOCTOR')")
+    public List<MedicalExamPDTO> getDoctorPatientExams(@PathVariable("id") Long idPatient) {
+
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+        String email = currentUser.getName();
+        Doctor doctor = (Doctor) doctorService.findByEmail(email);
+
+        List<MedicalExam> medicalExams = this.medicalExamService.findDoctorPatientExams(doctor.getId(),idPatient);
+        List<MedicalExamPDTO> examsDTO = new ArrayList<MedicalExamPDTO>();
+
+        for(MedicalExam exam : medicalExams){
+            MedicalExamPDTO dto = new MedicalExamPDTO(exam);
             examsDTO.add(dto);
         }
         return examsDTO;

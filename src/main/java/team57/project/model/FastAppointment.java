@@ -20,6 +20,8 @@ public class FastAppointment {
     private LocalTime timeFA;
     @Column(name="duration", nullable = false)
     private int duration; //in minutes
+    @Column (name = "done", nullable = false)
+    private boolean done;
     @ManyToOne // one way relationship
     @JoinColumn(name="examType_id", nullable=false)
     private ExamType examType;
@@ -61,6 +63,7 @@ public class FastAppointment {
         this.discount = discount;
         this.reserved = reserved;
         this.clinic = clinic;
+        this.done = false;
     }
 
     public Long getId() {
@@ -101,6 +104,14 @@ public class FastAppointment {
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public boolean getDone() {
+        return done;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
     }
 
     public ExamType getExamType() {

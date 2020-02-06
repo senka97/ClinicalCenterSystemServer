@@ -15,6 +15,7 @@ import team57.project.service.ClinicService;
 import team57.project.service.NurseService;
 import team57.project.service.PrescriptionService;
 
+import javax.persistence.OptimisticLockException;
 import java.util.List;
 
 @RestController
@@ -57,7 +58,14 @@ public class PrescriptionController {
         String email = currentUser.getName();
         Nurse nurse = (Nurse) nurseService.findByEmail(email);
 
-        prescriptionService.verify(prescription,nurse);
+        try{
+            prescriptionService.verify(prescription,nurse);
+        }
+        catch (OptimisticLockException e)
+        {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Somebody has just validated this prescription.");
+        }
+
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

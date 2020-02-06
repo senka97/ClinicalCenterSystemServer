@@ -12,13 +12,31 @@ public class MedicalReportDTO {
     private Long id;
     private String description;
     private String date;
-    private Time time;
+    private String time;
     private DoctorDTO doctor;
     private ArrayList<Medication> medications;
     private ArrayList<Diagnose> diagnoses;
+    private Long examId;
+    private String type;
 
     public MedicalReportDTO()
     {
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Long getExamId() {
+        return examId;
+    }
+
+    public void setExamId(Long examId) {
+        this.examId = examId;
     }
 
     public Long getId() {
@@ -45,11 +63,11 @@ public class MedicalReportDTO {
         this.date = date;
     }
 
-    public Time getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Time time) {
+    public void setTime(String time) {
         this.time = time;
     }
 

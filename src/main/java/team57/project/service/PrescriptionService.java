@@ -6,6 +6,7 @@ import team57.project.model.Nurse;
 import team57.project.model.Prescription;
 import team57.project.repository.PrescriptionRepository;
 
+import javax.persistence.OptimisticLockException;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class PrescriptionService {
     }
 
     @Transactional
-    public void verify(Prescription prescription, Nurse nurse)
+    public void verify(Prescription prescription, Nurse nurse) throws OptimisticLockException
     {
         prescription.setVerified(true);
         prescription.setNurse(nurse);

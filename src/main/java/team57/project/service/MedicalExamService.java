@@ -11,6 +11,7 @@ import javax.mail.MessagingException;
 import java.util.List;
 
 public interface MedicalExamService {
+    void save(MedicalExam m);
     List<MedicalExam> findAll();
     List<MedicalExam> findByPatientId(Long patientId);
     double getNumExamRequests(Clinic clinic);
@@ -23,5 +24,6 @@ public interface MedicalExamService {
     void rejectExamPatient(MedicalExam me);
     void systemReservingRooms() throws MessagingException, InterruptedException;
     List<MedicalExam> findDoctorsExams(Long idDoctor);
+    List<MedicalExam> findDoctorPatientExams(Long idDoctor,Long idPatient);
 
 }
