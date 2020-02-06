@@ -23,6 +23,9 @@ public class Prescription {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Clinic clinic;
 
+    @Version
+    private Long version;
+
     public Prescription() {
     }
 
@@ -86,6 +89,14 @@ public class Prescription {
 
     public void setClinic(Clinic clinic) {
         this.clinic = clinic;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
 }

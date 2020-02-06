@@ -344,7 +344,6 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
 
-
     private boolean isDoctorAbsent(AvailableDoctorRequest adr, Doctor doctor) {
         boolean isAbsent = false;
         for (Absence a : doctor.getAbsences()) {

@@ -57,10 +57,8 @@ public class PrescriptionController {
         String email = currentUser.getName();
         Nurse nurse = (Nurse) nurseService.findByEmail(email);
 
-        prescription.setVerified(true);
-        prescription.setNurse(nurse);
+        prescriptionService.verify(prescription,nurse);
 
-        prescriptionService.save(prescription);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
