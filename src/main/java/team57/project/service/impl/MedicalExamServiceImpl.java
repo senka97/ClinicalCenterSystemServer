@@ -35,6 +35,8 @@ public class MedicalExamServiceImpl implements MedicalExamService {
     private EmailService emailService;
     @Autowired
     private RoomRepository roomRepository;
+    @Autowired
+    private DoctorServiceImpl doctorService;
 
     @Override
     public List<MedicalExam> findAll() {
@@ -97,32 +99,65 @@ public class MedicalExamServiceImpl implements MedicalExamService {
     @Override
     @Transactional
     public void reserveRoom(MERoomRequest meRoomRequest) throws MessagingException {
+        //podaci o tome da li se datum ili doktor promenio se nalaze u meRoomRequest.getExamEnd
+        //podatak da li se termin promenio se nalazi u meRoomRequest.getRoomME
 
         //zakljuca se ovaj termin sobe da ga niko drugi ne moze zauzeti
         TermRoom tr = termRoomRepository.findTermRoom(meRoomRequest.getRoomME().getDate(),meRoomRequest.getRoomME().getStartTime(),meRoomRequest.getRoomME().getId());
         tr.setFree(false);
         termRoomRepository.save(tr);
-        //ako se promenio doktor ili termin, mora se osloboditi prethodni i zauzeti novi termin kod doktora
-        if(meRoomRequest.getExamStart().getDoctor().getId() != meRoomRequest.getExamEnd().getDoctor().getId() ||
-                !meRoomRequest.getExamStart().getDate().equals(meRoomRequest.getExamEnd().getDate()) ||
-        !meRoomRequest.getExamStart().getStartTime().equals(meRoomRequest.getExamEnd().getStartTime())){
-            TermDoctor tdOld = termDoctorRepository.findTermDoctor(meRoomRequest.getExamStart().getDate(),meRoomRequest.getExamStart().getStartTime(),meRoomRequest.getExamStart().getDoctor().getId());
-            TermDoctor tdNew = termDoctorRepository.findTermDoctor(meRoomRequest.getExamEnd().getDate(),meRoomRequest.getExamEnd().getStartTime(),meRoomRequest.getExamEnd().getDoctor().getId());
-            tdOld.setFree(true);
-            tdNew.setFree(false);
-            termDoctorRepository.save(tdOld);
-            termDoctorRepository.save(tdNew);
+        //ako je doktor ostao isti ali se datum ili vreme promenilo, onda slobadjam stari i zauzimam novi termin kod doktora
+        if(meRoomRequest.getExamStart().getDoctor().getId() == meRoomRequest.getExamEnd().getDoctor().getId()){
+            if(!meRoomRequest.getExamStart().getDate().equals(meRoomRequest.getExamEnd().getDate())||
+                    !meRoomRequest.getExamStart().getStartTime().equals(meRoomRequest.getRoomME().getStartTime())){
+                TermDoctor tdOld = termDoctorRepository.findTermDoctor(meRoomRequest.getExamStart().getDate(),meRoomRequest.getExamStart().getStartTime(),meRoomRequest.getExamStart().getDoctor().getId());
+                TermDoctor tdNew = termDoctorRepository.findTermDoctor(meRoomRequest.getExamEnd().getDate(),meRoomRequest.getRoomME().getStartTime(),meRoomRequest.getExamEnd().getDoctor().getId());
+                tdOld.setFree(true);
+                tdNew.setFree(false);
+                termDoctorRepository.save(tdOld);
+                termDoctorRepository.save(tdNew);
+            }
+        }
+        //ukoliko su se samo doktori promenili a vreme je ostalo isto, onda oslobadjam termin kod jednog, a zauzimam kod drugog, i postavljam drugog doktora
+        if(meRoomRequest.getExamStart().getDate().equals(meRoomRequest.getExamEnd().getDate())||
+                meRoomRequest.getExamStart().getStartTime().equals(meRoomRequest.getRoomME().getStartTime())){
+            if(meRoomRequest.getExamStart().getDoctor().getId() != meRoomRequest.getExamEnd().getDoctor().getId()) {
+                TermDoctor tdOld = termDoctorRepository.findTermDoctor(meRoomRequest.getExamStart().getDate(), meRoomRequest.getExamStart().getStartTime(), meRoomRequest.getExamStart().getDoctor().getId());
+                TermDoctor tdNew = termDoctorRepository.findTermDoctor(meRoomRequest.getExamStart().getDate(), meRoomRequest.getExamStart().getStartTime(), meRoomRequest.getExamEnd().getDoctor().getId());
+                tdOld.setFree(true);
+                tdNew.setFree(false);
+                termDoctorRepository.save(tdOld);
+                termDoctorRepository.save(tdNew);
 
+            }
+        }
+        //ukoliko se promenio i doktor i datum i vreme
+        if(meRoomRequest.getExamStart().getDoctor().getId() != meRoomRequest.getExamEnd().getDoctor().getId()){
+           if(!meRoomRequest.getExamStart().getDate().equals(meRoomRequest.getExamEnd().getDate()) ||
+                   !meRoomRequest.getExamStart().getStartTime().equals(meRoomRequest.getRoomME().getStartTime())){
+               TermDoctor tdOld = termDoctorRepository.findTermDoctor(meRoomRequest.getExamStart().getDate(), meRoomRequest.getExamStart().getStartTime(), meRoomRequest.getExamStart().getDoctor().getId());
+               TermDoctor tdNew = termDoctorRepository.findTermDoctor(meRoomRequest.getExamEnd().getDate(), meRoomRequest.getRoomME().getStartTime(), meRoomRequest.getExamEnd().getDoctor().getId());
+               tdOld.setFree(true);
+               tdNew.setFree(false);
+               termDoctorRepository.save(tdOld);
+               termDoctorRepository.save(tdNew);
+
+            }
         }
 
         Room room = roomService.findOne(meRoomRequest.getRoomME().getId());
         MedicalExam me = (MedicalExam) medicalExamRepository.findById(meRoomRequest.getExamStart().getId()).orElse(null);
         me.setExamRoom(room);
         me.setStatusME("APPROVED");
+        me.setDate(meRoomRequest.getExamEnd().getDate());
+        me.setStartTime(meRoomRequest.getRoomME().getStartTime());
+        me.setEndTime(meRoomRequest.getRoomME().getEndTime());
+        Doctor d = doctorService.findOne(meRoomRequest.getExamEnd().getDoctor().getId());
+        me.setDoctor(d);
         medicalExamRepository.save(me); //medical exam ima optimisticko zakljucavanje i ako je neko
         //u medjuvremenu dodelio neku drugu sobu puci ce
 
-        emailService.sendNotificationForReservation(meRoomRequest.getExamStart(),meRoomRequest.getExamEnd(),meRoomRequest.getRoomME(),me.getPatient().getEmail());
+        emailService.sendNotificationForReservation(meRoomRequest.getExamEnd(),meRoomRequest.getExamStart(),meRoomRequest.getRoomME(),me.getPatient().getEmail());
     }
 
     @Override
