@@ -28,5 +28,5 @@ public interface DoctorService {
 
     List<DoctorRating> findFreeDoctors(Clinic clinic, AvailableDoctorRequest adr);
     List<AppointmentDTO> findFreeTerms(Long doctorId, AvailableDoctorRequest adr);
-
+    Boolean sendSurgeryAppointment(Long patientId,AppointmentDTO appointmentDTO);
 }

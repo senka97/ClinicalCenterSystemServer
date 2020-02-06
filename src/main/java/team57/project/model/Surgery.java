@@ -18,9 +18,9 @@ public class Surgery {
     private Long id;
     @Column(name = "date", nullable = false)
     private LocalDate date;
-    @Column(name = "startTime", nullable = false)
+    @Column(name = "startTime", nullable = true)
     private LocalTime startTime;
-    @Column(name = "endTime", nullable = false)
+    @Column(name = "endTime", nullable = true)
     private LocalTime endTime;
     @Column(name = "price", nullable = false)
     private double price;
