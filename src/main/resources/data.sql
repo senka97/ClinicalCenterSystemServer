@@ -57,9 +57,9 @@ insert into room (name, number,room_type,removed) value ('Room 2',2,'Medical exa
 insert into room (name, number,room_type,removed) value ('Room 3',3,'Surgery',FALSE);
 
 
-insert into medical_exam (date, start_time, end_time,reserved,statusme,doctor_id,exam_room_id,exam_type_id,patient_id,clinic_id,price,discount,version) values ('2020-01-31', '7:00:00','8:00:00',FALSE,'ACCEPTED',3,1,1,5,1,10000,10,0);
-insert into medical_exam (date, start_time, end_time, reserved,statusme, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount,version) values ('2020-02-05', '8:00:00', '9:00:00', FALSE,'ACCEPTED', 3, 1, 1, 5,1,10000,10,0);
-insert into medical_exam (date, start_time, end_time, reserved,statusme, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount,version) values ('2020-02-08', '9:00:00', '10:00:00', FALSE,'ACCEPTED', 6, 1, 1, 5,1,10000,10,0);
+insert into medical_exam (date, start_time, end_time,statusme,doctor_id,exam_room_id,exam_type_id,patient_id,clinic_id,price,discount,version) values ('2020-01-31', '7:00:00','8:00:00','ACCEPTED',3,1,1,5,1,10000,10,0);
+insert into medical_exam (date, start_time, end_time, statusme, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount,version) values ('2020-02-05', '8:00:00', '9:00:00','ACCEPTED', 3, 1, 1, 5,1,10000,10,0);
+insert into medical_exam (date, start_time, end_time,statusme, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount,version) values ('2020-02-08', '9:00:00', '10:00:00','ACCEPTED', 6, 1, 1, 5,1,10000,10,0);
 
 
 insert into clinic_patients (clinic_id, patient_id) values (1,5);
