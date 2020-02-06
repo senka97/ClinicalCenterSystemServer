@@ -7,7 +7,11 @@ import team57.project.dto.*;
 import team57.project.model.*;
 import team57.project.repository.ClinicRepository;
 import team57.project.repository.PatientRepository;
+import team57.project.repository.RoomRepository;
+import team57.project.repository.TermRoomRepository;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,6 +25,10 @@ public class ClinicService {
     private ClinicRepository clinicRepository;
     @Autowired
     private PatientRepository patientRepository;
+    @Autowired
+    private TermRoomRepository termRoomRepository;
+    @Autowired
+    private RoomRepository roomRepository;
 
     public Clinic findOne(Long id) {
         return clinicRepository.findById(id).orElseGet(null);
@@ -53,7 +61,30 @@ public class ClinicService {
         Room room = new Room(roomDTO.getName(), roomDTO.getNumber(), roomDTO.getRoomType(), false);
         clinic.getRooms().add(room);
         clinicRepository.save(clinic);
+        Room r = roomRepository.findByNameAndNumber(roomDTO.getName(),roomDTO.getNumber());
+
+        LocalDate nowDate = LocalDate.now();
+        int today = nowDate.getDayOfWeek().getValue(); //redni broj dana u nedelji
+        LocalDate temp = LocalDate.now();
+        temp = temp.plusDays(1); //termini se prave od sutra pa do kraja sledece nedelje
+        for(int i=0;i<12-today;i++){
+            int n = temp.getDayOfWeek().getValue();
+            if(n == 6 || n == 7){ //ako je dan subota ili nedelja nema termina
+                System.out.println("Subota ili nedelja, ne kreiraju se termini.");
+            }else{
+                LocalTime startTime = LocalTime.of(6,0);
+                LocalTime endTime = LocalTime.of(22,0);
+                while(startTime.isBefore(endTime)){
+                    TermRoom term = new TermRoom(temp,startTime,startTime.plusHours(1),true,r);
+                    termRoomRepository.save(term);
+                    startTime = startTime.plusHours(1);
+                }
+            }
+            temp = temp.plusDays(1);
+        }
     }
+
+
 
     public Clinic findByName(String name) {
         return clinicRepository.findByName(name);

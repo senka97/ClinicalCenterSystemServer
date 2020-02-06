@@ -28,13 +28,19 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     List<Doctor> getAvailableDoctors(Long idClinic, Long idET, LocalDate date, LocalTime time);
 
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    //@Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query(value = "select d from Doctor d where d.id=?1")
     Doctor findDoctor(Long idDoctor);
 
 
     @Query(value = "select DISTINCT d from Clinic as c inner join c.doctors d inner join d.terms t inner join d.examTypes e where c.id=?1 and e.id=?2 and  t.dateTerm = ?3 and t.free=true")
     List<Doctor> getFreeDoctors(Long idClinic, Long idET, LocalDate date);
+
+    @Query(value = "select t from Doctor d inner join d.terms t where d.id=?1 and ((t.dateTerm>?2) or (t.dateTerm=?2 and t.endTime > ?3)) and t.free = false")
+    List<TermDoctor> findScheduledTerms(Long id,LocalDate nowDate,LocalTime nowTime);
+
+    @Query(value = "select d from Clinic c inner join c.doctors d inner join d.examTypes et where c.id=?1 and et.id=?2")
+    List<Doctor> searchDoctorsExamType(Long idClinic,Long idExamType);
 
 
 }

@@ -5,9 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import team57.project.dto.AvailableRoomRequest;
-import team57.project.dto.RoomDTO;
-import team57.project.dto.RoomFA;
+import team57.project.dto.*;
 import team57.project.model.Clinic;
 import team57.project.model.Room;
 import team57.project.service.ClinicService;
@@ -139,4 +137,32 @@ public class RoomController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PostMapping(value="/findRoomsFreeTerms/{id}")
+    @PreAuthorize("hasRole('CLINIC_ADMIN')")
+    public ResponseEntity<?> findRoomsFreeTerms(@PathVariable("id") Long id, @RequestBody FreeTermsRequest ftr){
+
+            System.out.println(ftr.getDate().toString());
+
+            System.out.println(ftr.getIdDoctor());
+
+
+            System.out.println(ftr.getRoomName());
+
+
+            System.out.println(ftr.getRoomNumber());
+
+
+        try {
+            Clinic clinic = clinicService.findOne(id);
+            List<RoomME> foundRooms = roomService.findRoomsFreeTerms(clinic,ftr);
+            return new ResponseEntity(foundRooms,HttpStatus.OK);
+
+        } catch(NullPointerException e){
+
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
 }

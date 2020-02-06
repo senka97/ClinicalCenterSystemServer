@@ -4,6 +4,7 @@ package team57.project.service;
 import team57.project.dto.*;
 import team57.project.model.Clinic;
 import team57.project.model.Doctor;
+import team57.project.model.ExamType;
 
 import java.util.List;
 
@@ -28,5 +29,7 @@ public interface DoctorService {
 
     List<DoctorRating> findFreeDoctors(Clinic clinic, AvailableDoctorRequest adr);
     List<AppointmentDTO> findFreeTerms(Long doctorId, AvailableDoctorRequest adr);
+
+    List<DoctorFA> searchForDoctorsExamTypes(Clinic clinic, ExamType examType);
 
 }

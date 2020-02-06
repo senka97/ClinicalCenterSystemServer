@@ -232,7 +232,19 @@ public class DoctorController {
 
     }
 
+    @GetMapping(value="/getDoctorsExamType/{idClinic}/{idExamType}", produces="application/json")
+    @PreAuthorize("hasRole('CLINIC_ADMIN')")
+    public ResponseEntity<?> getDoctorsExamTypes(@PathVariable("idClinic") Long idClinic, @PathVariable("idExamType") Long idExamType) {
 
+        try {
+            Clinic clinic = clinicService.findOne(idClinic);
+            ExamType examType = examTypeService.findOne(idExamType);
+            List<DoctorFA> doctors = doctorService.searchForDoctorsExamTypes(clinic,examType);
+            return new ResponseEntity<List<DoctorFA>>(doctors, HttpStatus.OK);
+        }catch (NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 
     private boolean isSerialNumber(String n){
         if (Pattern.matches("[0-9]+", n) && n.length() == 13) {

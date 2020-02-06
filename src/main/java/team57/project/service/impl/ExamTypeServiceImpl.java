@@ -8,7 +8,10 @@ import team57.project.dto.ExamTypeDTO;
 import team57.project.model.Clinic;
 import team57.project.model.ExamType;
 import team57.project.model.FastAppointment;
+import team57.project.model.MedicalExam;
 import team57.project.repository.ExamTypeRepository;
+import team57.project.repository.FastAppointmentRepository;
+import team57.project.repository.MedicalExamRepository;
 import team57.project.service.ExamTypeService;
 
 import java.time.LocalDate;
@@ -22,6 +25,10 @@ public class ExamTypeServiceImpl implements ExamTypeService {
 
     @Autowired
     private ExamTypeRepository examTypeRepository;
+    @Autowired
+    private MedicalExamRepository medicalExamRepository;
+    @Autowired
+    private FastAppointmentRepository fastAppointmentRepository;
 
 
     @Override
@@ -61,7 +68,7 @@ public class ExamTypeServiceImpl implements ExamTypeService {
                 }
             }
         }*/
-        for(FastAppointment fa:clinic.getFastAppointments()){
+        /*for(FastAppointment fa:clinic.getFastAppointments()){
             if (fa.getExamType().getName().equals(examType.getName())) {
                 if(fa.getDateFA().isAfter(LocalDate.now())){ //ako je u buducnosti odmah vrati da ne moze
                     return "This exam type can't be updated because the exam of this type is happening now or is arranged in the future.";
@@ -73,6 +80,11 @@ public class ExamTypeServiceImpl implements ExamTypeService {
                     }
                 }
             }
+        }*/
+        List<MedicalExam> me = medicalExamRepository.findExamsWithType(clinic.getId(),examType.getId(), LocalDate.now(),LocalTime.now());
+        List<FastAppointment> fa = fastAppointmentRepository.findFAWithType(clinic.getId(),examType.getId(),LocalDate.now(),LocalTime.now().minusHours(1));
+        if(me.size() != 0 || fa.size() != 0){
+            return "This exam type can't be updated because the exam of this type is happening now or is arranged in the future.";
         }
         examType.setName(examTypeDTO.getName());
         examType.setDescription(examTypeDTO.getDescription());
@@ -93,7 +105,7 @@ public class ExamTypeServiceImpl implements ExamTypeService {
                     }
                 }
             }*/
-            for(FastAppointment fa:clinic.getFastAppointments()){
+            /*for(FastAppointment fa:clinic.getFastAppointments()){
                 if (fa.getExamType().getName().equals(examType.getName())) {
                     if(fa.getDateFA().isAfter(LocalDate.now())){ //ako je u buducnosti odmah vrati da ne moze
                         return false;
@@ -105,10 +117,16 @@ public class ExamTypeServiceImpl implements ExamTypeService {
                         }
                     }
                 }
-            }
-            examType.setRemoved(true);
-            examTypeRepository.save(examType);
-            return true;
+            }*/
+
+        List<MedicalExam> me = medicalExamRepository.findExamsWithType(clinic.getId(),examType.getId(), LocalDate.now(),LocalTime.now());
+        List<FastAppointment> fa = fastAppointmentRepository.findFAWithType(clinic.getId(),examType.getId(),LocalDate.now(),LocalTime.now().minusHours(1));
+        if(me.size() != 0 || fa.size() != 0){
+            return false;
+        }
+        examType.setRemoved(true);
+        examTypeRepository.save(examType);
+        return true;
     }
 
     @Override
