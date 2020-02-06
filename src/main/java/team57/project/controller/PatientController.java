@@ -203,7 +203,7 @@ public class PatientController {
             dto.setId(mr.getId());
             dto.setDescription(mr.getDescription());
             dto.setDate(mr.getDate().toLocalDate().toString());
-            dto.setTime(mr.getTime());
+            dto.setTime(mr.getTime().toString());
             DoctorDTO doctorDTO = new DoctorDTO(mr.getDoctor());
             dto.setDoctor(doctorDTO);
             reportsDTO.add(dto);

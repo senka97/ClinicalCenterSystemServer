@@ -57,6 +57,12 @@ public class FastAppointmentServiceImpl implements FastAppointmentService {
     }
 
     @Override
+    public FastAppointment save(FastAppointment fa)
+    {
+        return fastAppointmentRepository.save(fa);
+    }
+
+    @Override
     @Transactional
     public void addNewFA(Clinic clinic, FARequest faRequest) {
 
@@ -131,6 +137,12 @@ public class FastAppointmentServiceImpl implements FastAppointmentService {
         }
 
         return freeFADTO;
+    }
+
+    @Override
+    public List<FastAppointment> findDoctorPatientFA(Long doctorId, Long patientId)
+    {
+        return fastAppointmentRepository.findDoctorPatientFA(doctorId,patientId);
     }
 
     @Override
