@@ -304,7 +304,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-<<<<<<< HEAD
+
     public Boolean sendSurgeryAppointment(Long patientId, AppointmentDTO appointmentDTO) {
         try{
             System.out.print("RADI");
@@ -331,7 +331,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     }
 
-=======
+
     public List<DoctorFA> searchForDoctorsExamTypes(Clinic clinic, ExamType examType) {
 
         List<Doctor> doctors = doctorRepository.searchDoctorsExamType(clinic.getId(),examType.getId());
@@ -344,7 +344,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
 
->>>>>>> master
+
     private boolean isDoctorAbsent(AvailableDoctorRequest adr, Doctor doctor) {
         boolean isAbsent = false;
         for (Absence a : doctor.getAbsences()) {

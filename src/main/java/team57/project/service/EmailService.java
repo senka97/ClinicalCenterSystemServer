@@ -153,11 +153,11 @@ public class EmailService {
     }
 
     @Async
-    public void  sendNotificationForReservation(MedicalExamRequest merNew,MedicalExamRequest merOld, RoomME roomeME,String emailP) throws MessagingException {
+    public void  sendNotificationForReservation(MedicalExamRequest merNew,MedicalExamRequest merOld, RoomME roomME,String emailP) throws MessagingException {
         String msg = "";
         boolean changed = false;
-        if(!merNew.getDate().equals(merOld.getDate()) || !merNew.getStartTime().equals(merOld.getStartTime())){
-            msg += "Date of you reservation for medical exam - " + merNew.getExamTypeName() + " was changed on " + merNew.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) + " at " + merNew.getStartTime().format(DateTimeFormatter.ofPattern("hh:mm"))  + ".<br>";
+        if(!merNew.getDate().equals(merOld.getDate()) || !merOld.getStartTime().equals(roomME.getStartTime())){
+            msg += "Date of you reservation for medical exam - " + merNew.getExamTypeName() + " was changed on " + merNew.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) + " at " + roomME.getStartTime().format(DateTimeFormatter.ofPattern("hh:mm"))  +  ". Doctor: " + merNew.getDoctor().getFullName() + ".<br>";
             changed = true;
         }
         String dateOld = merOld.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
@@ -165,7 +165,7 @@ public class EmailService {
 
         String message = "";
         if(!changed){
-            message += "Hello, " + merNew.getFullNamePatient() + "<br>" + "You have successfully reserved medical exam - " + merNew.getExamTypeName() + " on " + dateOld + " at " + timeOld + " in room " + roomeME.getName() +  ".<br><br>";
+            message += "Hello, " + merNew.getFullNamePatient() + "<br>" + "You have successfully reserved medical exam - " + merNew.getExamTypeName() + " on " + dateOld + " at " + timeOld + " in room " + roomME.getName() + ". Doctor: " + merNew.getDoctor().getFullName() + ".<br><br>";
         }else{
             message += "Hello, " + merNew.getFullNamePatient() + "<br>" +  msg;
         }
