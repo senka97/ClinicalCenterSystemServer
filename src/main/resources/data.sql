@@ -76,9 +76,9 @@ insert into medication (code, description) value ('#ABC12300','Bensedin 500 mg')
 insert into medication (code, description) value ('#AF000025','Nolpaza 40 mg');
 insert into medication (code, description) value ('#AB250020','Vitamin D 2000 UI');
 insert into medication (code, description) value ('#BD803021','Ciprocinal 500 mg');
-insert into prescription (verified, medication_id, nurse_id, patient_id, doctor_id, clinic_id) value (TRUE,1,4,5,6,2);
-insert into prescription (verified, medication_id, nurse_id, patient_id, doctor_id, clinic_id) value (FALSE,2,null,5,3,1);
-insert into prescription (verified, medication_id, nurse_id, patient_id, doctor_id, clinic_id) value (FALSE,3,null,5,3,1);
+insert into prescription (verified, medication_id, nurse_id, patient_id, doctor_id, clinic_id, version) value (TRUE,1,4,5,6,2,1);
+insert into prescription (verified, medication_id, nurse_id, patient_id, doctor_id, clinic_id, version) value (FALSE,2,null,5,3,1,0);
+insert into prescription (verified, medication_id, nurse_id, patient_id, doctor_id, clinic_id, version) value (FALSE,3,null,5,3,1,0);
 
 insert into medical_record_medical_reports (medical_record_id, medical_reports_id) value (1,1);
 insert into medical_record_medical_reports (medical_record_id, medical_reports_id) value (1,2);
