@@ -10,8 +10,10 @@ import team57.project.repository.DoctorRepository;
 import team57.project.repository.PatientRepository;
 import team57.project.repository.TermDoctorRepository;
 import team57.project.service.DoctorService;
+import team57.project.service.SurgeryService;
 
 import javax.transaction.Transactional;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -30,7 +32,10 @@ public class DoctorServiceImpl implements DoctorService {
     private AuthorityServiceImpl authService;
     @Autowired
     private TermDoctorRepository termDoctorRepository;
-
+    @Autowired
+    private SurgeryTypeServiceImpl surgeryTypeService;
+    @Autowired
+    private SurgeryServiceImpl surgeryService;
 
     @Override
     public Doctor findOne(Long id) {
@@ -89,27 +94,47 @@ public class DoctorServiceImpl implements DoctorService {
         doctor.setAuthorities(auth);
         doctor.setEnabled(true);
         doctorRepository.save(doctor);
+
+        Doctor d = doctorRepository.findByEmail(doctorDTO.getEmail());
+        LocalDate nowDate = LocalDate.now();
+        int today = nowDate.getDayOfWeek().getValue(); //redni broj dana u nedelji
+        LocalDate temp = LocalDate.now();
+        temp = temp.plusDays(1); //termini se prave od sutra pa do kraja sledece nedelje
+        for(int i=0;i<12-today;i++){
+            int n = temp.getDayOfWeek().getValue();
+            if(n == 6 || n == 7){ //ako je dan subota ili nedelja nema termina
+                System.out.println("Subota ili nedelja, ne kreiraju se termini.");
+            }else{
+                LocalTime wokingHoursStart = d.getWorkingHoursStart();
+                while(wokingHoursStart.isBefore(d.getWorkingHoursEnd())){
+                    TermDoctor term = new TermDoctor(temp,wokingHoursStart,wokingHoursStart.plusHours(1),true,d);
+                    termDoctorRepository.save(term);
+                    wokingHoursStart = wokingHoursStart.plusHours(1);
+                }
+            }
+            temp = temp.plusDays(1);
+        }
     }
+
 
     @Override
     public boolean removeDoctor(Doctor doctor) {
 
-        for(FastAppointment fa: doctor.getFastAppointments()){
-            /*if(fa.getDateTime().isAfter(LocalDateTime.now()) || (fa.getDateTime().isBefore(LocalDateTime.now()) &&
-                    fa.getDateTime().plusMinutes(fa.getDuration()).isAfter(LocalDateTime.now()))){
-                return false;
-            }*/
+        /*for(FastAppointment fa: doctor.getFastAppointments()){
             if(fa.getDateFA().isAfter(LocalDate.now())){ //ako je u buducnosti odmah vrati false
                 return false;
             }else if(fa.getDateFA().equals(LocalDate.now())){ //ako je danas proveri vreme
-                //if((fa.getTimeFA().isBefore(LocalTime.now()) && fa.getTimeFA().plusHours(1).isAfter(LocalTime.now())) || (fa.getTimeFA().equals(LocalTime.now()))){
                 if((fa.getTimeFA().plusHours(1).isAfter(LocalTime.now()))){ //dovoljno je proveriti samo da li je kraj pregleda posle sadasnjeg trenutka
                     return false;
                 }
             }
-        }
+        }*/
 
-        //ovde jos ide kod za proveru da li se nalazi u zakazanim pregledima ili operacijama
+        List<TermDoctor> scheduledTerms = doctorRepository.findScheduledTerms(doctor.getId(),LocalDate.now(),LocalTime.now());
+
+        if(scheduledTerms.size()!=0){
+            return false;
+        }
 
         doctor.setRemoved(true);
         doctorRepository.save(doctor);
@@ -278,6 +303,48 @@ public class DoctorServiceImpl implements DoctorService {
         return appointments;
     }
 
+    @Override
+<<<<<<< HEAD
+    public Boolean sendSurgeryAppointment(Long patientId, AppointmentDTO appointmentDTO) {
+        try{
+            System.out.print("RADI");
+            Patient p = this.patientRepository.findById(patientId).orElse(null);
+            Doctor doc = this.doctorRepository.findById(appointmentDTO.getDoctorId()).orElse(null);
+            Surgery s = new Surgery();
+            System.out.print(appointmentDTO);
+
+
+            SurgeryType type = surgeryTypeService.findOne(Long.parseLong(appointmentDTO.getType()));
+            s.setDate(appointmentDTO.getDate());
+            s.setPatient(p);
+            s.setSurgeryType(type);
+            s.setClinic(doc.getClinic());
+            s.setPrice(type.getPrice());
+            s.setDiscount(type.getDiscount());
+            System.out.print(s);
+            this.surgeryService.save(s);
+            return true;
+        }catch (Exception e){
+        return false;
+        }
+
+
+    }
+
+=======
+    public List<DoctorFA> searchForDoctorsExamTypes(Clinic clinic, ExamType examType) {
+
+        List<Doctor> doctors = doctorRepository.searchDoctorsExamType(clinic.getId(),examType.getId());
+        List<DoctorFA> doctorsFA = new ArrayList<DoctorFA>();
+        for(Doctor d: doctors){
+            doctorsFA.add(new DoctorFA(d));
+        }
+
+        return doctorsFA;
+    }
+
+
+>>>>>>> master
     private boolean isDoctorAbsent(AvailableDoctorRequest adr, Doctor doctor) {
         boolean isAbsent = false;
         for (Absence a : doctor.getAbsences()) {

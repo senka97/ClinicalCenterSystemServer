@@ -18,9 +18,9 @@ public class Surgery {
     private Long id;
     @Column(name = "date", nullable = false)
     private LocalDate date;
-    @Column(name = "startTime", nullable = false)
+    @Column(name = "startTime", nullable = true)
     private LocalTime startTime;
-    @Column(name = "endTime", nullable = false)
+    @Column(name = "endTime", nullable = true)
     private LocalTime endTime;
     @Column(name = "price", nullable = false)
     private double price;
@@ -37,6 +37,9 @@ public class Surgery {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) // two way relationship, clinic has a list of all its fast appointments
     @JoinColumn(name="clinic_id", nullable=false)
     private Clinic clinic;
+
+    @Version
+    private Long version;
 
     public Surgery(){}
 
@@ -137,5 +140,13 @@ public class Surgery {
 
     public void setDiscount(double discount) {
         this.discount = discount;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

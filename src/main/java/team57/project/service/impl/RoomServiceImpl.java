@@ -2,13 +2,12 @@ package team57.project.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import team57.project.dto.AvailableRoomRequest;
-import team57.project.dto.RoomDTO;
-import team57.project.dto.RoomFA;
-import team57.project.model.Clinic;
-import team57.project.model.Room;
-import team57.project.model.RoomReservationTime;
+import team57.project.dto.*;
+import team57.project.model.*;
+import team57.project.repository.DoctorRepository;
 import team57.project.repository.RoomRepository;
+import team57.project.repository.TermDoctorRepository;
+import team57.project.repository.TermRoomRepository;
 import team57.project.service.ClinicService;
 import team57.project.service.RoomService;
 
@@ -16,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -26,6 +26,12 @@ public class RoomServiceImpl implements RoomService {
     private RoomRepository roomRepository;
     @Autowired
     private ClinicService clinicService;
+    @Autowired
+    private TermDoctorRepository termDoctorRepository;
+    @Autowired
+    private TermRoomRepository termRoomRepository;
+    @Autowired
+    private DoctorRepository doctorRepository;
 
     public String updateRoom(Room room, RoomDTO roomDTO, Long idClinic){
 
@@ -41,8 +47,8 @@ public class RoomServiceImpl implements RoomService {
             }
         }*/
 
-        List<Room> scheduledRooms = roomRepository.findScheduledRooms(room.getId(), LocalDate.now(), LocalTime.now());
-        if(scheduledRooms.size() != 0){
+        List<TermRoom> scheduledTerms = roomRepository.findScheduledTerms(room.getId(), LocalDate.now(), LocalTime.now());
+        if(scheduledTerms.size() != 0){
             return "The room can't be updated because it is reserved " +
                     "for the upcoming exam or surgery.";
         }
@@ -87,8 +93,8 @@ public class RoomServiceImpl implements RoomService {
 
             }
         }*/
-        List<Room> scheduledRooms = roomRepository.findScheduledRooms(room.getId(), LocalDate.now(), LocalTime.now());
-        if(scheduledRooms.size() != 0){
+        List<TermRoom> scheduledTerms = roomRepository.findScheduledTerms(room.getId(), LocalDate.now(), LocalTime.now());
+        if(scheduledTerms.size() != 0){
             return false;
         }
 
@@ -111,6 +117,87 @@ public class RoomServiceImpl implements RoomService {
             roomsFA.add(new RoomFA(room));
         }
         return roomsFA;
+    }
+
+    @Override
+    public List<RoomME> findRoomsFreeTerms(Clinic clinic, FreeTermsRequest ftr) {
+        //roomName
+        //roomNumber
+        //idDoctor
+        //date
+        List<Room> foundRooms = new ArrayList<Room>(); //sobe koje odgovaraju imenu i broju
+        List<RoomME> foundRoomsME = new ArrayList<RoomME>();
+        //ako nije unet naziv i broj trazi sve
+        if((ftr.getRoomName().equals("") || ftr.getRoomName()==null) && (ftr.getRoomNumber().equals("") || ftr.getRoomNumber()==null)){
+            foundRooms = roomRepository.findRooms(clinic.getId());
+        }else{
+            foundRooms = searchRooms(clinic.getId(),ftr.getRoomName(),ftr.getRoomNumber());
+        }
+
+        //dovucem slobodne termine sobe za radno vreme doktora
+        //dovucem slobodne termine od doktora na taj dan
+        //sortiram od najranijeg termina ka najkasnije i idem redom od najranijeg termina sobe i proveravam da li ima
+        //slobodan taj termin za doktora
+        Doctor d = doctorRepository.findDoctor(ftr.getIdDoctor());
+        List<TermDoctor> termsDoctors = termDoctorRepository.findFreeTermsDate(ftr.getIdDoctor(),ftr.getDate());
+        termsDoctors.sort(Comparator.comparing(TermDoctor::getStartTime));
+        LocalTime startWorkHours = d.getWorkingHoursStart();
+        LocalTime endWorkHours = d.getWorkingHoursEnd();
+
+        for(Room room: foundRooms){
+            List<TermRoom> termsRoom = termRoomRepository.findFreeTermsDate(room.getId(),ftr.getDate(),startWorkHours,endWorkHours);
+            termsRoom.sort(Comparator.comparing(TermRoom::getStartTime));
+            for(TermRoom tr:termsRoom){
+                if(doctorTermExists(tr.getStartTime(),termsDoctors)){
+                    foundRoomsME.add(new RoomME(room,tr));
+                    break;
+                }
+            }
+        }
+        return foundRoomsME;
+    }
+
+    private boolean doctorTermExists(LocalTime start,List<TermDoctor> termsDoctor){
+
+        for(TermDoctor td: termsDoctor){
+            if(td.getStartTime().equals(start)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+    private List<Room> searchRooms(Long clinicId, String roomName,String roomNumber) {
+
+        List<Room> foundRooms = new ArrayList<Room>();
+        List<Room> rooms = roomRepository.findRooms(clinicId);
+        for(Room room : rooms){
+            boolean nameCorrect = true;
+            boolean numberCorrect = true;
+            if(!roomName.equals("") && roomName != null){
+                if(room.getName().toLowerCase().contains(roomName.toLowerCase())){
+                    nameCorrect = true;
+                }else{
+                    nameCorrect = false;
+                }
+            }
+            if(!roomNumber.equals("") && roomNumber != null){
+                if(room.getNumber().toLowerCase().contains(roomNumber.toLowerCase())){
+                    numberCorrect = true;
+                }else{
+                    numberCorrect = false;
+                }
+            }
+            if(nameCorrect && numberCorrect){
+                foundRooms.add(room);
+            }
+
+        }
+
+        return foundRooms;
+
     }
 
 

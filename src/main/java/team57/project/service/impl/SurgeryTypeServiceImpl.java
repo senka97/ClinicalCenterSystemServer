@@ -4,16 +4,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team57.project.dto.SurgeryTypeDTO;
 import team57.project.model.*;
+import team57.project.repository.SurgeryRepository;
 import team57.project.repository.SurgeryTypeRepository;
 import team57.project.service.SurgeryTypeService;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 
 @Service
 public class SurgeryTypeServiceImpl implements SurgeryTypeService {
 
     @Autowired
     private SurgeryTypeRepository surgeryTypeRepository;
+    @Autowired
+    private SurgeryRepository surgeryRepository;
 
 
     @Override
@@ -42,7 +48,11 @@ public class SurgeryTypeServiceImpl implements SurgeryTypeService {
             }
         }
 
-        //ovde ide kod za proveru da li je neka operacija ovog tipa zakazana za buducnost
+        List<Surgery> s = surgeryRepository.findSurgeryWithType(clinic.getId(),surgeryType.getId(), LocalDate.now(), LocalTime.now());
+
+        if(s.size()!=0){
+            return "This surgery type can't be updated because the surgery of this type is happening now or is arranged in the future.";
+        }
 
         surgeryType.setName(surgeryTypeDTO.getName());
         surgeryType.setDescription(surgeryTypeDTO.getDescription());

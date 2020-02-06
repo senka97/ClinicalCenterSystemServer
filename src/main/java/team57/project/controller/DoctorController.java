@@ -2,6 +2,7 @@ package team57.project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,8 @@ import team57.project.service.impl.DoctorServiceImpl;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @RestController
 @RequestMapping(value = "api/doctors")
@@ -233,6 +236,40 @@ public class DoctorController {
     }
 
 
+    @RequestMapping(value = "/makeSurgeryAppointment/{id}", method = PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_DOCTOR') ")
+    public ResponseEntity<?> makeAppointment(@PathVariable("id") Long patientId, @RequestBody AppointmentDTO appointmentDTO) {
+        if(appointmentDTO.getType() == null || appointmentDTO.getDate() == null ){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Surgery type and date are mandatory.");
+        }
+        if(appointmentDTO.getDate().getDayOfWeek().getValue() == 6 || appointmentDTO.getDate().getDayOfWeek().getValue() == 7){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You can't reserve surgery at the weekend.");
+        }
+        try {
+            Boolean surgery = this.doctorService.sendSurgeryAppointment(patientId,appointmentDTO);
+            if(surgery){
+                return new ResponseEntity<Boolean>(surgery, HttpStatus.OK);
+            }else {
+                return new ResponseEntity<>(surgery, HttpStatus.GONE);
+            }
+        } catch (Exception e){
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @GetMapping(value="/getDoctorsExamType/{idClinic}/{idExamType}", produces="application/json")
+    @PreAuthorize("hasRole('CLINIC_ADMIN')")
+    public ResponseEntity<?> getDoctorsExamTypes(@PathVariable("idClinic") Long idClinic, @PathVariable("idExamType") Long idExamType) {
+        try {
+            Clinic clinic = clinicService.findOne(idClinic);
+            ExamType examType = examTypeService.findOne(idExamType);
+            List<DoctorFA> doctors = doctorService.searchForDoctorsExamTypes(clinic,examType);
+            return new ResponseEntity<List<DoctorFA>>(doctors, HttpStatus.OK);
+        }catch (NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 
     private boolean isSerialNumber(String n){
         if (Pattern.matches("[0-9]+", n) && n.length() == 13) {

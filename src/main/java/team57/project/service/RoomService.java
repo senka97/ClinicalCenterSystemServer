@@ -1,8 +1,6 @@
 package team57.project.service;
 
-import team57.project.dto.AvailableRoomRequest;
-import team57.project.dto.RoomDTO;
-import team57.project.dto.RoomFA;
+import team57.project.dto.*;
 import team57.project.model.Clinic;
 import team57.project.model.Room;
 
@@ -14,5 +12,6 @@ public interface RoomService {
     boolean removeRoom(Room room);
     Room findOne(Long id);
     List<RoomFA> findAvailableRooms(Clinic clinic, AvailableRoomRequest arq);
+    List<RoomME> findRoomsFreeTerms(Clinic clinic, FreeTermsRequest ftr);
 
 }
