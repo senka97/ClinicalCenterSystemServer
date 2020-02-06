@@ -9,4 +9,5 @@ public interface SurgeryService {
 
     List<Surgery> findByPatientId(Long patientId);
     List<Surgery> findDoctorsSurgeries(Long doctorID);
+    void save(Surgery s);
 }

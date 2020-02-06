@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 public class AppointmentDTO {
     private Long id;
-    private String date;
+    private LocalDate date;
     private String time;
     private String type;
     private Long doctorId;
@@ -16,7 +16,7 @@ public class AppointmentDTO {
     public AppointmentDTO(){}
     public AppointmentDTO(TermDoctor termDoc){
         this.id = termDoc.getId();
-        this.date = termDoc.getDateTerm().toString();
+        this.date = termDoc.getDateTerm();
         this.time = termDoc.getStartTime().toString();
         this.doctorId = termDoc.getDoctor().getId();
     }
@@ -29,11 +29,11 @@ public class AppointmentDTO {
         this.id = id;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

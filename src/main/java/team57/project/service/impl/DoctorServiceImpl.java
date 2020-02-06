@@ -10,8 +10,10 @@ import team57.project.repository.DoctorRepository;
 import team57.project.repository.PatientRepository;
 import team57.project.repository.TermDoctorRepository;
 import team57.project.service.DoctorService;
+import team57.project.service.SurgeryService;
 
 import javax.transaction.Transactional;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -30,7 +32,10 @@ public class DoctorServiceImpl implements DoctorService {
     private AuthorityServiceImpl authService;
     @Autowired
     private TermDoctorRepository termDoctorRepository;
-
+    @Autowired
+    private SurgeryTypeServiceImpl surgeryTypeService;
+    @Autowired
+    private SurgeryServiceImpl surgeryService;
 
     @Override
     public Doctor findOne(Long id) {
@@ -299,6 +304,34 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+<<<<<<< HEAD
+    public Boolean sendSurgeryAppointment(Long patientId, AppointmentDTO appointmentDTO) {
+        try{
+            System.out.print("RADI");
+            Patient p = this.patientRepository.findById(patientId).orElse(null);
+            Doctor doc = this.doctorRepository.findById(appointmentDTO.getDoctorId()).orElse(null);
+            Surgery s = new Surgery();
+            System.out.print(appointmentDTO);
+
+
+            SurgeryType type = surgeryTypeService.findOne(Long.parseLong(appointmentDTO.getType()));
+            s.setDate(appointmentDTO.getDate());
+            s.setPatient(p);
+            s.setSurgeryType(type);
+            s.setClinic(doc.getClinic());
+            s.setPrice(type.getPrice());
+            s.setDiscount(type.getDiscount());
+            System.out.print(s);
+            this.surgeryService.save(s);
+            return true;
+        }catch (Exception e){
+        return false;
+        }
+
+
+    }
+
+=======
     public List<DoctorFA> searchForDoctorsExamTypes(Clinic clinic, ExamType examType) {
 
         List<Doctor> doctors = doctorRepository.searchDoctorsExamType(clinic.getId(),examType.getId());
@@ -311,6 +344,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
 
+>>>>>>> master
     private boolean isDoctorAbsent(AvailableDoctorRequest adr, Doctor doctor) {
         boolean isAbsent = false;
         for (Absence a : doctor.getAbsences()) {

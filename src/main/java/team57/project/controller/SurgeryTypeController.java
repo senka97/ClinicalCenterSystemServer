@@ -12,6 +12,7 @@ import team57.project.model.Clinic;
 import team57.project.model.ExamType;
 import team57.project.model.SurgeryType;
 import team57.project.service.ClinicService;
+import team57.project.service.DoctorService;
 import team57.project.service.impl.SurgeryTypeServiceImpl;
 
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ public class SurgeryTypeController {
     private SurgeryTypeServiceImpl surgeryTypeService;
     @Autowired
     private ClinicService clinicService;
+    @Autowired
+    private DoctorService doctorService;
 
     @GetMapping(value="/getSurgeryType/{id}", produces="application/json")
     @PreAuthorize("hasRole('CLINIC_ADMIN')")
@@ -161,5 +164,25 @@ public class SurgeryTypeController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
+    }
+
+    @GetMapping(value="/getDoctorSurgeryTypes/{idDoctor}", produces="application/json")
+    @PreAuthorize("hasRole('ROLE_DOCTOR')")
+    public ResponseEntity<?> getDoctorSurgeryTypes(@PathVariable("idDoctor") Long idDoctor)
+    {
+        try {
+            Set<SurgeryType> surgeryTypes = this.doctorService.findOne(idDoctor).getSurgeryTypes();
+            List<SurgeryTypeDTO> surgeryTypeDTOS = new ArrayList<>();
+            for(SurgeryType surgeryType: surgeryTypes){
+                if(!surgeryType.isRemoved()){
+                    surgeryTypeDTOS.add(new SurgeryTypeDTO(surgeryType));
+                }
+            }
+            return new ResponseEntity(surgeryTypeDTOS, HttpStatus.OK);
+
+        } catch(NullPointerException e){
+
+            return ResponseEntity.notFound().build();
+        }
     }
 }

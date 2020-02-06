@@ -27,4 +27,9 @@ public class SurgeryServiceImpl implements SurgeryService {
     public List<Surgery> findDoctorsSurgeries(Long doctorID){
         return this.surgeryRepository.findDoctorsSurgeries(doctorID);
     }
+
+    @Override
+    public void save(Surgery s) {
+        this.surgeryRepository.save(s);
+    }
 }
