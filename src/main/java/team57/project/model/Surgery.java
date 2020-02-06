@@ -38,6 +38,9 @@ public class Surgery {
     @JoinColumn(name="clinic_id", nullable=false)
     private Clinic clinic;
 
+    @Version
+    private Long version;
+
     public Surgery(){}
 
     public Surgery(LocalDate date, LocalTime startTime, LocalTime endTime, SurgeryType surgeryType, Room surgeryRoom, Set<Doctor> doctors, Patient patient) {
@@ -137,5 +140,13 @@ public class Surgery {
 
     public void setDiscount(double discount) {
         this.discount = discount;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

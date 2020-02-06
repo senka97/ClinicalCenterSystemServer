@@ -94,27 +94,47 @@ public class DoctorServiceImpl implements DoctorService {
         doctor.setAuthorities(auth);
         doctor.setEnabled(true);
         doctorRepository.save(doctor);
+
+        Doctor d = doctorRepository.findByEmail(doctorDTO.getEmail());
+        LocalDate nowDate = LocalDate.now();
+        int today = nowDate.getDayOfWeek().getValue(); //redni broj dana u nedelji
+        LocalDate temp = LocalDate.now();
+        temp = temp.plusDays(1); //termini se prave od sutra pa do kraja sledece nedelje
+        for(int i=0;i<12-today;i++){
+            int n = temp.getDayOfWeek().getValue();
+            if(n == 6 || n == 7){ //ako je dan subota ili nedelja nema termina
+                System.out.println("Subota ili nedelja, ne kreiraju se termini.");
+            }else{
+                LocalTime wokingHoursStart = d.getWorkingHoursStart();
+                while(wokingHoursStart.isBefore(d.getWorkingHoursEnd())){
+                    TermDoctor term = new TermDoctor(temp,wokingHoursStart,wokingHoursStart.plusHours(1),true,d);
+                    termDoctorRepository.save(term);
+                    wokingHoursStart = wokingHoursStart.plusHours(1);
+                }
+            }
+            temp = temp.plusDays(1);
+        }
     }
+
 
     @Override
     public boolean removeDoctor(Doctor doctor) {
 
-        for(FastAppointment fa: doctor.getFastAppointments()){
-            /*if(fa.getDateTime().isAfter(LocalDateTime.now()) || (fa.getDateTime().isBefore(LocalDateTime.now()) &&
-                    fa.getDateTime().plusMinutes(fa.getDuration()).isAfter(LocalDateTime.now()))){
-                return false;
-            }*/
+        /*for(FastAppointment fa: doctor.getFastAppointments()){
             if(fa.getDateFA().isAfter(LocalDate.now())){ //ako je u buducnosti odmah vrati false
                 return false;
             }else if(fa.getDateFA().equals(LocalDate.now())){ //ako je danas proveri vreme
-                //if((fa.getTimeFA().isBefore(LocalTime.now()) && fa.getTimeFA().plusHours(1).isAfter(LocalTime.now())) || (fa.getTimeFA().equals(LocalTime.now()))){
                 if((fa.getTimeFA().plusHours(1).isAfter(LocalTime.now()))){ //dovoljno je proveriti samo da li je kraj pregleda posle sadasnjeg trenutka
                     return false;
                 }
             }
-        }
+        }*/
 
-        //ovde jos ide kod za proveru da li se nalazi u zakazanim pregledima ili operacijama
+        List<TermDoctor> scheduledTerms = doctorRepository.findScheduledTerms(doctor.getId(),LocalDate.now(),LocalTime.now());
+
+        if(scheduledTerms.size()!=0){
+            return false;
+        }
 
         doctor.setRemoved(true);
         doctorRepository.save(doctor);
@@ -284,6 +304,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+<<<<<<< HEAD
     public Boolean sendSurgeryAppointment(Long patientId, AppointmentDTO appointmentDTO) {
         try{
             System.out.print("RADI");
@@ -310,6 +331,20 @@ public class DoctorServiceImpl implements DoctorService {
 
     }
 
+=======
+    public List<DoctorFA> searchForDoctorsExamTypes(Clinic clinic, ExamType examType) {
+
+        List<Doctor> doctors = doctorRepository.searchDoctorsExamType(clinic.getId(),examType.getId());
+        List<DoctorFA> doctorsFA = new ArrayList<DoctorFA>();
+        for(Doctor d: doctors){
+            doctorsFA.add(new DoctorFA(d));
+        }
+
+        return doctorsFA;
+    }
+
+
+>>>>>>> master
     private boolean isDoctorAbsent(AvailableDoctorRequest adr, Doctor doctor) {
         boolean isAbsent = false;
         for (Absence a : doctor.getAbsences()) {
