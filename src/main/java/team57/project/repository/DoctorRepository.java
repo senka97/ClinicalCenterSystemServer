@@ -42,5 +42,10 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     @Query(value = "select d from Clinic c inner join c.doctors d inner join d.examTypes et where c.id=?1 and et.id=?2")
     List<Doctor> searchDoctorsExamType(Long idClinic,Long idExamType);
 
+   // @Query(value = "select d from Doctor d inner join d.terms t where t.date =?1 and t.startTime =?2 ")
+    @Query(value="select * from user u, doctors_surgery_types dst, term_doctor td  where u.type='DOCTOR' and u.id=dst.doctor_id and dst.surgery_type_id=?3 and td.doctor_id=u.id and td.free=true and td.date_term=?1 and td.start_time=?2", nativeQuery = true)
+    List<Doctor> getFreeDoctorsForThisTerm(LocalDate date, LocalTime time, Long idSt);
 
+    @Query(value = "select d from Clinic c inner join c.doctors d inner join d.surgeryTypes st where c.id=1 and st.id=?1")
+    List<Doctor> getDoctorsSurgeryType(Long idSt);
 }

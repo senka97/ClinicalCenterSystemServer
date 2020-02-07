@@ -30,9 +30,14 @@ public class Surgery {
     private Room surgeryRoom;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private SurgeryType surgeryType;
+    @Column(name = "statusS", nullable = false) //REQUESTED,APPROVED,ACCEPTED,REJECTED
+    private String statusS;
+    //REQUESTED - kada doktor posalje upit za operaciju adminu i soba jos nije dodeljena
+    //APPROVED - soba je dodeljena
+    //REJECTED - admin je odbio termin jer je nemoguce naci slobodnu sobu i slobodnog doktora u istom terminu
     @ManyToMany(mappedBy = "surgeries")
     private Set<Doctor> doctors;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Patient patient;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) // two way relationship, clinic has a list of all its fast appointments
     @JoinColumn(name="clinic_id", nullable=false)
@@ -51,6 +56,15 @@ public class Surgery {
         this.surgeryRoom = surgeryRoom;
         this.doctors = doctors;
         this.patient = patient;
+        this.statusS = "REQUESTED";
+    }
+
+    public String getStatusS() {
+        return statusS;
+    }
+
+    public void setStatusS(String statusS) {
+        this.statusS = statusS;
     }
 
     public Room getSurgeryRoom() {

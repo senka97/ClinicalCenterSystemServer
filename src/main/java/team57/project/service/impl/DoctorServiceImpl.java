@@ -321,6 +321,7 @@ public class DoctorServiceImpl implements DoctorService {
             s.setClinic(doc.getClinic());
             s.setPrice(type.getPrice());
             s.setDiscount(type.getDiscount());
+            s.setStatusS("REQUESTED");
             System.out.print(s);
             this.surgeryService.save(s);
             return true;
@@ -337,6 +338,27 @@ public class DoctorServiceImpl implements DoctorService {
         List<Doctor> doctors = doctorRepository.searchDoctorsExamType(clinic.getId(),examType.getId());
         List<DoctorFA> doctorsFA = new ArrayList<DoctorFA>();
         for(Doctor d: doctors){
+            doctorsFA.add(new DoctorFA(d));
+        }
+
+        return doctorsFA;
+    }
+
+    @Override
+    public List<Doctor>  getDoctorsSurgeryTypes(Long id) {
+
+        List<Doctor> doctors = doctorRepository.getDoctorsSurgeryType( id);
+
+        return doctors;
+    }
+
+    @Override
+    public List<DoctorFA>  getFreeDoctorsForThisTerm(RoomTerm rt, Long id) {
+
+        List<Doctor> doctors = doctorRepository.getFreeDoctorsForThisTerm(rt.getDate(), rt.getStartTime(), rt.getIdSurgeryType());
+        List<DoctorFA> doctorsFA = new ArrayList<DoctorFA>();
+        for(Doctor d: doctors){
+            if (d.getClinic().getId() ==id)
             doctorsFA.add(new DoctorFA(d));
         }
 

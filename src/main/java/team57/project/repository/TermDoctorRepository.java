@@ -1,5 +1,6 @@
 package team57.project.repository;
 
+import org.apache.tomcat.jni.Local;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
@@ -29,6 +30,6 @@ public interface TermDoctorRepository extends JpaRepository<TermDoctor,Long> {
     @Query(value = "select t from TermDoctor t inner join t.doctor d where d.id=?1 and t.dateTerm=?2 and t.free=true")
     List<TermDoctor> findFreeTermsDate(Long doctorId,  LocalDate dat);
 
-
-
+    @Query(value="select * from term_doctor td where date_term=?1 and td.start_time=?2 and td.doctor_id=?3", nativeQuery = true)
+    TermDoctor findByDateTime(LocalDate date, LocalTime time, Long id);
 }
