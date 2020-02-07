@@ -142,17 +142,6 @@ public class RoomController {
     @PreAuthorize("hasRole('CLINIC_ADMIN')")
     public ResponseEntity<?> findRoomsFreeTerms(@PathVariable("id") Long id, @RequestBody FreeTermsRequest ftr){
 
-            System.out.println(ftr.getDate().toString());
-
-            System.out.println(ftr.getIdDoctor());
-
-
-            System.out.println(ftr.getRoomName());
-
-
-            System.out.println(ftr.getRoomNumber());
-
-
         try {
             Clinic clinic = clinicService.findOne(id);
             List<RoomME> foundRooms = roomService.findRoomsFreeTerms(clinic,ftr);

@@ -54,8 +54,21 @@ public class MedicalExam {
         this.startTime = termDoctor.getStartTime();
         this.endTime = termDoctor.getEndTime();
         this.statusME = "REQUESTED";
-        this.done = false;
+    }
 
+    public MedicalExam(LocalDate date, LocalTime startTime, LocalTime endTime, String statusME, double price, double discount, ExamType examType, Patient patient, Room examRoom, Doctor doctor, Clinic clinic) {
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.statusME = statusME;
+        this.price = price;
+        this.discount = discount;
+        this.examType = examType;
+        this.patient = patient;
+        this.examRoom = examRoom;
+        this.doctor = doctor;
+        this.clinic = clinic;
+        this.done = false;
     }
 
     public boolean getDone() {
@@ -64,6 +77,7 @@ public class MedicalExam {
 
     public void setDone(boolean done) {
         this.done = done;
+
     }
 
     public Long getId() {
