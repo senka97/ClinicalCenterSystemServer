@@ -13,6 +13,13 @@ public class FreeTermsRequest {
 
     }
 
+    public FreeTermsRequest(String roomName, String roomNumber, Long idDoctor, LocalDate date) {
+        this.roomName = roomName;
+        this.roomNumber = roomNumber;
+        this.idDoctor = idDoctor;
+        this.date = date;
+    }
+
     public String getRoomName() {
         return roomName;
     }
