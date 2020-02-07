@@ -45,11 +45,6 @@ public class FastAppointmentServiceImpl implements FastAppointmentService {
     private ClinicService clinicService;
 
 
-    /*public Collection<FastAppointment> findFAWithExamType(Long id, LocalDateTime now){
-
-        return fastAppointmentRepository.findFAWithExamType(id, LocalDateTime.now());
-    }*/
-
 
     @Override
     public FastAppointment findOne(Long id) {

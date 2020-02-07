@@ -17,7 +17,7 @@ public interface MedicalExamService {
     List<MedicalExamRequest> findExamRequests(Clinic clinic);
     MedicalExam findOne(Long id);
     List<RoomME> getAvailableRooms(MedicalExam me);
-    void reserveRoom(MERoomRequest meRoomRequest) throws MessagingException;
+    MedicalExam reserveRoom(MERoomRequest meRoomRequest) throws MessagingException;
     void rejectExam(MedicalExam me) throws MessagingException, InterruptedException;
     void acceptExamPatient(MedicalExam me);
     void rejectExamPatient(MedicalExam me);

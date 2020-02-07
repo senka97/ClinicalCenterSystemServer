@@ -98,7 +98,7 @@ public class MedicalExamServiceImpl implements MedicalExamService {
 
     @Override
     @Transactional
-    public void reserveRoom(MERoomRequest meRoomRequest) throws MessagingException {
+    public MedicalExam reserveRoom(MERoomRequest meRoomRequest) throws MessagingException {
         //podaci o tome da li se datum ili doktor promenio se nalaze u meRoomRequest.getExamEnd
         //podatak da li se termin promenio se nalazi u meRoomRequest.getRoomME
 
@@ -158,6 +158,7 @@ public class MedicalExamServiceImpl implements MedicalExamService {
         //u medjuvremenu dodelio neku drugu sobu puci ce
 
         emailService.sendNotificationForReservation(meRoomRequest.getExamEnd(),meRoomRequest.getExamStart(),meRoomRequest.getRoomME(),me.getPatient().getEmail());
+        return me;
     }
 
     @Override

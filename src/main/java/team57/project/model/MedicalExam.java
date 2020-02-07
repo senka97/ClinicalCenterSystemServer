@@ -52,10 +52,22 @@ public class MedicalExam {
         this.startTime = termDoctor.getStartTime();
         this.endTime = termDoctor.getEndTime();
         this.statusME = "REQUESTED";
-
-
-
     }
+
+    public MedicalExam(LocalDate date, LocalTime startTime, LocalTime endTime, String statusME, double price, double discount, ExamType examType, Patient patient, Room examRoom, Doctor doctor, Clinic clinic) {
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.statusME = statusME;
+        this.price = price;
+        this.discount = discount;
+        this.examType = examType;
+        this.patient = patient;
+        this.examRoom = examRoom;
+        this.doctor = doctor;
+        this.clinic = clinic;
+    }
+
     public Long getId() {
         return id;
     }
