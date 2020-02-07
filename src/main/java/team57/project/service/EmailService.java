@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import team57.project.dto.MedicalExamRequest;
 import team57.project.dto.RoomME;
+import team57.project.dto.RoomTerm;
 import team57.project.event.OnRegistrationSuccessEvent;
 import team57.project.model.*;
 
@@ -218,5 +219,73 @@ public class EmailService {
 
     }
 
+    @Async
+    public void sendRejectSurgery(Surgery s) throws MailException, InterruptedException, MessagingException{
+        String date = s.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+        //String time = s.getStartTime().format(DateTimeFormatter.ofPattern("hh:mm"));
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setText("Hello, " + s.getPatient().getName() + "!\n\n" + "Your request for the surgery- " + s.getSurgeryType().getName() + " on " + date +  " is rejected because currently is not possible to find free doctor and free room in this and the next week."  + "\n\nBest regards,\nClinic admin");
+        mail.setTo(s.getPatient().getEmail());
+        mail.setSubject("Clinical Center System - Medical exam rejection");
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        javaMailSender.send(mail);
+
+    }
+
+    @Async
+    public void sendMailForSurgeryPatient(RoomTerm r, Patient p)
+    {
+        String date = r.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+        String time = r.getStartTime().format(DateTimeFormatter.ofPattern("hh:mm"));
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setText("Hello, " + p.getName() + "!\n\n" + "You have the surgery-  on " + date + " at " + time + " in " + r.getName()  + ".\n\nBest regards,\nClinic admin");
+        mail.setTo(p.getEmail());
+        mail.setSubject("Clinical Center System - Room found");
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        javaMailSender.send(mail);
+    }
+
+    @Async
+    public void sendMailForSurgeryDoctor(RoomTerm r, Doctor d)
+    {
+        String date = r.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+        String time = r.getStartTime().format(DateTimeFormatter.ofPattern("hh:mm"));
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setText("Hello, " + d.getName() + "!\n\n" + "You have the surgery -  on " + date + " at " + time + " in " + r.getName()  + ".\n\nBest regards,\nClinic admin");
+        mail.setTo(d.getEmail());
+        mail.setSubject("Clinical Center System - Room found");
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        javaMailSender.send(mail);
+    }
+
+    @Async
+    public void sendPatientRoom(Surgery me) throws MailException, InterruptedException, MessagingException{
+
+        String date = me.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+        String time = me.getStartTime().format(DateTimeFormatter.ofPattern("hh:mm"));
+
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setText("Hello, " + me.getPatient().getName() + "!\n\n" + "You have the surgery - " + me.getSurgeryType().getName() + " on " + date + " at " + time + " in " + me.getSurgeryRoom().getName()  + ".\n\nBest regards,\nClinic admin");
+        mail.setTo(me.getPatient().getEmail());
+        mail.setSubject("Clinical Center System - Room found");
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        javaMailSender.send(mail);
+
+    }
+
+    @Async
+    public void sendDoctorRoom(Surgery me, Doctor d) throws MailException, InterruptedException, MessagingException{
+
+        String date = me.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+        String time = me.getStartTime().format(DateTimeFormatter.ofPattern("hh:mm"));
+
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setText("Hello, " + d.getName() + "!\n\n" + "You have the surgery - " + me.getSurgeryType().getName() + " on " + date + " at " + time + " in " + me.getSurgeryRoom().getName()  + ".\n\nBest regards,\nClinic admin");
+        mail.setTo(d.getEmail());
+        mail.setSubject("Clinical Center System - Room found");
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        javaMailSender.send(mail);
+
+    }
 
 }

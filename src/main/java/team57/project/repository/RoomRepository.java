@@ -32,4 +32,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     @Query(value = "select r from Clinic c inner join c.rooms r where c.id=?1")
     List<Room> findAllInClinic(Long id);
+
+    @Query(value = "select * from clinic c, clinic_rooms cr, room r where c.id=?1 and cr.clinic_id=?1 and cr.rooms_id = r.id and r.room_type=?2" , nativeQuery = true)
+    List<Room> findAllInClinicSurgery(Long id, String type);
 }
