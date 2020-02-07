@@ -50,6 +50,12 @@ public class MedicalReportController {
     @Autowired
     private PrescriptionService prescriptionService;
 
+    @Autowired
+    private MedicalExamService medicalExamService;
+
+    @Autowired
+    private FastAppointmentService fastAppointmentService;
+
     @GetMapping(value = "/getPrescriptions/{id}", produces ="application/json")
     @PreAuthorize("hasRole('ROLE_DOCTOR')")
     public Set<PrescriptionDTO> getMedicalReportPrescriptions(@PathVariable("id") Long id) {
@@ -108,25 +114,34 @@ public class MedicalReportController {
     public ResponseEntity<?> createMedicalReport(@PathVariable("id") Long id, @RequestBody MedicalReportDTO medicalReport) throws ParseException {
 
         MedicalReport newReport = new MedicalReport();
+
         Doctor doctor = doctorService.findOne(medicalReport.getDoctor().getId());
         Patient patient = patientService.findOne(id);
         Clinic clinic = clinicService.findOne(doctor.getClinic().getId());
         MedicalRecord record = patientService.findPatientMedicalRecord(id);
+        MedicalExam medicalExam = medicalExamService.findOne(medicalReport.getExamId());
+        FastAppointment fastAppointment = fastAppointmentService.findOne(medicalReport.getExamId());
 
         newReport.setDoctor(doctor);
         newReport.setDescription(medicalReport.getDescription());
-        newReport.setTime(medicalReport.getTime());
+
+        DateFormat formatter2 = new SimpleDateFormat("HH:mm");
+        java.sql.Time timeValue = new java.sql.Time(formatter2.parse(medicalReport.getTime()).getTime());
+        newReport.setTime(timeValue);
+
         SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd");
         java.util.Date date = formatter.parse(medicalReport.getDate());
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
         newReport.setDate(sqlDate);
 
+        MedicalReport nReport = medicalReportService.save(newReport);
+
         if(medicalReport.getMedications() != null)
         {
-            System.out.println("Usao u medications");
+
             for(Medication m : medicalReport.getMedications())
             {
-                System.out.println("usao u for");
+
                 Prescription p = new Prescription();
                 Medication med = medicationService.findOne(m.getId());
                 p.setVerified(false);
@@ -135,27 +150,38 @@ public class MedicalReportController {
                 p.setPatient(patient);
                 p.setMedication(med);
                 p.setClinic(clinic);
-                newReport.getPrescriptions().add(p);
-                prescriptionService.save(p);
-                System.out.println("zavrsio for");
+
+                Prescription pr = prescriptionService.save(p);
+                nReport.getPrescriptions().add(pr);
+
             }
         }
 
         if(medicalReport.getDiagnoses() != null)
         {
-            System.out.println("Usao u diagnoses");
+
             for(Diagnose d : medicalReport.getDiagnoses())
             {
-                System.out.println("usao u for");
+
                 Diagnose diag = diagnosisService.findOne(d.getId());
-                newReport.getDiagnoses().add(diag);
-                System.out.println("zavrsio for");
+                nReport.getDiagnoses().add(diag);
+
             }
         }
 
-        record.getMedicalReports().add(newReport);
+        record.getMedicalReports().add(nReport);
+        if(medicalReport.getType().equals("EXAM"))
+        {
+            medicalExam.setDone(true);
+            medicalExamService.save(medicalExam);
+        }else if (medicalReport.getType().equals("FAST"))
+        {
+            fastAppointment.setDone(true);
+            fastAppointmentService.save(fastAppointment);
+        }
 
-        medicalReportService.save(newReport);
+
+
         medicalRecordService.save(record);
 
         return new ResponseEntity(HttpStatus.OK);

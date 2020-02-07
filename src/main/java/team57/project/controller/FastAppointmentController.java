@@ -2,16 +2,14 @@ package team57.project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import team57.project.dto.AllFastAppointments;
-import team57.project.dto.FARequest;
-import team57.project.dto.FastAppointmentDTO;
-import team57.project.dto.FastAppointmentWKDTO;
+import team57.project.dto.*;
 import team57.project.model.Clinic;
 import team57.project.model.Doctor;
 import team57.project.model.FastAppointment;
@@ -24,6 +22,7 @@ import team57.project.service.impl.PatientServiceImpl;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.RollbackException;
 import javax.xml.ws.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -87,6 +86,30 @@ public class FastAppointmentController {
         } catch (NullPointerException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @GetMapping(value = "/getDoctorPatientFA/{id}", produces = "application/json")
+    @PreAuthorize("hasRole('DOCTOR')")
+    public ResponseEntity<?> getDoctorPatientFA(@PathVariable("id") Long idPatient) {
+
+        System.out.println("UDJE U FUNKCIJU");
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+        String email = currentUser.getName();
+        Doctor doctor = (Doctor) doctorService.findByEmail(email);
+
+        List<FastAppointment> fa = this.fastAppointmentService.findDoctorPatientFA(doctor.getId(), idPatient);
+        List<FastAppointmentPDTO> faDTO = new ArrayList<FastAppointmentPDTO>();
+
+        for(FastAppointment f : fa)
+        {
+            FastAppointmentPDTO dto = new FastAppointmentPDTO(f);
+            faDTO.add(dto);
+            //System.out.println(dto.getId());
+            //System.out.println(dto.getExamType());
+        }
+        System.out.println("DUZINA NIZA: " + faDTO.size());
+
+        return new ResponseEntity(faDTO, HttpStatus.OK);
     }
 
     @GetMapping(value = "/getReservedFA/{id}", produces = "application/json")
