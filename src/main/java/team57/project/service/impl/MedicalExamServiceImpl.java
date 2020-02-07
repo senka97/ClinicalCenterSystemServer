@@ -43,6 +43,10 @@ public class MedicalExamServiceImpl implements MedicalExamService {
         return this.medicalExamRepository.findAll();
     }
 
+    @Override
+    public void save(MedicalExam m){
+         this.medicalExamRepository.save(m);
+    }
 
 
     @Override
@@ -56,7 +60,11 @@ public class MedicalExamServiceImpl implements MedicalExamService {
         return this.medicalExamRepository.findDoctorsExams(doctorId);
     }
 
-
+    @Override
+    public List<MedicalExam> findDoctorPatientExams(Long doctorId,Long patientId)
+    {
+        return this.medicalExamRepository.findDoctorPatientExams(doctorId,patientId);
+    }
 
 
     @Override

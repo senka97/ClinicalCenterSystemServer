@@ -26,6 +26,8 @@ public interface FastAppointmentRepository extends JpaRepository<FastAppointment
     @Query(value="select * from fast_appointment f where f.doctor_id= ?1 " , nativeQuery = true)
     List<FastAppointment> findReserved(Long id);
 
+    @Query(value="select * from fast_appointment f where f.doctor_id = ?1 and f.patient_id= ?2 and f.done = false " , nativeQuery = true)
+    List<FastAppointment> findDoctorPatientFA(Long doctorId, Long patientId);
 
 
 }

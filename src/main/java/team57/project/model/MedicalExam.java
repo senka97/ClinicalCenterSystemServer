@@ -28,6 +28,8 @@ public class MedicalExam {
     //APPROVED - soba je dodeljena i pacijent treba da prihvati ili odbije zakazani termin
     //ACCEPTED - pacijent je prihvatio termin
     //REJECTED - admin je odbio termin jer je nemoguce naci slobodnu sobu i slobodnog doktora u istom terminu, ili je pacijent odbio odgovor na zahtev
+    @Column (name = "done", nullable = false)
+    private boolean done;
     @Column(name = "price", nullable = false)
     private double price;
     @Column(name = "discount", nullable = false)
@@ -66,6 +68,16 @@ public class MedicalExam {
         this.examRoom = examRoom;
         this.doctor = doctor;
         this.clinic = clinic;
+        this.done = false;
+    }
+
+    public boolean getDone() {
+        return done;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
+
     }
 
     public Long getId() {

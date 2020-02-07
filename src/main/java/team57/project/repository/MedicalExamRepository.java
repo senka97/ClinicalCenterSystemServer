@@ -33,4 +33,7 @@ public interface MedicalExamRepository extends JpaRepository<MedicalExam, Long> 
     @Query(value = "SELECT * FROM medical_exam e WHERE e.doctor_id = ?1 and e.exam_room_id is not null" , nativeQuery = true)
     List<MedicalExam> findDoctorsExams(Long doctorId);
 
+    @Query(value = "SELECT * FROM medical_exam e WHERE e.doctor_id = ?1 and e.patient_id= ?2 and e.exam_room_id is not null and e.done = false" , nativeQuery = true)
+    List<MedicalExam> findDoctorPatientExams(Long doctorId, Long patientID);
+
 }
