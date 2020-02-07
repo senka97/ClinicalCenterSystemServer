@@ -66,6 +66,25 @@ public class User implements UserDetails {
     @Version
     private Long version;
 
+    public User(Long id, String name, String surname, String email, String password, String address, String city, String country, String phoneNumber, String serialNumber) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.password = password;
+        this.address = address;
+        this.city = city;
+        this.country = country;
+        this.phoneNumber = phoneNumber;
+        this.serialNumber = serialNumber;
+        this.id = id;
+    }
+
+    public User(Long id, String email, String name) {
+        this.id=id;
+        this.email = email;
+        this.name=name;
+    }
+
 
     public Long getId() {
         return id;

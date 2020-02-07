@@ -48,7 +48,7 @@ public class DoctorServiceTest {
     @MockBean
     private TermDoctorRepository termDoctorRepository;
 
-    @Test //Pos
+    @Test //Positive !!DATE -> if(today==2020.2.25) then date=2020.2.28.(friday) max date= today+7
     @Transactional
     public void findFreeDoctorsTest(){
 
@@ -98,17 +98,18 @@ public class DoctorServiceTest {
         Mockito.when(this.doctorRepository.getFreeDoctors(clinic1.getId(),request.getIdExamType(),request.getDate())).thenReturn(doctorsMock);
 
         List<DoctorRating> doct = this.doctorService.findFreeDoctors(clinic1,request);
-        System.out.println("Clinic1 size: " + clinic1.getDoctors().size());
+
 
         for(DoctorRating d : doct){
             System.out.println(doct.get(0).getName());
         }
-
+        assertThat(doct).isNotNull();
         assertThat(doct.size()).isEqualTo(1);
+
 
     }
 
-    @Test
+    @Test//Positive !!DATE -> if(today==2020.2.25) then date=2020.2.28.(friday) max date= today+7
     public void findFreeTermsTest(){
 
         Clinic clinic1 = new Clinic(CLINIC_1_ID,CLINIC_1_NAME,CLINIC_1_ADRESS,CLINIC_1_DES,CLINIC_1_RATING,CLINIC_1_RNUM);
@@ -134,6 +135,7 @@ public class DoctorServiceTest {
         TermDoctor termDoctor =  new TermDoctor( date, t1, t2,true, doctor1);
         TermDoctor termDoctor2 =  new TermDoctor( date, t2, t3,true, doctor1);
         TermDoctor termDoctor3 =  new TermDoctor( date, t3, t4,true, doctor1);
+
         doctor1.setAbsences(new HashSet<>());
 
         Set<TermDoctor> terms = new HashSet<>();

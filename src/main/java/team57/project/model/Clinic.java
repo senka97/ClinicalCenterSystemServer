@@ -58,11 +58,11 @@ public class Clinic {
 
         this.doctors = new HashSet<>();
         this.examTypes = new HashSet<>();
-//        this.absences = new HashSet<>();
-//        this.clinicAdmins = new HashSet<>();
-//        this.patients = new HashSet<>();
-//        this.nurses = new HashSet<>();
-//        this.medicalExams = new HashSet<>();
+        this.absences = new HashSet<>();
+        this.clinicAdmins = new HashSet<>();
+        this.patients = new HashSet<>();
+        this.nurses = new HashSet<>();
+        this.medicalExams = new HashSet<>();
 
     }
 

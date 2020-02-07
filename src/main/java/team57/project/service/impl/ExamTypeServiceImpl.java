@@ -37,6 +37,11 @@ public class ExamTypeServiceImpl implements ExamTypeService {
     }
 
     @Override
+    public ExamType findByName(String name) {
+        return this.examTypeRepository.findByName(name);
+    }
+
+    @Override
     public boolean addExamType(Clinic clinic, ExamTypeDTO examTypeDTO) {
 
         for(ExamType et : clinic.getExamTypes()){

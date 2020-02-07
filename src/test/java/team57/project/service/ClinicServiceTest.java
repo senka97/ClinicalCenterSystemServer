@@ -45,7 +45,7 @@ public class ClinicServiceTest {
     @MockBean
     private ClinicRepository clinicRepository;
 
-    @Test //Positive
+    @Test //Positive !!DATE -> if(today==2020.2.25) then date=2020.2.28.(friday) max date= today+7
     @Transactional
     public void findFreeClinics(){
 
