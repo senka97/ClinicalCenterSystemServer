@@ -123,6 +123,13 @@ public class ClinicService {
 
     public List<ClinicDTO> findFreeClinics(AvailableDoctorRequest adr) {
 
+        if(adr.getIdExamType() == null){
+            return null;
+        }
+        if(adr.getDate() == null){
+            return null;
+        }
+
         System.out.println(adr);
         List<ClinicDTO> clinicDTOS = new ArrayList<>();
         List<Clinic> clinics = new ArrayList<>();

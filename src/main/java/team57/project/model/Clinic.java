@@ -3,10 +3,8 @@ package team57.project.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
+
 @Entity
 public class Clinic {
 
@@ -49,6 +47,25 @@ public class Clinic {
 
 
     public Clinic() {}
+
+    public Clinic(Long id, String name, String address, String description, double rating, long numberOfReviews) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.description = description;
+        this.rating = rating;
+        this.numberOfReviews = numberOfReviews;
+
+        this.doctors = new HashSet<>();
+        this.examTypes = new HashSet<>();
+//        this.absences = new HashSet<>();
+//        this.clinicAdmins = new HashSet<>();
+//        this.patients = new HashSet<>();
+//        this.nurses = new HashSet<>();
+//        this.medicalExams = new HashSet<>();
+
+    }
+
     public Long getId() {
         return id;
     }

@@ -34,6 +34,8 @@ public class TermDoctor {
         this.free = free;
     }
 
+
+
     public Long getId() {
         return id;
     }
