@@ -3,6 +3,7 @@ package team57.project.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 @Entity
 @DiscriminatorValue("PATIENT")
@@ -31,6 +32,10 @@ public class Patient extends User {
 
     public Patient(String name, String surname, String email, String password, String address, String city, String country, String phoneNumber, String serialNumber) {
         super(name, surname, email, password, address, city, country, phoneNumber, serialNumber);
+    }
+    public Patient(Long id, String name, String surname, String email, String password, String address, String city, String country, String phoneNumber, String serialNumber) {
+        super(id,name, surname, email, password, address, city, country, phoneNumber, serialNumber);
+        this.medicalExams = new HashSet<>();
     }
 
     public MedicalRecord getMedicalRecord() {
