@@ -25,6 +25,11 @@ public class ClinicAdmin extends User{
     public ClinicAdmin() {
     }
 
+    public ClinicAdmin(Long id, String email, String name) {
+        super(id,email,name);
+
+    }
+
     @JsonIgnore
     public Clinic getClinic() {
         return this.clinic;

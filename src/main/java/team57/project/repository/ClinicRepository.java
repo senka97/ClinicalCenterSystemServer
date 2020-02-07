@@ -19,7 +19,7 @@ public interface ClinicRepository  extends JpaRepository<Clinic, Long> {
      @Query(value = "select distinct c.id from Clinic c inner join c.patients p where p.id=?1")
      List<Long> patientClinics(Long patientId);
 
-     @Query(value = "select DISTINCT c from Clinic as c inner join c.doctors d inner join d.terms t inner join d.examTypes e where e.id=?1 and  t.dateTerm = ?2 and t.free=true")
+     @Query(value = "select distinct c from Clinic as c inner join c.doctors d inner join d.terms t inner join d.examTypes e where e.id=?1 and  t.dateTerm = ?2 and t.free=true")
      List<Clinic> getFreeClinics(Long idET, LocalDate date);
 
      @Query(value = "select fa from Clinic c inner join c.fastAppointments fa where c.id=?1 and fa.dateFA>=?2 and fa.dateFA<=?3")

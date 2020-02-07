@@ -42,6 +42,16 @@ public class RoomME {
         this.roomType = r.getRoomType();
     }
 
+    public RoomME(Long id, String name, String number, LocalDate date, LocalTime startTime, LocalTime endTime, String roomType) {
+        this.id = id;
+        this.name = name;
+        this.number = number;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.roomType = roomType;
+    }
+
     public Long getId() {
         return id;
     }
