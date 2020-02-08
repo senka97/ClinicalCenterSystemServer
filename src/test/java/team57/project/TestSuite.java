@@ -24,6 +24,10 @@ import team57.project.service.*;
         DoctorRepositoryTest.class,
         ExamTypeRepositoryTest.class,
         TermDoctorRepositoryTest.class,
+        FastAppointmentRepository.class,
+        MedicalExamRepository.class,
+        RoomRepository.class,
+        TermRoomRepository.class,
 
         MedicalExamControllerTest.class,
         RoomControllerTest.class,
@@ -32,6 +36,9 @@ import team57.project.service.*;
         DoctorControllerTest.class,
         ExamTypeControllerTest.class,
         PatientControllerTest.class
+
+
+
 
 
 })

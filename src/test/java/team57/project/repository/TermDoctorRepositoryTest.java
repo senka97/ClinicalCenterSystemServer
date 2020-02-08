@@ -12,6 +12,7 @@ import team57.project.model.TermDoctor;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -65,5 +66,22 @@ public class TermDoctorRepositoryTest {
         assertThat(terms).isNotNull();
         //System create 8 terms each day of next week from today
         assertThat(terms).isNullOrEmpty();
+    }
+
+    @Test
+    @Transactional
+    public void testFindTermDoctor(){
+
+        TermDoctor td = termDoctorRepository.findTermDoctor(LocalDate.of(2020,2,7), LocalTime.of(7,0),3L);
+        assertThat(td).isNotNull();
+        assertThat(td.getDoctor().getId()).isEqualTo(3L);
+    }
+
+    @Test
+    @Transactional
+    public void testFindTermDoctor1(){
+
+        TermDoctor td = termDoctorRepository.findTermDoctor(LocalDate.of(2020,2,7), LocalTime.of(23,0),3L);
+        assertThat(td).isNull();
     }
 }
