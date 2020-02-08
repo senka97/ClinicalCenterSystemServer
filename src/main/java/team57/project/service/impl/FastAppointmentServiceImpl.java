@@ -87,7 +87,8 @@ public class FastAppointmentServiceImpl implements FastAppointmentService {
         List<FastAppointment> free = new ArrayList<FastAppointment>();
         finished = fastAppointmentRepository.findFinished(clinic.getId(), LocalDate.now(), LocalTime.now().minusHours(1));
         scheduled = fastAppointmentRepository.findScheduled(clinic.getId(), LocalDate.now(),LocalTime.now().minusHours(1));
-        free = fastAppointmentRepository.findFree(clinic.getId(),LocalDate.now(),LocalTime.now().minusHours(1));
+        //free = fastAppointmentRepository.findFree(clinic.getId(),LocalDate.now(),LocalTime.now().minusHours(1));
+        free = fastAppointmentRepository.findFree(clinic.getId());
 
         for(FastAppointment fa: finished){
             finishedDTO.add(new FastAppointmentDTO(fa));
@@ -112,7 +113,8 @@ public class FastAppointmentServiceImpl implements FastAppointmentService {
     public List<FastAppointmentDTO> getFreeFA(Clinic clinic) {
 
         List<FastAppointmentDTO> freeFADTO = new ArrayList<FastAppointmentDTO>();
-        List<FastAppointment> freeFA = fastAppointmentRepository.findFree(clinic.getId(),LocalDate.now(),LocalTime.now());
+        //List<FastAppointment> freeFA = fastAppointmentRepository.findFree(clinic.getId(),LocalDate.now(),LocalTime.now());
+         List<FastAppointment> freeFA = fastAppointmentRepository.findFree(clinic.getId());
 
         for(FastAppointment fa: freeFA){
             freeFADTO.add(new FastAppointmentDTO(fa));
