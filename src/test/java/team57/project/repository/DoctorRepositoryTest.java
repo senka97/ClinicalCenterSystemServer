@@ -49,4 +49,19 @@ public class DoctorRepositoryTest {
         assertThat(doctors).isNullOrEmpty();
 
     }
+
+    @Test
+    public void testFindDoctor(){
+
+        Doctor d = doctorRepository.findDoctor(3L);
+        assertThat(d).isNotNull();
+        assertThat(d.getName()).isEqualTo("Petar");
+    }
+
+    @Test
+    public void testFindDoctorNegative(){
+
+        Doctor d = doctorRepository.findDoctor(120L);
+        assertThat(d).isNull();
+    }
 }
