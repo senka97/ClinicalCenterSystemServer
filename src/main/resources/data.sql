@@ -27,7 +27,8 @@ insert into user (name, surname, email, password, address, city, country, phone_
 insert into user (name, surname, email, password, address, city, country, phone_number, serial_number,number_of_reviews, rating, activated_account, enabled, last_password_reset_date, password_changed,working_hours_start, working_hours_end, removed, clinic_id, type, version) values ('Nikola', 'Matic', 'nikola@gmail.com', '$2a$10$.4TlEcGSbL2ibKLkKMBqo.otZTShm8UqMjkpOK3Lpl42y3BH0m56q','Alekse Santica 47', 'Novi Sad', 'Srbija', '0635984156', '032163256332', 0, 0, -1, TRUE, '2019-11-19 04:00:00',FALSE, '06:00', '14:00', FALSE, 2, 'DOCTOR',0);
 insert into user (name, surname, email, password, address, city, country, phone_number, serial_number,number_of_reviews, rating, activated_account, enabled, last_password_reset_date, password_changed,working_hours_start, working_hours_end, removed, clinic_id, type, version) values ('Milan', 'Milanovic', 'milan@gmail.com', '$2a$10$.4TlEcGSbL2ibKLkKMBqo.otZTShm8UqMjkpOK3Lpl42y3BH0m56q','Alekse Santica 47', 'Novi Sad', 'Srbija', '0635984156', '032163256332', 0, 0, -1, TRUE, '2019-11-19 04:00:00',FALSE, '06:00', '14:00', FALSE, 2, 'DOCTOR',0);
 
-
+insert into user (name, surname, email, password, address, city, country, phone_number, serial_number,number_of_reviews, rating, activated_account, enabled, last_password_reset_date, password_changed,clinic_id, working_hours_start, working_hours_end, removed, type, version)
+values ('Zika', 'Zikic', 'zika@gmail.com','$2a$10$laKrspGgEPZFXKWh6R0v3O7HGV7FCOYCgFvCtKCPseId0jk.glGY6','Alekse Santica 47','Novi Sad','Srbija','0635984156','032163256332',-1,-1,-1,TRUE,'2019-11-19 04:00:00',TRUE,1,'06:00', '14:00',FALSE,'CLINIC_ADMIN',0);
 
 insert into user_authority(user_id, authority_id) value (1,1);
 insert into user_authority(user_id, authority_id) value (2,2);
@@ -39,6 +40,7 @@ insert into user_authority(user_id, authority_id) value (7,4);
 insert into user_authority(user_id, authority_id) value (8,4);
 insert into user_authority(user_id, authority_id) value (9,4);
 insert into user_authority(user_id, authority_id) value (10,4);
+insert into user_authority(user_id, authority_id) value (11,2);
 
 
 insert into exam_type (name, description, price,discount,removed,duration) value ('CT snimanje glave', 'Snimanje glave',10000,10, FALSE,1);
