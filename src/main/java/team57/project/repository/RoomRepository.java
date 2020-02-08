@@ -17,7 +17,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     Room findByNameAndNumber(String name,String number);
 
-    @Query(value = "select r from Clinic as c inner join c.rooms r inner join r.terms t where c.id=?1 and  t.dateTerm = ?2 and t.startTime = ?3 and t.free=true")
+    @Query(value = "select r from Clinic as c inner join c.rooms r inner join r.terms t where c.id=?1 and  t.dateTerm = ?2 and t.startTime = ?3 and t.free=true and r.roomType='Medical exam'")
     List<Room> getAvailableRooms(Long id, LocalDate date, LocalTime time);
 
     //@Lock(LockModeType.PESSIMISTIC_WRITE)
