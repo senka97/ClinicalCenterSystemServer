@@ -182,7 +182,7 @@ public class DoctorController {
             return new ResponseEntity(freeDoctors, HttpStatus.OK);
 
         } catch (NullPointerException e) {
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
 
@@ -214,10 +214,10 @@ public class DoctorController {
 
         System.out.println("Available terms:");
         if(adr.getIdExamType() == null || adr.getDate() == null ){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exam type and date are mandatory.");
+            return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body("Exam type and date are mandatory.");
         }
         if(adr.getDate().getDayOfWeek().getValue() == 6 || adr.getDate().getDayOfWeek().getValue() == 7){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You can't reserve a doctor at the weekend.");
+            return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body("You can't reserve a doctor at the weekend.");
         }
         try{
             List<AppointmentDTO> appointments = this.doctorService.findFreeTerms(doctorId,adr);
@@ -229,7 +229,7 @@ public class DoctorController {
             return new ResponseEntity(appointments,HttpStatus.OK);
 
         }catch(NullPointerException e){
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).build();
         }
 
 

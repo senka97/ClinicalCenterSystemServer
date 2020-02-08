@@ -17,6 +17,7 @@ import team57.project.service.MedicationService;
 import team57.project.service.NurseService;
 import team57.project.service.PatientService;
 import team57.project.service.impl.DoctorServiceImpl;
+import team57.project.service.impl.PatientServiceImpl;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -32,8 +33,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 @RequestMapping(value = "/api/patients", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PatientController {
 
-    @Autowired
-    private PatientService patientService;
+    @Autowired //OVO SAM promjenio
+    private PatientServiceImpl patientService;
     @Autowired
     private MedicationService medicationService;
     @Autowired
@@ -155,9 +156,9 @@ public class PatientController {
         try {
             Boolean exam = this.patientService.sendAppointment(appointmentDTO,id);
             if(exam){
-                return new ResponseEntity<Boolean>(exam, HttpStatus.OK);
+                return new ResponseEntity<Boolean>(true, HttpStatus.OK);
             }else {
-                return new ResponseEntity<>(exam, HttpStatus.GONE);
+                return new ResponseEntity<>(false, HttpStatus.GONE);
             }
         } catch (Exception e){
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
