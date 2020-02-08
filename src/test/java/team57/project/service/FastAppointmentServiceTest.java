@@ -91,7 +91,8 @@ public class FastAppointmentServiceTest {
 
         LocalTime nowTime = LocalTime.now();
         LocalDate nowDate = LocalDate.now();
-        Mockito.when(fastAppointmentRepositoryMocked.findFree(clinic.getId(),nowDate,nowTime)).thenReturn(new ArrayList<FastAppointment>());
+        //Mockito.when(fastAppointmentRepositoryMocked.findFree(clinic.getId(),nowDate,nowTime)).thenReturn(new ArrayList<FastAppointment>());
+        Mockito.when(fastAppointmentRepositoryMocked.findFree(clinic.getId())).thenReturn(new ArrayList<FastAppointment>());
         List<FastAppointmentDTO> faDTO =  fastAppointmentService.getFreeFA(clinic);
         assertThat(faDTO.size()).isEqualTo(0);
 

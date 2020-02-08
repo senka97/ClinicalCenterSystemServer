@@ -3,9 +3,7 @@ package team57.project;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import team57.project.controller.FastAppointmentControllerTest;
-import team57.project.controller.MedicalExamControllerTest;
-import team57.project.controller.RoomControllerTest;
+import team57.project.controller.*;
 import team57.project.service.FastAppointmentServiceTest;
 import team57.project.service.MedicalExamServiceTest;
 import team57.project.service.RoomServiceTest;
@@ -31,7 +29,10 @@ import team57.project.service.*;
         FastAppointmentRepository.class,
         MedicalExamRepository.class,
         RoomRepository.class,
-        TermRoomRepository.class
+        TermRoomRepository.class,
+        FastAppointmentControllerIntegrationTest.class,
+        MedicalExamControllerIntegrationTest.class,
+        RoomControllerIntegrationTest.class
 })
 
 public class TestSuite {

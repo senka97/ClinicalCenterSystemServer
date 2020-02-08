@@ -131,9 +131,6 @@ public class FastAppointmentController {
 
         try {
             FastAppointment fa = fastAppointmentService.findOne(id);
-            //Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-            //String email = currentUser.getName();
-            //Patient patient = (Patient) patientService.findOneByEmail(email);
             Patient patient = patientService.findOne(idP);
 
             try {
