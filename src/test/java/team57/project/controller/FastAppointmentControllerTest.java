@@ -17,6 +17,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 import team57.project.dto.FastAppointmentDTO;
 import team57.project.dto.UserTokenState;
 import team57.project.model.*;
@@ -26,12 +27,15 @@ import team57.project.service.impl.FastAppointmentServiceImpl;
 import team57.project.service.impl.MedicalExamServiceImpl;
 import team57.project.service.impl.PatientServiceImpl;
 
+import javax.annotation.PostConstruct;
 import java.nio.charset.Charset;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -48,32 +52,42 @@ public class FastAppointmentControllerTest {
 
     private static final String URL_PREFIX = "/api/fastAppointments";
 
-    private MediaType contentType = new MediaType(
-            MediaType.APPLICATION_JSON.getType(),
-            MediaType.APPLICATION_JSON.getSubtype(),
-            Charset.forName("utf8"));
+    private String accessToken;
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Before
+    public void login() {
+        ResponseEntity<UserTokenState> responseEntity =
+                restTemplate.postForEntity("/auth/login",
+                        new JwtAuthenticationRequest("isa2019pacijent@outlook.com", "pera"),
+                        UserTokenState.class);
+        accessToken = "Bearer " + Objects.requireNonNull(responseEntity.getBody()).getAccessToken();
+        System.out.println(accessToken);
+    }
 
     private MockMvc mockMvc;
 
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
+    @PostConstruct
+    public void setUp() {
+        this.mockMvc = MockMvcBuilders
+                .webAppContextSetup(webApplicationContext)
+                .apply(springSecurity())
+                .build();
+    }
+
     @MockBean
     private FastAppointmentServiceImpl fastAppointmentServiceMocked;
-
-    @InjectMocks
-    private FastAppointmentController fastAppointmentController;
 
     @MockBean
     private ClinicService clinicServiceMocked;
 
     @MockBean
     private PatientServiceImpl patientServiceMocked;
-
-    @Before
-    public void init(){
-        MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders
-                .standaloneSetup(fastAppointmentController)
-                .build();
-    }
 
 
     @Test
@@ -110,7 +124,8 @@ public class FastAppointmentControllerTest {
 
         Mockito.when(clinicServiceMocked.findOne(clinic.getId())).thenReturn(clinic);
         Mockito.when(fastAppointmentServiceMocked.getFreeFA(clinic)).thenReturn(fas);
-        mockMvc.perform(get(URL_PREFIX+"/getFreeFA/1"))
+        mockMvc.perform(get(URL_PREFIX+"/getFreeFA/1")
+                .header("Authorization", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$", hasSize(4)));
@@ -136,7 +151,8 @@ public class FastAppointmentControllerTest {
         Mockito.when(fastAppointmentServiceMocked.findOne(1L)).thenReturn(fa1);
         Mockito.when(patientServiceMocked.findOne(p.getId())).thenReturn(p);
         Mockito.when(fastAppointmentServiceMocked.reserveFA(fa1,p)).thenReturn(null);
-        mockMvc.perform(put(URL_PREFIX+"/reserveFA/1/2"))
+        mockMvc.perform(put(URL_PREFIX+"/reserveFA/1/2")
+                .header("Authorization", accessToken))
                 .andExpect(status().isOk());
 
 

@@ -19,7 +19,6 @@ import team57.project.service.*;
         DoctorServiceTest.class,
         ExamTypesServiceTest.class,
         PatientServiceTest.class,
-
         ClinicRepositoryTest.class,
         DoctorRepositoryTest.class,
         ExamTypeRepositoryTest.class,
@@ -28,18 +27,19 @@ import team57.project.service.*;
         MedicalExamRepository.class,
         RoomRepository.class,
         TermRoomRepository.class,
-
+        FastAppointmentControllerIntegrationTest.class,
+        MedicalExamControllerIntegrationTest.class,
+        RoomControllerIntegrationTest.class,
         MedicalExamControllerTest.class,
         RoomControllerTest.class,
         FastAppointmentControllerTest.class,
         ClinicControllerTest.class,
         DoctorControllerTest.class,
         ExamTypeControllerTest.class,
-        PatientControllerTest.class
-
-
-
-
+        PatientControllerTest.class,
+        FastAppointmentControllerIntegrationTest.class,
+        MedicalExamControllerIntegrationTest.class,
+        RoomControllerIntegrationTest.class
 
 })
 
