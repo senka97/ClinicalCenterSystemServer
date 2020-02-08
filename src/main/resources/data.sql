@@ -94,9 +94,9 @@ insert into room (name, number,room_type,removed) value ('Room 4',4,'Surgery',FA
 
 insert into medical_exam (date, start_time, end_time,statusme,doctor_id,exam_room_id,exam_type_id,patient_id,clinic_id,price,discount,version,done) values ('2020-01-31', '7:00:00','8:00:00','ACCEPTED',3,1,1,5,1,10000,10,0, true);
 insert into medical_exam (date, start_time, end_time, statusme, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount,version, done) values ('2020-02-05', '8:00:00', '9:00:00','ACCEPTED', 3, 1, 1, 5,1,10000,10,0, false);
-insert into medical_exam (date, start_time, end_time,statusme, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount,version, done) values ('2020-02-08', '9:00:00', '10:00:00','ACCEPTED', 6, 1, 1, 5,1,10000,10,0,false);
-insert into medical_exam (date, start_time, end_time,statusme, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount,version, done) values ('2020-02-09', '9:00:00', '10:00:00','ACCEPTED', 3, 1, 1, 5,1,10000,10,0,false);
-insert into medical_exam (date, start_time, end_time,statusme, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount,version, done) values ('2020-02-10', '9:00:00', '10:00:00','ACCEPTED', 3, 1, 1, 5,1,10000,10,0,false);
+insert into medical_exam (date, start_time, end_time,statusme, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount,version, done) values ('2020-02-10', '9:00:00', '10:00:00','ACCEPTED', 6, 1, 1, 5,1,10000,10,0,false);
+insert into medical_exam (date, start_time, end_time,statusme, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount,version, done) values ('2020-02-11', '9:00:00', '10:00:00','ACCEPTED', 3, 1, 1, 5,1,10000,10,0,false);
+insert into medical_exam (date, start_time, end_time,statusme, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount,version, done) values ('2020-02-12', '9:00:00', '10:00:00','ACCEPTED', 3, 1, 1, 5,1,10000,10,0,false);
 
 
 insert into clinic_patients (clinic_id, patient_id) values (1,5);
@@ -172,15 +172,38 @@ insert into medical_record_chronic_condition(medical_record_id, diagnose_id) val
 insert into medical_exam (date, start_time, end_time,statusme,doctor_id,exam_room_id,exam_type_id,patient_id,clinic_id,price,discount,version,done) values ('2020-02-15', '7:00:00','8:00:00','REQUESTED',3,NULL,1,5,1,10000,10,0, false);
 insert into medical_exam (date, start_time, end_time, statusme, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount,version, done) values ('2020-02-15', '9:00:00', '10:00:00','REQUESTED', 3, NULL, 1, 5,1,10000,10,0, false);
 insert into medical_exam (date, start_time, end_time,statusme, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount,version, done) values ('2020-02-15', '11:00:00', '12:00:00','REQUESTED', 7, NULL, 1, 5,1,10000,10,0,false);
+-- Senka
+insert into medical_exam (date, start_time, end_time,statusme,doctor_id,exam_room_id,exam_type_id,patient_id,clinic_id,price,discount,version,done) values ('2020-02-10', '7:00:00','8:00:00','REQUESTED',3,NULL,1,5,1,10000,10,0, false);
+insert into medical_exam (date, start_time, end_time, statusme, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount,version, done) values ('2020-02-10', '9:00:00', '10:00:00','REQUESTED', 3, NULL, 1, 5,1,10000,10,0, false);
+insert into medical_exam (date, start_time, end_time,statusme, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount,version, done) values ('2020-02-10', '11:00:00', '12:00:00','REQUESTED', 7, NULL, 1, 5,1,10000,10,0,false);
 
 
 -- testiranje
 insert into fast_appointment(datefa, discount,done,duration,price,reserved,timefa,clinic_id,doctor_id,exam_type_id,patient_id,room_id,version) values ('2020-11-02',10, FALSE,1,5000, FALSE,'07:00:00' ,1, 3, 1, NULL, 1,0);
 insert into fast_appointment(datefa, discount,done,duration,price,reserved,timefa,clinic_id,doctor_id,exam_type_id,patient_id,room_id,version) values ('2020-11-02',10, FALSE,1,5000, FALSE, '08:00:00', 1, 3, 1, NULL, 1,0);
 insert into fast_appointment(datefa, discount,done,duration,price,reserved,timefa,clinic_id,doctor_id,exam_type_id,patient_id,room_id,version) values ('2020-11-02',10, FALSE,1,5000, FALSE,'10:00', 1, 7, 1, NULL, 1,0);
+-- Senka
+insert into fast_appointment(datefa, discount,done,duration,price,reserved,timefa,clinic_id,doctor_id,exam_type_id,patient_id,room_id,version) values ('2020-02-10',10, FALSE,1,5000, FALSE,'08:00:00' ,1, 3, 1, NULL, 1,0);
+insert into fast_appointment(datefa, discount,done,duration,price,reserved,timefa,clinic_id,doctor_id,exam_type_id,patient_id,room_id,version) values ('2020-02-10',10, FALSE,1,5000, FALSE, '10:00:00', 1, 3, 1, NULL, 1,0);
 
+-- Senka
+-- Slobodni termini soba u klinici za neki datum i vreme
+insert into term_room(date_term, end_time, free,start_time,room_id) values ('2020-02-10', '7:00:00',false,'6:00:00',1);
+insert into term_room(date_term, end_time, free,start_time,room_id) values ('2020-02-10', '8:00:00',true,'7:00:00',1);
+insert into term_room(date_term, end_time, free,start_time,room_id) values ('2020-02-10', '9:00:00',false,'8:00:00',1);
+insert into term_room(date_term, end_time, free,start_time,room_id) values ('2020-02-10', '10:00:00',true,'9:00:00',1);
+insert into term_room(date_term, end_time, free,start_time,room_id) values ('2020-02-10', '11:00:00',true,'10:00:00',1);
+insert into term_room(date_term, end_time, free,start_time,room_id) values ('2020-02-10', '12:00:00',true,'11:00:00',1);
 
+-- slobodni termini za doktora na odredjeni datum kod trazena slobodne sobe
+insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values ('2020-02-10', '8:00:00',false,'7:00:00',3);
+insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values ('2020-02-10', '9:00:00',true,'8:00:00',3);
+insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values ('2020-02-10', '10:00:00',false,'9:00:00',3);
+insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values ('2020-02-10', '11:00:00',true,'10:00:00',3);
+insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values ('2020-02-10', '12:00:00',true,'11:00:00',3);
+insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values ('2020-02-10', '13:00:00',true,'12:00:00',3);
 
+/*
 -- Jovica
 insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values ('2020-02-06', '8:00:00',true,'7:00:00',3);
 insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values ('2020-02-06', '9:00:00',true,'8:00:00',3);
@@ -205,6 +228,7 @@ insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values (
 insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values ('2020-02-07', '10:00:00',true,'9:00:00',3);
 insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values ('2020-02-07', '11:00:00',false,'10:00:00',3);
 insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values ('2020-02-07', '12:00:00',true,'11:00:00',3);
-
 insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values ('2020-02-07', '13:00:00',false,'12:00:00',3);
+*/
+
 

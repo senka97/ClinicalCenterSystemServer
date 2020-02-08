@@ -137,7 +137,70 @@ public class SearchingClinicsTest {
 
         List<WebElement> rows = patientHomePage.getDivListClinics().findElements(By.className("clinics"));
 
-        Assertions.assertEquals(2, rows.size());
+        Assertions.assertEquals(1, rows.size());
+
+    }
+
+    @Test
+    public void testPatientSearchingClinicsReservingExamSuccess() throws InterruptedException {
+
+        driver.navigate().to(baseUrl + "/login");
+        loginPage.ensureIsDisplayedEmail();
+
+        loginPage.getEmail().sendKeys("isa2019pacijent@outlook.com");
+        loginPage.getPassword().sendKeys("pera");
+
+        loginPage.getLoginBtn().click();
+        loginPage.ensureIsNotVisibleLoginBtn();
+
+        patientHomePage.ensureIsClickableBtnListOfClinics();
+        patientHomePage.getBtnListOfClinics().click();
+
+        patientHomePage.ensureIsVisibleShowListOfClinics();
+
+        patientHomePage.ensureIsClickableSelectExamType();
+        patientHomePage.getSelectExamType().click();
+
+        patientHomePage.ensureIsClickableItemId();
+        patientHomePage.getItemId().click();
+
+        patientHomePage.getDatePickerInput().click();
+        patientHomePage.getDatePickerInput().sendKeys("2020-02-10");
+
+        patientHomePage.getBtnSearch().click();
+        patientHomePage.ensureIsVisibleDivListClinics();
+
+        patientHomePage.ensureIsVisibleBtnClinic();
+        patientHomePage.getBtnClinic().click();
+        patientHomePage.ensureIsVisibleTableDoctor();
+        patientHomePage.ensureIsClickableRowDoctor();
+        patientHomePage.getRowDoctor().click();
+
+        patientHomePage.ensureIsVisibleTableAppointments();
+        List<WebElement> rowsBefore = patientHomePage.getTableAppointments().findElements(By.name("counting-appointments"));
+        patientHomePage.ensureIsClickableAppointment();
+        //Assertions.assertEquals(true, true);
+        //driver.findElement(By.id("1")).click();
+        patientHomePage.getAppointmentId().click();
+        Thread.sleep(6000);
+        patientHomePage.ensureIsVisibleTableDoctor();
+        patientHomePage.ensureIsClickableBtnReset();
+        patientHomePage.getBtnReset().click();
+        //patientHomePage.ensureIsNotVisibleTableAppointments();
+        patientHomePage.ensureIsVisibleTableDoctor();
+        patientHomePage.ensureIsClickableRowDoctor();
+        patientHomePage.getRowDoctor().click();
+        patientHomePage.ensureIsVisibleTableAppointments();
+        List<WebElement> rows = patientHomePage.getTableAppointments().findElements(By.name("counting-appointments"));
+
+        patientHomePage.ensureIsClickablePatientLogout();
+        patientHomePage.getBtnPatientLogout().click();
+
+        patientHomePage.ensureIsNotVisiblePatientLogout();
+
+        Assertions.assertEquals(rowsBefore.size() - 1, rows.size());
+
+
 
     }
 

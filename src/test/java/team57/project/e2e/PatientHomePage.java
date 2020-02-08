@@ -14,7 +14,7 @@ public class PatientHomePage {
     @FindBy(xpath = "//*[@id=\"btn-list-of-clinics\"]")
     private WebElement btnListOfClinics;
 
-    @FindBy(xpath = "//*[@id=\"show-list-of-clinics\"]")
+    @FindBy(xpath = "//*[@id=\"show-list-clinics\"]")
     private WebElement showListOfClinics;
 
     @FindBy(xpath = "//*[@id=\"select-exam-type\"]")
@@ -34,6 +34,27 @@ public class PatientHomePage {
 
     @FindBy(xpath = "//*[@id=\"div-no-clinics\"]")
     private WebElement divNoClinics;
+
+    @FindBy(xpath = "//*[@id=\"1\"]")
+    private WebElement btnClinic;
+
+    @FindBy(xpath = "//*[@id=\"myTable\"]")
+    private WebElement tableDoctor;
+
+    @FindBy(xpath = "//*[@id=\"3\"]")
+    private WebElement rowDoctor;
+
+    @FindBy(xpath = "//*[@id=\"table-appointments\"]")
+    private WebElement tableAppointments;
+
+    @FindBy(xpath = "//*[@id=\"4\"]")
+    private WebElement appointmentId;
+
+    @FindBy(xpath = "//*[@id=\"btn-patient-logout\"]")
+    private WebElement btnPatientLogout;
+
+    @FindBy(xpath = "//*[@id=\"btn-reset\"]")
+    private WebElement btnReset;
 
     public PatientHomePage()
     {
@@ -70,6 +91,51 @@ public class PatientHomePage {
         (new WebDriverWait(driver,10)).until(ExpectedConditions.visibilityOf(divNoClinics));
     }
 
+    public void ensureIsVisibleBtnClinic()
+    {
+        (new WebDriverWait(driver,10)).until(ExpectedConditions.visibilityOf(btnClinic));
+    }
+
+    public void ensureIsVisibleTableDoctor()
+    {
+        (new WebDriverWait(driver,10)).until(ExpectedConditions.visibilityOf(tableDoctor));
+    }
+
+    public void ensureIsClickableRowDoctor()
+    {
+        (new WebDriverWait(driver,10)).until(ExpectedConditions.elementToBeClickable(rowDoctor));
+    }
+
+    public void ensureIsClickableBtnReset()
+    {
+        (new WebDriverWait(driver,10)).until(ExpectedConditions.elementToBeClickable(btnReset));
+    }
+
+    public void ensureIsVisibleTableAppointments()
+    {
+        (new WebDriverWait(driver,10)).until(ExpectedConditions.visibilityOf(tableAppointments));
+    }
+
+    public void ensureIsClickableAppointment()
+    {
+        (new WebDriverWait(driver,10)).until(ExpectedConditions.elementToBeClickable(appointmentId));
+    }
+
+    public void ensureIsNotVisibleTableAppointments()
+    {
+        (new WebDriverWait(driver,20)).until(ExpectedConditions.invisibilityOfElementLocated(By.id("table-appointments")));
+    }
+
+    public void ensureIsClickablePatientLogout()
+    {
+        (new WebDriverWait(driver,10)).until(ExpectedConditions.elementToBeClickable(btnPatientLogout));
+    }
+
+    public void ensureIsNotVisiblePatientLogout()
+    {
+        (new WebDriverWait(driver,10)).until(ExpectedConditions.invisibilityOfElementLocated(By.id("btn-patient-logout")));
+    }
+
     public WebElement getBtnListOfClinics() {
         return btnListOfClinics;
     }
@@ -100,5 +166,33 @@ public class PatientHomePage {
 
     public WebElement getDivNoClinics() {
         return divNoClinics;
+    }
+
+    public WebElement getBtnClinic() {
+        return btnClinic;
+    }
+
+    public WebElement getRowDoctor() {
+        return rowDoctor;
+    }
+
+    public WebElement getTableAppointments() {
+        return tableAppointments;
+    }
+
+    public WebElement getAppointmentId() {
+        return appointmentId;
+    }
+
+    public WebElement getBtnPatientLogout() {
+        return btnPatientLogout;
+    }
+
+    public WebElement getTableDoctor() {
+        return tableDoctor;
+    }
+
+    public WebElement getBtnReset() {
+        return btnReset;
     }
 }

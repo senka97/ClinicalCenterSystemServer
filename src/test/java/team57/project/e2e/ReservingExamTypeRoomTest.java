@@ -4,9 +4,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
+
+import java.util.List;
 
 public class ReservingExamTypeRoomTest {
 
@@ -34,7 +38,7 @@ public class ReservingExamTypeRoomTest {
     }
 
     @Test
-    public void testReservingExamRoomSuccess(){
+    public void testReservingExamRoomSuccess() throws InterruptedException {
 
         driver.navigate().to(baseUrl + "/login");
         loginPage.ensureIsDisplayedEmail();
@@ -45,9 +49,60 @@ public class ReservingExamTypeRoomTest {
         loginPage.getLoginBtn().click();
         loginPage.ensureIsNotVisibleLoginBtn();
 
+        clinicAdminHomePage.ensureIsClickableBtnExamRoom();
+        clinicAdminHomePage.getBtnExamRoom().click();
 
+        clinicAdminHomePage.ensureIsVisibleTableExamRequests();
+        List<WebElement> rowsBefore = clinicAdminHomePage.getTableExamRequests().findElements(By.name("exam-request-row"));
 
-        Assertions.assertEquals(true, true);
+        clinicAdminHomePage.ensureIsClickableBtnExamRequest();
+        clinicAdminHomePage.getBtnExamRequest().click();
+
+        clinicAdminHomePage.ensureIsVisibleTableExamRoomSuccess();
+        clinicAdminHomePage.ensureIsClickableBtnReserve();
+        clinicAdminHomePage.getBtnReserve().click();
+        Thread.sleep(5000);
+
+        clinicAdminHomePage.ensureIsVisibleTableExamRequests();
+        List<WebElement> rows = clinicAdminHomePage.getTableExamRequests().findElements(By.name("exam-request-row"));
+
+        Assertions.assertEquals(rowsBefore.size()-1, rows.size());
+
+    }
+
+    @Test
+    public void testReservingExamRoomReject() throws InterruptedException {
+
+        driver.navigate().to(baseUrl + "/login");
+        loginPage.ensureIsDisplayedEmail();
+
+        loginPage.getEmail().sendKeys("zika@gmail.com");
+        loginPage.getPassword().sendKeys("zika");
+
+        loginPage.getLoginBtn().click();
+        loginPage.ensureIsNotVisibleLoginBtn();
+
+        clinicAdminHomePage.ensureIsClickableBtnExamRoom();
+        clinicAdminHomePage.getBtnExamRoom().click();
+
+        clinicAdminHomePage.ensureIsVisibleTableExamRequests();
+        List<WebElement> rowsBefore = clinicAdminHomePage.getTableExamRequests().findElements(By.name("exam-request-row"));
+
+        //clinicAdminHomePage.ensureIsClickableBtnExamRequest();
+        driver.findElement(By.id("6")).click();
+
+        Thread.sleep(2000);
+        clinicAdminHomePage.ensureIsClickableBtnReject();
+        clinicAdminHomePage.getBtnReject().click();
+        Thread.sleep(5000);
+
+        clinicAdminHomePage.ensureIsClickableBtnOk();
+        clinicAdminHomePage.getBtnOk().click();
+
+        clinicAdminHomePage.ensureIsVisibleTableExamRequests();
+        List<WebElement> rows = clinicAdminHomePage.getTableExamRequests().findElements(By.name("exam-request-row"));
+
+        Assertions.assertEquals(rowsBefore.size()-1, rows.size());
 
     }
 }
