@@ -22,15 +22,16 @@ public class DoctorRepositoryTest {
     @Autowired
     private DoctorRepository doctorRepository;
 
-    @Test //Positive !!DATE -> if(today==2020.2.25) then date=2020.2.28.(friday) max date= today+7
+    @Test //Positive
     @Transactional
     public void findFreeDoctors(){
 
-        LocalDate date = LocalDate.of(2020, 2,11);
+        LocalDate date = LocalDate.of(2020, 2,6);
+     //   LocalDate date = LocalDate.of(2020, 2,7);
         List<Doctor> doctors = this.doctorRepository.getFreeDoctors(1L,1L,date);
         assertThat(doctors).isNotNull();
 
-        assertThat(doctors.size()).isEqualTo(3);
+        assertThat(doctors.size()).isEqualTo(1);
         for(Doctor d : doctors){
             System.out.println("Clinic " + d.getClinic().getId() + " " + d.getExamTypes().toString());
             assertThat(d.getClinic().getId()).isEqualTo(1L);
@@ -43,7 +44,7 @@ public class DoctorRepositoryTest {
     @Transactional
     public void findFreeDoctorsWeek(){
 
-        LocalDate date = LocalDate.of(2020, 2,8);
+        LocalDate date = LocalDate.of(2020, 2,9);
         List<Doctor> doctors = this.doctorRepository.getFreeDoctors(1L,1L,date);
 
         assertThat(doctors).isNullOrEmpty();

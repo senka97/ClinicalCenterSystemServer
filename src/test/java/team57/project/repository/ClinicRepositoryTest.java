@@ -21,19 +21,20 @@ public class ClinicRepositoryTest {
     @Autowired
     private ClinicRepository clinicRepository;
 
-    @Test //Positive !!DATE -> if(today==2020.2.25) then date=2020.2.28.(friday) max date= today+7
+    @Test //Positive
     public void findFreeClinicsTest(){
-        LocalDate date = LocalDate.of(2020, 2,11);
-        List<Clinic> clinics=this.clinicRepository.getFreeClinics(1L,date);
+     //   LocalDate date = LocalDate.of(2020, 2,7);
+        LocalDate date = LocalDate.of(2020, 2,6);
+        List<Clinic> clinics=this.clinicRepository.getFreeClinics(3L,date);
 
         assertThat(clinics).isNotNull();
-        assertThat(clinics.size()).isEqualTo(2);
+        assertThat(clinics.size()).isEqualTo(1);
     }
 
     @Test //Negative - 0 clinics
     public void findFreeClinicsTestWeek(){
         //week
-        LocalDate date = LocalDate.of(2020, 2,8);
+        LocalDate date = LocalDate.of(2020, 2,9);
         List<Clinic> clinics=this.clinicRepository.getFreeClinics(1L,date);
 
         assertThat(clinics).isNotNull();

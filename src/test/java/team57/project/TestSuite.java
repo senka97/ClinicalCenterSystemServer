@@ -13,11 +13,8 @@ import team57.project.service.*;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         MedicalExamServiceTest.class,
-        RoomServiceTest.class,
         FastAppointmentServiceTest.class,
-        MedicalExamControllerTest.class,
-        RoomControllerTest.class,
-        FastAppointmentControllerTest.class,
+        RoomServiceTest.class,
         ClinicServiceTest.class,
         DoctorServiceTest.class,
         ExamTypesServiceTest.class,
@@ -32,7 +29,18 @@ import team57.project.service.*;
         TermRoomRepository.class,
         FastAppointmentControllerIntegrationTest.class,
         MedicalExamControllerIntegrationTest.class,
+        RoomControllerIntegrationTest.class,
+        MedicalExamControllerTest.class,
+        RoomControllerTest.class,
+        FastAppointmentControllerTest.class,
+        ClinicControllerTest.class,
+        DoctorControllerTest.class,
+        ExamTypeControllerTest.class,
+        PatientControllerTest.class,
+        FastAppointmentControllerIntegrationTest.class,
+        MedicalExamControllerIntegrationTest.class,
         RoomControllerIntegrationTest.class
+
 })
 
 public class TestSuite {
