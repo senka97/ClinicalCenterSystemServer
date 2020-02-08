@@ -78,7 +78,7 @@ public class MedicalExamController {
 
     @GetMapping(value="/getExamRequest/{id}")
     @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
-    public ResponseEntity<?> getExamRequest(@PathVariable("id") Long id){
+    public ResponseEntity<MedicalExamRequest> getExamRequest(@PathVariable("id") Long id){
 
         try{
             MedicalExam me = medicalExamService.findOne(id);

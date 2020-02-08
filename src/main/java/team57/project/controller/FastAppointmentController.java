@@ -125,15 +125,16 @@ public class FastAppointmentController {
         }
     }
 
-    @PutMapping(value = "reserveFA/{id}")
+    @PutMapping(value = "reserveFA/{id}/{idP}")
     @PreAuthorize("hasRole('PATIENT')")
-    public ResponseEntity<?> reserveFA(@PathVariable("id") Long id) {
+    public ResponseEntity<?> reserveFA(@PathVariable("id") Long id,@PathVariable("idP") Long idP) {
 
         try {
             FastAppointment fa = fastAppointmentService.findOne(id);
-            Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-            String email = currentUser.getName();
-            Patient patient = (Patient) patientService.findOneByEmail(email);
+            //Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+            //String email = currentUser.getName();
+            //Patient patient = (Patient) patientService.findOneByEmail(email);
+            Patient patient = patientService.findOne(idP);
 
             try {
                 String msg = fastAppointmentService.reserveFA(fa, patient);
