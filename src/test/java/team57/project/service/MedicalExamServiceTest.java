@@ -57,7 +57,6 @@ public class MedicalExamServiceTest {
     private EmailService emailServiceMocked;
 
 
-
     @Test
     public void testFindExamRequests(){
         Clinic clinic = new Clinic("Klinika 1","Aleske Santica 34","Klinika za oci");
@@ -82,6 +81,24 @@ public class MedicalExamServiceTest {
         Assert.assertEquals(medicalExamsRequests.get(0).getId(),m1.getId());
 
         verify(medicalExamRepositoryMocked,times(1)).findExamRequests(clinic.getId());
+
+    }
+
+    @Test
+    public void testFindOne(){
+        Clinic clinic = new Clinic("Klinika 1","Aleske Santica 34","Klinika za oci");
+        clinic.setId(1L);
+        MedicalExam m1 = new MedicalExam(LocalDate.of(2020,11,2),
+                LocalTime.of(7,0),LocalTime.of(8,0),"REQUESTED",5000,10,
+                null,null,null,null,clinic);
+        m1.setId(1L);
+
+        Mockito.when(medicalExamRepositoryMocked.findById(m1.getId())).thenReturn(java.util.Optional.of(m1));
+        MedicalExam m2 = medicalExamService.findOne(m1.getId());
+        assertThat(m2.getId()).isEqualTo(m1.getId());
+        assertThat(m2.getStatusME()).isEqualTo(m1.getStatusME());
+
+        verify(medicalExamRepositoryMocked,times(1)).findById(m1.getId());
 
     }
 

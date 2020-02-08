@@ -1,14 +1,19 @@
 package team57.project.controller;
 
+import org.hibernate.PessimisticLockException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import team57.project.dto.SurgeryDTO;
-import team57.project.dto.SurgeryWKDTO;
-import team57.project.model.Surgery;
-import team57.project.service.SurgeryService;
+import team57.project.dto.*;
+import team57.project.model.*;
+import team57.project.model.Patient;
+import team57.project.service.*;
 
+import javax.mail.MessagingException;
+import javax.persistence.OptimisticLockException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +23,8 @@ import java.util.List;
 public class SurgeryController {
     @Autowired
     private SurgeryService surgeryService;
+    @Autowired
+    private ClinicService clinicService;
 
 
     @RequestMapping(value = "/getSurgeries/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -47,5 +54,97 @@ public class SurgeryController {
             surgeryDTO.add(dto);
         }
         return surgeryDTO;
+    }
+
+    @GetMapping(value="/getNumSurgeryRequests/{id}")
+    @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
+    public ResponseEntity<?> getNumSurgeryRequests(@PathVariable("id") Long id){
+
+        try{
+            Clinic clinic = clinicService.findOne(id);
+            double num = surgeryService.getNumSurgeryRequests(clinic);
+            return new ResponseEntity(num, HttpStatus.OK);
+        }catch(NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @GetMapping(value="/getSurgeryRequests/{id}")
+    @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
+    public ResponseEntity<?> getSurgeryRequests(@PathVariable("id") Long id){
+
+        try{
+            Clinic clinic = clinicService.findOne(id);
+            List<SurgeryRequest> surgeryRequests = surgeryService.findSurgeryRequests(clinic);
+            return new ResponseEntity(surgeryRequests,HttpStatus.OK);
+
+        }catch(NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @GetMapping(value="/getSurgeryRequest/{id}")
+    @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
+    public ResponseEntity<?> getSurgeryRequest(@PathVariable("id") Long id){
+
+        try{
+            Surgery s = surgeryService.findOne(id);
+            SurgeryRequest sRequest= new SurgeryRequest(s);
+            return new ResponseEntity(sRequest,HttpStatus.OK);
+
+        }catch(NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @GetMapping(value="/getAvailableRoomsSurgery/{id}")
+    @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
+    public ResponseEntity<?> getAvailableRoomsTerms(@PathVariable("id") Long id){
+
+        try{
+            Surgery s = surgeryService.findOne(id);
+            List<RoomTerm> availableRooms = surgeryService.getAvailableRoomsTerms(s);
+            return new ResponseEntity(availableRooms,HttpStatus.OK);
+
+        }catch(NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PutMapping(value="/reserve/{id}", consumes = "application/json")
+    @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
+    public ResponseEntity<?> reserve(@RequestBody RoomTerm request, @PathVariable("id") Long surgeryId) {
+
+        try{
+            Surgery s = surgeryService.findOne(surgeryId);
+            surgeryService.reserve(s,request);
+
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch(PessimisticLockException pe){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("This room has just been reserved for that term.");
+        }catch (OptimisticLockException oe){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Some other admin has just found the room for this surgery.");
+        }
+
+
+    }
+
+    @PutMapping(value="/rejectSurgeryAdmin/{id}", consumes = "application/json")
+    @PreAuthorize("hasRole('ROLE_CLINIC_ADMIN')")
+    public ResponseEntity<?> rejectSurgeryAdmin(@PathVariable("id") Long id){
+
+        try{
+            Surgery s = surgeryService.findOne(id);
+            surgeryService.rejectSurgery(s);
+            return ResponseEntity.status(HttpStatus.OK).build();
+
+        }catch(NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (InterruptedException e) {
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Something went wrong with sending email notification");
+        } catch (MessagingException e) {
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Something went wrong with sending email notification");
+        }
+
     }
 }

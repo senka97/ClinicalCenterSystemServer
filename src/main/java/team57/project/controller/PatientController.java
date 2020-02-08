@@ -156,7 +156,7 @@ public class PatientController {
         try {
             Boolean exam = this.patientService.sendAppointment(appointmentDTO,id);
             if(exam){
-                return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+                return new ResponseEntity<>(true, HttpStatus.OK);
             }else {
                 return new ResponseEntity<>(false, HttpStatus.GONE);
             }

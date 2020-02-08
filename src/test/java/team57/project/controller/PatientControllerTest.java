@@ -23,6 +23,7 @@ import team57.project.service.ClinicService;
 import team57.project.service.impl.ExamTypeServiceImpl;
 import team57.project.service.impl.PatientServiceImpl;
 
+import javax.transaction.Transactional;
 import java.nio.charset.Charset;
 
 import java.time.LocalDate;
@@ -80,33 +81,19 @@ public class PatientControllerTest {
     public void makeAppointment() throws Exception {
 
 
-        Patient p = new Patient(PATIENT_ID,PATIENT_NAME,PATIENT_SURNAME,PATIENT_EMAIL,PATIENT_PASSWORD,PATIENT_ADDRESS,PATIENT_CITY,
-                PATIENT_COUNTRY,PATIENT_PHONE,PATIENT_SERIAL);
+        AppointmentDTO appointmentDTO = new AppointmentDTO();
+        appointmentDTO.setType("1");
 
-        LocalDate date = LocalDate.of(2020, 2,11);
-        LocalTime t1 = LocalTime.of(4,0);
-        LocalTime t2 = LocalTime.of(5,0);
-        Doctor doctor1 = new Doctor();
-        doctor1.setId(3L);
+        System.out.println("Appointment DTO:" + appointmentDTO);
 
-        //provjeriti sta kada je terin zauzet
-        TermDoctor termDoctor = new TermDoctor(date,t1,t2,true,doctor1);
-        termDoctor.setId(2L);
-
-        AppointmentDTO appointmentDTO = new AppointmentDTO(termDoctor);
-        appointmentDTO.setType("TIP1");
+        Mockito.when(this.patientService.sendAppointment(appointmentDTO,3L)).thenReturn(false);
 
 
-
-        Mockito.when(this.patientService.sendAppointment(appointmentDTO,doctor1.getId())).thenReturn(true);
-        String time = t1.toString();
-
-        String json = "{\"id\":1,\"date\":[2020,2,7]," +
-                "\"time\":13-00,\"type\":1,\"doctorId\":3}";
+        String json = "{\"id\":1,\"date\":[2020,2,11]," +
+                "\"time\":[11,0],\"type\":1,\"doctorId\":3}";
         mockMvc.perform(put(URL_PREFIX+"/makeAppointment/5")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(json))
-                .andExpect(status().isOk());
+                .andExpect(status().isGone());
     }
-
 }

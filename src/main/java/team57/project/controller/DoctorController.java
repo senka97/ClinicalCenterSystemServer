@@ -13,7 +13,9 @@ import team57.project.model.ExamType;
 import team57.project.service.ClinicService;
 import team57.project.service.ExamTypeService;
 import team57.project.service.PatientService;
+import team57.project.service.SurgeryTypeService;
 import team57.project.service.impl.DoctorServiceImpl;
+import team57.project.model.SurgeryType;
 
 import java.util.Comparator;
 import java.util.List;
@@ -34,6 +36,8 @@ public class DoctorController {
     private PatientService patientService;
     @Autowired
     private ExamTypeService examTypeService;
+    @Autowired
+    private SurgeryTypeService surgeryTypeService;
 
     @GetMapping(value="/getDoctor/{id}", produces="application/json")
     @PreAuthorize("hasRole('CLINIC_ADMIN')")
@@ -265,6 +269,21 @@ public class DoctorController {
             Clinic clinic = clinicService.findOne(idClinic);
             ExamType examType = examTypeService.findOne(idExamType);
             List<DoctorFA> doctors = doctorService.searchForDoctorsExamTypes(clinic,examType);
+            return new ResponseEntity<List<DoctorFA>>(doctors, HttpStatus.OK);
+        }catch (NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PutMapping(value="/getFreeDoctorsForThisTerm/{id}", produces="application/json", consumes="application/json")
+    @PreAuthorize("hasRole('CLINIC_ADMIN')")
+    public ResponseEntity<?> getFreeDoctorsForThisTerm(@PathVariable("id") Long clinicId,  @RequestBody RoomTerm rt) {
+        try {
+
+            //SurgeryType surgeryType = surgeryTypeService.findOne(rt.getIdSurgeryType());
+            //List<Doctor> doctors = doctorService.getDoctorsSurgeryTypes(surgeryType.getId());
+            System.out.println(rt.getName());
+            List<DoctorFA> doctors = doctorService.getFreeDoctorsForThisTerm(rt, clinicId);
             return new ResponseEntity<List<DoctorFA>>(doctors, HttpStatus.OK);
         }catch (NullPointerException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
