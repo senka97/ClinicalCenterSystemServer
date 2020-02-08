@@ -163,6 +163,7 @@ insert into medical_record_chronic_condition(medical_record_id, diagnose_id) val
 
 
 
+
 -- TESTIRANJEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 
 -- zahtevi za pregledom bez soba
@@ -202,4 +203,6 @@ insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values (
 insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values ('2020-02-07', '10:00:00',true,'9:00:00',3);
 insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values ('2020-02-07', '11:00:00',false,'10:00:00',3);
 insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values ('2020-02-07', '12:00:00',true,'11:00:00',3);
+
 insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values ('2020-02-07', '13:00:00',false,'12:00:00',3);
+

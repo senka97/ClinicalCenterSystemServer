@@ -5,11 +5,12 @@ import lombok.Setter;
 import team57.project.model.TermDoctor;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class AppointmentDTO {
     private Long id;
     private LocalDate date;
-    private String time;
+    private LocalTime time;
     private String type;
     private Long doctorId;
 
@@ -17,7 +18,7 @@ public class AppointmentDTO {
     public AppointmentDTO(TermDoctor termDoc){
         this.id = termDoc.getId();
         this.date = termDoc.getDateTerm();
-        this.time = termDoc.getStartTime().toString();
+        this.time = termDoc.getStartTime();
         this.doctorId = termDoc.getDoctor().getId();
     }
 
@@ -37,11 +38,11 @@ public class AppointmentDTO {
         this.date = date;
     }
 
-    public String getTime() {
+    public LocalTime getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(LocalTime time) {
         this.time = time;
     }
 
