@@ -12,6 +12,7 @@ import team57.project.model.TermDoctor;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,13 +25,15 @@ public class TermDoctorRepositoryTest {
     @Autowired
     private TermDoctorRepository termDoctorRepository;
 
-    @Test //Positive !!DATE -> if(today==2020.2.25) then date=2020.2.28.(friday) max date= today+7
+    @Test //Positive
     public void findFreeTermsDate(){
-        LocalDate date = LocalDate.of(2020, 2,11);
+        LocalDate date = LocalDate.of(2020, 2,7);
+
+     //   LocalDate date = LocalDate.of(2020, 2,6);
         List<TermDoctor> terms = this.termDoctorRepository.getFreeTerms(3L,1L,date);
         assertThat(terms).isNotNull();
-        //System create 8 terms each day of next week from today
-        assertThat(terms.size()).isEqualTo(8);
+        //System create 8 terms each day of next week from today - Mock database 3 free Terms
+        assertThat(terms.size()).isEqualTo(3);
         for(TermDoctor term : terms){
             //same doctor
             assertThat(term.getDoctor().getId()).isEqualTo(3L);
@@ -38,21 +41,47 @@ public class TermDoctorRepositoryTest {
             assertThat(term.isFree()).isEqualTo(true);
         }
     }
+
+    @Test //Positive
+    public void findFreeTermsTaken(){
+      //  LocalDate date = LocalDate.of(2020, 2,5);
+        LocalDate date = LocalDate.of(2020, 2,6);
+        List<TermDoctor> terms = this.termDoctorRepository.getFreeTerms(3L,1L,date);
+        assertThat(terms).isNullOrEmpty();
+    }
+
     @Test //Positive empty
     public void findFreeTermsDateWeek(){
-        LocalDate date = LocalDate.of(2020, 2,8);
+        LocalDate date = LocalDate.of(2020, 2,9);
         List<TermDoctor> terms = this.termDoctorRepository.getFreeTerms(3L,1L,date);
         assertThat(terms).isNotNull();
-        //System create 8 terms each day of next week from today
+
         assertThat(terms).isNullOrEmpty();
 
     }
-    @Test //Positive empty
+    @Test //Positive empty - wrong id
     public void findFreeTermsDatePatientId(){
-        LocalDate date = LocalDate.of(2020, 2,8);
+        LocalDate date = LocalDate.of(2020, 2,6);
         List<TermDoctor> terms = this.termDoctorRepository.getFreeTerms(5L,1L,date);
         assertThat(terms).isNotNull();
         //System create 8 terms each day of next week from today
         assertThat(terms).isNullOrEmpty();
+    }
+
+    @Test
+    @Transactional
+    public void testFindTermDoctor(){
+
+        TermDoctor td = termDoctorRepository.findTermDoctor(LocalDate.of(2020,2,7), LocalTime.of(7,0),3L);
+        assertThat(td).isNotNull();
+        assertThat(td.getDoctor().getId()).isEqualTo(3L);
+    }
+
+    @Test
+    @Transactional
+    public void testFindTermDoctor1(){
+
+        TermDoctor td = termDoctorRepository.findTermDoctor(LocalDate.of(2020,2,7), LocalTime.of(23,0),3L);
+        assertThat(td).isNull();
     }
 }

@@ -89,7 +89,7 @@ public class PatientServiceTest {
         assertThat(pat).isNotNull();
     }
 
-    @Test //Positive !!DATE -> if(today==2020.2.25) then date=2020.2.28.(friday) max date= today+7
+    @Test //Positive
     @Transactional
     public void sendAppointmentTest(){
         Patient p = new Patient(PATIENT_ID,PATIENT_NAME,PATIENT_SURNAME,PATIENT_EMAIL,PATIENT_PASSWORD,PATIENT_ADDRESS,PATIENT_CITY,
@@ -149,7 +149,7 @@ public class PatientServiceTest {
 
 
     @Test // Positive retrun FALSE - because term is already taken
-    //Positive !!DATE -> if(today==2020.2.25) then date=2020.2.28.(friday) max date= today+7
+
     @Transactional
     public void sendAppointmentTestTaken(){
         Patient p = new Patient(PATIENT_ID,PATIENT_NAME,PATIENT_SURNAME,PATIENT_EMAIL,PATIENT_PASSWORD,PATIENT_ADDRESS,PATIENT_CITY,
