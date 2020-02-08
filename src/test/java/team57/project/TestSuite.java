@@ -27,7 +27,11 @@ import team57.project.service.*;
         ClinicRepositoryTest.class,
         DoctorRepositoryTest.class,
         ExamTypeRepositoryTest.class,
-        TermDoctorRepositoryTest.class
+        TermDoctorRepositoryTest.class,
+        FastAppointmentRepository.class,
+        MedicalExamRepository.class,
+        RoomRepository.class,
+        TermRoomRepository.class
 })
 
 public class TestSuite {
