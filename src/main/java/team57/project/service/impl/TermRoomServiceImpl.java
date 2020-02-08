@@ -24,6 +24,12 @@ public class TermRoomServiceImpl implements TermRoomService {
     private RoomRepository roomRepository;
 
     @Override
+    public TermRoom save(TermRoom tr)
+    {
+        return termRoomRepository.save(tr);
+    }
+
+    @Override
     public boolean existTermsInDB() {
         List<TermRoom> terms = termRoomRepository.findAll();
         if(terms.size() == 0){
@@ -86,5 +92,11 @@ public class TermRoomServiceImpl implements TermRoomService {
             }
         }
 
+    }
+
+    @Override
+    public TermRoom findByDateTime(LocalDate date, LocalTime time,Long id)
+    {
+        return termRoomRepository.findByDateTime(date,time, id);
     }
 }

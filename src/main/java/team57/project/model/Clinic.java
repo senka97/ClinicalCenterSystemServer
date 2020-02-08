@@ -48,6 +48,25 @@ public class Clinic {
 
     public Clinic() {}
 
+
+    public Clinic(Long id, String name, String address, String description, double rating, long numberOfReviews) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.description = description;
+        this.rating = rating;
+        this.numberOfReviews = numberOfReviews;
+
+        this.doctors = new HashSet<>();
+        this.examTypes = new HashSet<>();
+        this.absences = new HashSet<>();
+        this.clinicAdmins = new HashSet<>();
+        this.patients = new HashSet<>();
+        this.nurses = new HashSet<>();
+        this.medicalExams = new HashSet<>();
+
+    }
+
     public Clinic(String name, String address, String description){
         this.name = name;
         this.address = address;
@@ -67,6 +86,7 @@ public class Clinic {
         this.absences = new HashSet<>();
 
     }
+
     public Long getId() {
         return id;
     }

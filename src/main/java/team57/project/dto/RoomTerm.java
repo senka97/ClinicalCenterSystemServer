@@ -1,55 +1,56 @@
 package team57.project.dto;
 
-import team57.project.model.MedicalExam;
-import team57.project.model.Room;
-import team57.project.model.Surgery;
-import team57.project.model.TermDoctor;
-import team57.project.model.TermRoom;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
-public class RoomME {
+import team57.project.model.Surgery;
+import team57.project.model.TermRoom;
+
+public class RoomTerm {
 
     private Long id;
+    private Long idRoom;
     private String name;
     private String number;
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
     private String roomType;
+    private Long idSurgeryType;
+    private List<DoctorFA> doctors;
 
-    public RoomME(){
+    public RoomTerm()
+    {
 
     }
-    public RoomME(Room r, MedicalExam me){
+
+    public RoomTerm(TermRoom r)
+    {
         this.id = r.getId();
-        this.name = r.getName();
-        this.number = r.getNumber();
-        this.date = me.getDate();
-        this.startTime = me.getStartTime();
-        this.endTime = me.getEndTime();
-        this.roomType = r.getRoomType();
+        this.idRoom = r.getRoom().getId();
+        this.name = r.getRoom().getName();
+        this.number = r.getRoom().getNumber();
+        this.roomType = r.getRoom().getRoomType();
+        this.startTime =  r.getStartTime();
+        this.endTime = r.getEndTime();
+        this.date = r.getDateTerm();
     }
 
-    public RoomME(Room r, TermRoom tr){
-        this.id = r.getId();
-        this.name = r.getName();
-        this.number = r.getNumber();
-        this.date = tr.getDateTerm();
-        this.startTime = tr.getStartTime();
-        this.endTime = tr.getEndTime();
-        this.roomType = r.getRoomType();
+    public List<DoctorFA> getDoctors() {
+        return doctors;
     }
 
-    public RoomME(Long id, String name, String number, LocalDate date, LocalTime startTime, LocalTime endTime, String roomType) {
-        this.id = id;
-        this.name = name;
-        this.number = number;
-        this.date = date;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.roomType = roomType;
+    public void setDoctors(List<DoctorFA> doctors) {
+        this.doctors = doctors;
+    }
+
+    public Long getIdSurgeryType() {
+        return idSurgeryType;
+    }
+
+    public void setIdSurgeryType(Long idRoomType) {
+        this.idSurgeryType = idRoomType;
     }
 
     public Long getId() {
@@ -58,6 +59,14 @@ public class RoomME {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getIdRoom() {
+        return idRoom;
+    }
+
+    public void setIdRoom(Long idRoom) {
+        this.idRoom = idRoom;
     }
 
     public String getName() {

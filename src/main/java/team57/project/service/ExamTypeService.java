@@ -12,6 +12,7 @@ import java.util.List;
 public interface ExamTypeService {
 
     ExamType findOne(Long id);
+    ExamType findByName(String name);
     boolean addExamType(Clinic clinic, ExamTypeDTO examTypeDTO);
     String updateExamType(ExamType examType, ExamTypeDTO examTypeDTO, Clinic clinic);
     boolean removeExamType(ExamType examType, Clinic clinic);

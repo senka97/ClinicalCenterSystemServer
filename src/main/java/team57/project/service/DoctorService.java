@@ -3,6 +3,7 @@ package team57.project.service;
 
 import team57.project.dto.*;
 import team57.project.model.Clinic;
+import team57.project.model.SurgeryType;
 import team57.project.model.Doctor;
 import team57.project.model.ExamType;
 
@@ -34,6 +35,8 @@ public interface DoctorService {
 
 
     List<DoctorFA> searchForDoctorsExamTypes(Clinic clinic, ExamType examType);
+    List<Doctor> getDoctorsSurgeryTypes(Long idS);
+    List<DoctorFA> getFreeDoctorsForThisTerm(RoomTerm rt, Long id);
 
 
 }

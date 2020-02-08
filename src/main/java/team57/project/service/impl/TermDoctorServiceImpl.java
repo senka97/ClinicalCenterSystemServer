@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import team57.project.model.Doctor;
 import team57.project.model.TermDoctor;
+import team57.project.model.TermRoom;
 import team57.project.repository.DoctorRepository;
 import team57.project.repository.TermDoctorRepository;
 import team57.project.service.TermDoctorService;
@@ -23,6 +24,12 @@ public class TermDoctorServiceImpl implements TermDoctorService {
     private TermDoctorRepository termDoctorRepository;
     @Autowired
     private DoctorRepository doctorRepository;
+
+    @Override
+    public TermDoctor save(TermDoctor td)
+    {
+        return termDoctorRepository.save(td);
+    }
 
     @Override
     public boolean existTermsInDB() {
@@ -86,5 +93,10 @@ public class TermDoctorServiceImpl implements TermDoctorService {
         }
     }
 
+    @Override
+    public TermDoctor findByDateTime(LocalDate date, LocalTime time,Long id)
+    {
+        return termDoctorRepository.findByDateTime(date, time, id);
+    }
 
 }
