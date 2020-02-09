@@ -145,11 +145,11 @@ insert into medical_report_diagnoses (medical_report_id, diagnoses_id) value (2,
 
 
 insert into surgery (date,start_time, end_time ,patient_id,surgery_type_id,clinic_id,price,discount,surgery_room_id,version,statusS) value ('2020-02-10','07:00:00','08:00:00',5,1,1,100000,5,3,0,'APPROVED');
-insert into surgery (date,patient_id,surgery_type_id,clinic_id,price,discount,surgery_room_id,version,statusS) value ('2020-02-11',5,1,1,100000,5,null,0,'REQUESTED');
-insert into surgery (date,patient_id,surgery_type_id,clinic_id,price,discount,surgery_room_id,version,statusS) value ('2020-02-12',5,1,1,100000,5,null,0,'REQUESTED');
-insert into surgery (date,patient_id,surgery_type_id,clinic_id,price,discount,surgery_room_id,version,statusS) value ('2020-02-12',5,1,1,100000,5,null,0,'REQUESTED');
-insert into surgery (date,patient_id,surgery_type_id,clinic_id,price,discount,surgery_room_id,version,statusS) value ('2020-02-12',5,1,1,100000,5,null,0,'REQUESTED');
-insert into surgery (date,patient_id,surgery_type_id,clinic_id,price,discount,surgery_room_id,version,statusS) value ('2020-02-12',5,1,1,100000,5,null,0,'REQUESTED');
+insert into surgery (date,start_time,end_time,patient_id,surgery_type_id,clinic_id,price,discount,surgery_room_id,version,statusS) value ('2020-02-11','07:00:00','08:00:00',5,1,1,100000,5,3,0,'APPROVED');
+insert into surgery (date,start_time,end_time,patient_id,surgery_type_id,clinic_id,price,discount,surgery_room_id,version,statusS) value ('2020-02-12','07:00:00','08:00:00',5,1,1,100000,5,3,0,'APPROVED');
+#insert into surgery (date,patient_id,surgery_type_id,clinic_id,price,discount,surgery_room_id,version,statusS) value ('2020-02-12',5,1,1,100000,5,null,0,'REQUESTED');
+#insert into surgery (date,patient_id,surgery_type_id,clinic_id,price,discount,surgery_room_id,version,statusS) value ('2020-02-12',5,1,1,100000,5,null,0,'REQUESTED');
+#insert into surgery (date,patient_id,surgery_type_id,clinic_id,price,discount,surgery_room_id,version,statusS) value ('2020-02-12',5,1,1,100000,5,null,0,'REQUESTED');
 
 
 insert into doctors_surgeries (doctor_id, surgery_id) value (3,1);
@@ -163,7 +163,7 @@ insert into medical_record_chronic_condition(medical_record_id, diagnose_id) val
 
 -- Senka
 insert into medical_exam (date, start_time, end_time,statusme,doctor_id,exam_room_id,exam_type_id,patient_id,clinic_id,price,discount,version,done) values ('2020-02-10', '7:00:00','8:00:00','REQUESTED',3,NULL,1,5,1,10000,10,0, false);
-insert into medical_exam (date, start_time, end_time, statusme, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount,version, done) values ('2020-02-10', '9:00:00', '10:00:00','REQUESTED', 3, NULL, 1, 5,1,10000,10,0, false);
+insert into medical_exam (date, start_time, end_time, statusme, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount,version, done) values ('2020-02-10', '7:00:00', '8:00:00','REQUESTED', 3, NULL, 1, 5,1,10000,10,0, false);
 insert into medical_exam (date, start_time, end_time,statusme, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount,version, done) values ('2020-02-10', '11:00:00', '12:00:00','REQUESTED', 7, NULL, 1, 5,1,10000,10,0,false);
 
 
@@ -179,7 +179,7 @@ insert into term_room(date_term, end_time, free,start_time,room_id) values ('202
 insert into term_room(date_term, end_time, free,start_time,room_id) values ('2020-02-10', '11:00:00',true,'10:00:00',1);
 insert into term_room(date_term, end_time, free,start_time,room_id) values ('2020-02-10', '12:00:00',true,'11:00:00',1);
 
--- slobodni termini za doktora na odredjeni datum kod trazena slobodne sobe
+-- slobodni termini za doktora na odredjeni datum i vreme
 insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values ('2020-02-10', '8:00:00',false,'7:00:00',3);
 insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values ('2020-02-10', '9:00:00',true,'8:00:00',3);
 insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values ('2020-02-10', '10:00:00',false,'9:00:00',3);
