@@ -153,5 +153,19 @@ public class RoomController {
         }
     }
 
+    @GetMapping(value="/getReservedRoomTerms/{idRoom}")
+    @PreAuthorize("hasRole('CLINIC_ADMIN')")
+    public ResponseEntity<?> getReservedRoomTerms(@PathVariable("idRoom") Long idRoom){
+
+        try{
+            Room room = roomService.findOne(idRoom);
+            List<TermRoomDTO> termsRoomDTO = roomService.getReservedRoomTerms(room);
+            return new ResponseEntity(termsRoomDTO, HttpStatus.OK);
+        }catch (NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+
 
 }
