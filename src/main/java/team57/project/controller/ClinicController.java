@@ -167,6 +167,8 @@ public class ClinicController {
     public ResponseEntity<?> getFreeClinics(@RequestBody AvailableDoctorRequest adr) {
 
         System.out.println("Testiranje" + adr);
+        System.out.println("Testiranje" + adr.getIdExamType());
+        System.out.println("Testiranje" + adr.getDate());
         if (adr.getIdExamType() == null || adr.getDate() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exam type and date are mandatory.");
         }
@@ -179,7 +181,7 @@ public class ClinicController {
             return new ResponseEntity(freeClinics, HttpStatus.OK);
 
         } catch (NullPointerException e) {
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
     }

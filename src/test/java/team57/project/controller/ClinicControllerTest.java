@@ -60,8 +60,6 @@ public class ClinicControllerTest {
     @InjectMocks
     private ClinicController clinicController;
 
-
-
     @Before
     public void init(){
         MockitoAnnotations.initMocks(this);
@@ -74,16 +72,14 @@ public class ClinicControllerTest {
     public void getFreeClinics() throws Exception {
         AvailableDoctorRequest request = new AvailableDoctorRequest();
 
-
         Clinic clinic1 = new Clinic(CLINIC_1_ID,CLINIC_1_NAME,CLINIC_1_ADRESS,CLINIC_1_DES,CLINIC_1_RATING,CLINIC_1_RNUM);
         ClinicDTO dto1 = new ClinicDTO(clinic1);
         List<ClinicDTO> clinics = new ArrayList<>();
         clinics.add(dto1);
 
-
         Mockito.when(clinicService.findFreeClinics(request)).thenReturn(clinics);
 
-        String json = "{\"idExamType\":1,\"date\":[2020,2,7]," +
+        String json = "{\"idExamType\":1,\"date\":[2020,2,6]," +
                 "\"time\":[8,0]}";
 
         mockMvc.perform(put(URL_PREFIX+"/getFreeClinics")
@@ -96,12 +92,10 @@ public class ClinicControllerTest {
     public void getFreeClinicsWeek() throws Exception {
         AvailableDoctorRequest request = new AvailableDoctorRequest();
 
-
         Clinic clinic1 = new Clinic(CLINIC_1_ID,CLINIC_1_NAME,CLINIC_1_ADRESS,CLINIC_1_DES,CLINIC_1_RATING,CLINIC_1_RNUM);
         ClinicDTO dto1 = new ClinicDTO(clinic1);
         List<ClinicDTO> clinics = new ArrayList<>();
         clinics.add(dto1);
-
 
         Mockito.when(clinicService.findFreeClinics(request)).thenReturn(null);
 
@@ -117,12 +111,10 @@ public class ClinicControllerTest {
     public void getFreeClinicsDateNull() throws Exception {
         AvailableDoctorRequest request = new AvailableDoctorRequest();
 
-
         Clinic clinic1 = new Clinic(CLINIC_1_ID,CLINIC_1_NAME,CLINIC_1_ADRESS,CLINIC_1_DES,CLINIC_1_RATING,CLINIC_1_RNUM);
         ClinicDTO dto1 = new ClinicDTO(clinic1);
         List<ClinicDTO> clinics = new ArrayList<>();
         clinics.add(dto1);
-
 
         Mockito.when(clinicService.findFreeClinics(request)).thenReturn(null);
 

@@ -155,6 +155,10 @@ public class PatientController {
     public ResponseEntity<?> makeAppointment(@PathVariable("id") Long id, @RequestBody AppointmentDTO appointmentDTO) {
         try {
             Boolean exam = this.patientService.sendAppointment(appointmentDTO,id);
+
+            System.out.println(id +" " +appointmentDTO.getType() + " " + appointmentDTO.getDate()
+            + "  " + appointmentDTO.getTime() + "  " + exam
+            );
             if(exam){
                 return new ResponseEntity<>(true, HttpStatus.OK);
             }else {
