@@ -96,4 +96,22 @@ public class PatientControllerTest {
                 .content(json))
                 .andExpect(status().isGone());
     }
+    @Test
+    public void makeAppointmentTrue() throws Exception {
+
+
+        AppointmentDTO appointmentDTO = new AppointmentDTO();
+        appointmentDTO.setType("Ultrazvuk kicmenog stuba");
+
+        System.out.println("Appointment DTO:" + appointmentDTO);
+
+        Mockito.when(this.patientService.sendAppointment(appointmentDTO,5L)).thenReturn(true);
+
+        String json = "{\"id\":1,\"date\":[2020,2,6]," +
+                "\"time\":[7,0],\"type\": \"Ultrazvuk kicmenog stuba\",\"doctorId\":3}";
+        mockMvc.perform(put(URL_PREFIX+"/makeAppointment/5")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(json))
+                .andExpect(status().isOk());
+    }
 }
