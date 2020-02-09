@@ -16,20 +16,22 @@ public class ClinicAdminHomePage {
     @FindBy(xpath = "//*[@id=\"table-exam-requests\"]")
     private WebElement tableExamRequests;
 
-    @FindBy(xpath = "//*[@id=\"6\"]")
-    private WebElement btnExamRequest;
+   /* @FindBy(xpath = "//*[@id=\"6\"]")
+    private WebElement btnExamRequest;*/
 
     @FindBy(xpath = "//*[@id=\"table-exam-rooms-success\"]")
     private WebElement tableExamRoomSuccess;
 
-    @FindBy(xpath = "//*[@id=\"btn-reserve\"]")
-    private WebElement btnReserve;
+   /* @FindBy(xpath = "//*[@id=\"btn-reserve\"]")
+    private WebElement btnReserve;*/
 
     @FindBy(xpath = "//*[@id=\"btn-reject\"]")
     private WebElement btnReject;
 
     @FindBy(xpath = "//*[@id=\"btn-ok\"]")
     private WebElement btnOk;
+
+
 
     public ClinicAdminHomePage()
     {
@@ -44,17 +46,17 @@ public class ClinicAdminHomePage {
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.visibilityOf(tableExamRequests));
     }
 
-    public void ensureIsClickableBtnExamRequest() {
+   /* public void ensureIsClickableBtnExamRequest() {
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(btnExamRequest));
-    }
+    }*/
 
     public void ensureIsVisibleTableExamRoomSuccess() {
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.visibilityOf(tableExamRoomSuccess));
     }
 
-    public void ensureIsClickableBtnReserve() {
+  /*  public void ensureIsClickableBtnReserve() {
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(btnReserve));
-    }
+    }*/
 
     public void ensureIsClickableBtnReject() {
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(btnReject));
@@ -63,6 +65,8 @@ public class ClinicAdminHomePage {
     public void ensureIsClickableBtnOk() {
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(btnOk));
     }
+
+
 
     public ClinicAdminHomePage(WebDriver driver) {
         this.driver = driver;
@@ -76,17 +80,17 @@ public class ClinicAdminHomePage {
         return tableExamRequests;
     }
 
-    public WebElement getBtnExamRequest() {
+   /* public WebElement getBtnExamRequest() {
         return btnExamRequest;
-    }
+    }*/
 
     public WebElement getTableExamRoomSuccess() {
         return tableExamRoomSuccess;
     }
 
-    public WebElement getBtnReserve() {
+   /* public WebElement getBtnReserve() {
         return btnReserve;
-    }
+    }*/
 
     public WebElement getBtnReject() {
         return btnReject;
@@ -95,4 +99,6 @@ public class ClinicAdminHomePage {
     public WebElement getBtnOk() {
         return btnOk;
     }
+
+
 }

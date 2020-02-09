@@ -52,7 +52,7 @@ public class SearchingClinicsTest {
 
     }
 
-    @Test
+   /* @Test
     public void testLoginPatientSuccess() throws InterruptedException {
 
         driver.navigate().to(baseUrl + "/login");
@@ -67,7 +67,7 @@ public class SearchingClinicsTest {
 
         Assertions.assertEquals(baseUrl +"/patientHP" , driver.getCurrentUrl());
 
-    }
+    }*/
 
     @Test
     public void testPatientSearchingClinicsError() throws InterruptedException {
@@ -179,15 +179,13 @@ public class SearchingClinicsTest {
         patientHomePage.ensureIsVisibleTableAppointments();
         Thread.sleep(1000);
         List<WebElement> rowsBefore = patientHomePage.getTableAppointments().findElements(By.name("counting-appointments"));
-        //patientHomePage.ensureIsClickableAppointment();
-        //Assertions.assertEquals(true, true);
-        driver.findElement(By.id("5")).click();
-       // patientHomePage.getAppointmentId().click();
-        Thread.sleep(6000);
+        List<WebElement> buttons = patientHomePage.getTableAppointments().findElements(By.name("appointment-buttons"));
+        buttons.get(0).click();
+        Thread.sleep(7000);
         patientHomePage.ensureIsVisibleTableDoctor();
         patientHomePage.ensureIsClickableBtnReset();
         patientHomePage.getBtnReset().click();
-        //patientHomePage.ensureIsNotVisibleTableAppointments();
+
         patientHomePage.ensureIsVisibleTableDoctor();
         patientHomePage.ensureIsClickableRowDoctor();
         patientHomePage.getRowDoctor().click();
@@ -205,5 +203,60 @@ public class SearchingClinicsTest {
 
 
     }
+
+    @Test
+    public void testPatientSearchingClinicsReservingFastExam() throws InterruptedException {
+
+        driver.navigate().to(baseUrl + "/login");
+        loginPage.ensureIsDisplayedEmail();
+
+        loginPage.getEmail().sendKeys("isa2019pacijent@outlook.com");
+        loginPage.getPassword().sendKeys("pera");
+
+        loginPage.getLoginBtn().click();
+        loginPage.ensureIsNotVisibleLoginBtn();
+
+        patientHomePage.ensureIsClickableBtnListOfClinics();
+        patientHomePage.getBtnListOfClinics().click();
+
+        patientHomePage.ensureIsVisibleShowListOfClinics();
+
+        patientHomePage.ensureIsClickableSelectExamType();
+        patientHomePage.getSelectExamType().click();
+
+        patientHomePage.ensureIsClickableItemId();
+        patientHomePage.getItemId().click();
+
+        patientHomePage.getDatePickerInput().click();
+        patientHomePage.getDatePickerInput().sendKeys("2020-02-10");
+
+        patientHomePage.getBtnSearch().click();
+        patientHomePage.ensureIsVisibleDivListClinics();
+
+        List<WebElement> buttons = patientHomePage.getDivListClinics().findElements(By.name("btn-clinic-profile"));
+        buttons.get(0).click();
+
+        patientHomePage.ensureIsClickableBtnMenu();
+        patientHomePage.getBtnMenu().click();
+        Thread.sleep(500);
+        patientHomePage.ensureIsClickableBtnFastExam();
+        patientHomePage.getBtnFastExam().click();
+        Thread.sleep(1000);
+        patientHomePage.ensureIsVisibleTableFastExams();
+        List<WebElement> rowsBefore = patientHomePage.getTableFastExams().findElements(By.name("counting-fast-exams"));
+        List<WebElement> buttons2 = patientHomePage.getTableFastExams().findElements(By.name("btn-reserve-fast-exam"));
+
+        buttons2.get(0).click();
+        patientHomePage.ensureIsVisibleTableFastExams();
+        Thread.sleep(5000);
+        List<WebElement> rows = patientHomePage.getTableFastExams().findElements(By.name("counting-fast-exams"));
+
+        Assertions.assertEquals(rowsBefore.size() - 1, rows.size());
+
+
+
+    }
+
+
 
 }

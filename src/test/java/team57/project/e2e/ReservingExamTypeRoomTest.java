@@ -54,14 +54,13 @@ public class ReservingExamTypeRoomTest {
         Thread.sleep(1000);
         clinicAdminHomePage.ensureIsVisibleTableExamRequests();
         List<WebElement> rowsBefore = clinicAdminHomePage.getTableExamRequests().findElements(By.name("exam-request-row"));
-
-        clinicAdminHomePage.ensureIsClickableBtnExamRequest();
-        clinicAdminHomePage.getBtnExamRequest().click();
+        List<WebElement> buttons = clinicAdminHomePage.getTableExamRequests().findElements(By.name("btn-exam-request"));
+        buttons.get(0).click(); //find room
         Thread.sleep(1000);
         clinicAdminHomePage.ensureIsVisibleTableExamRoomSuccess();
-        clinicAdminHomePage.ensureIsClickableBtnReserve();
-        clinicAdminHomePage.getBtnReserve().click();
-        Thread.sleep(5000);
+        List<WebElement> buttons2 = clinicAdminHomePage.getTableExamRoomSuccess().findElements(By.name("btn-reserve"));
+        buttons2.get(0).click();
+        Thread.sleep(6000);
 
         clinicAdminHomePage.ensureIsVisibleTableExamRequests();
         List<WebElement> rows = clinicAdminHomePage.getTableExamRequests().findElements(By.name("exam-request-row"));
@@ -88,8 +87,9 @@ public class ReservingExamTypeRoomTest {
         clinicAdminHomePage.ensureIsVisibleTableExamRequests();
         List<WebElement> rowsBefore = clinicAdminHomePage.getTableExamRequests().findElements(By.name("exam-request-row"));
 
-        //clinicAdminHomePage.ensureIsClickableBtnExamRequest();
-        driver.findElement(By.id("7")).click();
+
+        List<WebElement> buttons = clinicAdminHomePage.getTableExamRequests().findElements(By.name("btn-exam-request"));
+        buttons.get(0).click(); //find room
 
         Thread.sleep(2000);
         clinicAdminHomePage.ensureIsClickableBtnReject();

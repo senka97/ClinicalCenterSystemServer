@@ -7,6 +7,8 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
+
 public class PatientHomePage {
 
     private WebDriver driver;
@@ -47,14 +49,26 @@ public class PatientHomePage {
     @FindBy(xpath = "//*[@id=\"table-appointments\"]")
     private WebElement tableAppointments;
 
-    @FindBy(xpath = "//*[@id=\"4\"]")
-    private WebElement appointmentId;
+   /* @FindBy(xpath = "//*[@id=\"table-appointments\"]//tbody//ng-container//ng-container//tr")
+    private List<WebElement> tableAppointments2;*/
+
+   /* @FindBy(xpath = "//*[@id=\"4\"]")
+    private WebElement appointmentId;*/
 
     @FindBy(xpath = "//*[@id=\"btn-patient-logout\"]")
     private WebElement btnPatientLogout;
 
     @FindBy(xpath = "//*[@id=\"btn-reset\"]")
     private WebElement btnReset;
+
+    @FindBy(xpath = "//*[@id=\"btn-menu\"]")
+    private WebElement btnMenu;
+
+    @FindBy(xpath = "//*[@id=\"btn-fast-exams\"]")
+    private WebElement btnFastExam;
+
+    @FindBy(xpath = "//*[@id=\"table-fast-exams\"]")
+    private WebElement tableFastExams;
 
     public PatientHomePage()
     {
@@ -116,10 +130,15 @@ public class PatientHomePage {
         (new WebDriverWait(driver,10)).until(ExpectedConditions.visibilityOf(tableAppointments));
     }
 
-    public void ensureIsClickableAppointment()
+    public void ensureIsVisibleTableFastExams()
+    {
+        (new WebDriverWait(driver,10)).until(ExpectedConditions.visibilityOf(tableFastExams));
+    }
+
+  /*  public void ensureIsClickableAppointment()
     {
         (new WebDriverWait(driver,10)).until(ExpectedConditions.elementToBeClickable(appointmentId));
-    }
+    }*/
 
     public void ensureIsNotVisibleTableAppointments()
     {
@@ -134,6 +153,14 @@ public class PatientHomePage {
     public void ensureIsNotVisiblePatientLogout()
     {
         (new WebDriverWait(driver,10)).until(ExpectedConditions.invisibilityOfElementLocated(By.id("btn-patient-logout")));
+    }
+
+    public void ensureIsClickableBtnMenu() {
+        (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(btnMenu));
+    }
+
+    public void ensureIsClickableBtnFastExam() {
+        (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(btnFastExam));
     }
 
     public WebElement getBtnListOfClinics() {
@@ -180,9 +207,9 @@ public class PatientHomePage {
         return tableAppointments;
     }
 
-    public WebElement getAppointmentId() {
+  /*  public WebElement getAppointmentId() {
         return appointmentId;
-    }
+    }*/
 
     public WebElement getBtnPatientLogout() {
         return btnPatientLogout;
@@ -194,5 +221,21 @@ public class PatientHomePage {
 
     public WebElement getBtnReset() {
         return btnReset;
+    }
+
+  /*  public List<WebElement> getTableAppointments2() {
+        return tableAppointments2;
+    }*/
+
+    public WebElement getBtnMenu() {
+        return btnMenu;
+    }
+
+    public WebElement getBtnFastExam() {
+        return btnFastExam;
+    }
+
+    public WebElement getTableFastExams() {
+        return tableFastExams;
     }
 }
