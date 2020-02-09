@@ -30,4 +30,7 @@ public interface TermRoomRepository extends JpaRepository<TermRoom,Long> {
 
     @Query(value="select * from term_room tr where tr.date_term=?1 and tr.start_time=?2 and tr.room_id= ?3", nativeQuery = true)
     TermRoom findByDateTime(LocalDate date, LocalTime time, Long id);
+
+    @Query(value = "select t from TermRoom t inner join t.room r where r.id=?1 and t.free=false")
+    List<TermRoom> getReservedRoomTerms(Long id);
 }

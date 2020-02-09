@@ -13,5 +13,6 @@ public interface RoomService {
     Room findOne(Long id);
     List<RoomFA> findAvailableRooms(Clinic clinic, AvailableRoomRequest arq);
     List<RoomME> findRoomsFreeTerms(Clinic clinic, FreeTermsRequest ftr);
+    List<TermRoomDTO>getReservedRoomTerms(Room room);
 
 }
