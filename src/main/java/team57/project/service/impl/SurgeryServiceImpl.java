@@ -1,5 +1,7 @@
 package team57.project.service.impl;
 
+import org.hibernate.PessimisticLockException;
+import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import team57.project.repository.TermRoomRepository;
 import team57.project.service.*;
 
 import javax.mail.MessagingException;
+import javax.persistence.OptimisticLockException;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -113,20 +116,15 @@ public class SurgeryServiceImpl implements SurgeryService {
 
     @Override
     @Transactional
-    public void reserve(Surgery s, RoomTerm request) {
+    public void reserve(Surgery s, RoomTerm request) throws PessimisticLockException, OptimisticLockException{
 
-        s.setStartTime(request.getStartTime());
-        s.setEndTime(request.getEndTime());
-        Room room = roomService.findOne(request.getIdRoom());
-        s.setSurgeryRoom(room);
-        s.setStatusS("APPROVED");
-
-        surgeryRepository.save(s);
 
         for(DoctorFA doc : request.getDoctors())
         {
             Doctor doctor = doctorService.findOne(doc.getId());
+            //pessimistic lock exception
             TermDoctor td = termDoctorService.findByDateTime(request.getDate(),request.getStartTime(),doctor.getId());
+
             td.setFree(false);
             doctor.getSurgeries().add(s);
             emailService.sendMailForSurgeryDoctor(request,doctor);
@@ -134,12 +132,20 @@ public class SurgeryServiceImpl implements SurgeryService {
             termDoctorService.save(td);
 
         }
-
-        Patient p = patientService.findOne(s.getPatient().getId());
-
+        //pessimistic lock exception
         TermRoom tr = termRoomService.findByDateTime(request.getDate(),request.getStartTime(),request.getIdRoom());
         tr.setFree(false);
         termRoomService.save(tr);
+
+        Room room = roomService.findOne(request.getIdRoom());
+        s.setStartTime(request.getStartTime());
+        s.setEndTime(request.getEndTime());
+        s.setSurgeryRoom(room);
+        s.setStatusS("APPROVED");
+
+        surgeryRepository.save(s);
+
+        Patient p = patientService.findOne(s.getPatient().getId());
 
         emailService.sendMailForSurgeryPatient(request,p);
     }
