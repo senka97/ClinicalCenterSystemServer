@@ -1,5 +1,5 @@
 -- noinspection SqlNoDataSourceInspectionForFile
-insert into authority (name) value ('ROLE_CLINICAL_CENTER_ADMIN');
+/*insert into authority (name) value ('ROLE_CLINICAL_CENTER_ADMIN');
 insert into authority (name) value ('ROLE_CLINIC_ADMIN');
 insert into authority (name) value ('ROLE_PATIENT');
 insert into authority (name) value ('ROLE_DOCTOR');
@@ -160,7 +160,7 @@ insert into medical_record_allergic_medication(medical_record_id,medication_id) 
 
 insert into medical_record_chronic_condition(medical_record_id, diagnose_id) values (1,3);
 insert into medical_record_chronic_condition(medical_record_id, diagnose_id) values (1,4);
-/*
+
 -- Senka
 insert into medical_exam (date, start_time, end_time,statusme,doctor_id,exam_room_id,exam_type_id,patient_id,clinic_id,price,discount,version,done) values ('2020-02-10', '7:00:00','8:00:00','REQUESTED',3,NULL,1,5,1,10000,10,0, false);
 insert into medical_exam (date, start_time, end_time, statusme, doctor_id, exam_room_id, exam_type_id, patient_id,clinic_id,price,discount,version, done) values ('2020-02-10', '9:00:00', '10:00:00','REQUESTED', 3, NULL, 1, 5,1,10000,10,0, false);

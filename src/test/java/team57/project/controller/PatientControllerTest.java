@@ -96,7 +96,7 @@ public class PatientControllerTest {
                 .content(json))
                 .andExpect(status().isGone());
     }
-    @Test
+    /*@Test
     public void makeAppointmentTrue() throws Exception {
 
 
@@ -113,5 +113,5 @@ public class PatientControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(json))
                 .andExpect(status().isOk());
-    }
+    }*/
 }
