@@ -174,12 +174,67 @@ public class MedicalExamServiceTest {
         Mockito.when(medicalExamRepositoryMocked.findById(m1.getId())).thenReturn(java.util.Optional.of(m1));
         Mockito.when(doctorServiceMocked.findOne(mer2.getDoctor().getId())).thenReturn(d2);
 
-        MedicalExam m2 = medicalExamService.reserveRoom(mrr);
+        //MedicalExam m2 = medicalExamService.reserveRoom(mrr);
+        String msg = medicalExamService.reserveRoom(mrr);
+        //Long actual = 2L;
+        //Assert.assertEquals(m2.getDoctor().getId(),actual);
+        //assertThat(m2.getDate()).isEqualTo(LocalDate.of(2020,12,2));
+        //assertThat(m2.getStartTime()).isEqualTo(LocalTime.of(6,0));
+        //assertThat(m2.getStatusME()).isEqualTo("APPROVED");
+        assertThat(msg).isEqualTo(null);
+    }
 
-        Long actual = 2L;
-        Assert.assertEquals(m2.getDoctor().getId(),actual);
-        assertThat(m2.getDate()).isEqualTo(LocalDate.of(2020,12,2));
-        assertThat(m2.getStartTime()).isEqualTo(LocalTime.of(6,0));
-        assertThat(m2.getStatusME()).isEqualTo("APPROVED");
+    @Test
+    @Transactional
+    public void testReserveRoomNegative() throws MessagingException {
+
+        Clinic clinic = new Clinic("Klinika 1","Aleske Santica 34","Klinika za oci");
+        clinic.setId(1L);
+        ExamType e = new ExamType("Pregled 1","Pregled broj 1",2342,34);
+        e.setId(1L);
+        Patient p = new Patient("Pera","Peric","pera@gmail.com","pera123","Gogoljeva 12","Novi Sad","Srbija","234234234","1231231231231");
+        p.setId(1L);
+        Doctor d1 = new Doctor("Petar","Petrovic","petar@gmail.com","petar123","Gogoljeva 23","Novi Sad","Srbija","234234234","1231231231231");
+        d1.setId(2L);
+        TermDoctor td1 = new TermDoctor(LocalDate.of(2020,11,2),LocalTime.of(7,0),LocalTime.of(8,0),true,d1);
+
+        //zauzet mu je termin
+        Doctor d2 = new Doctor("Ivan","Ivanovic","ivan@gmail.com","ivan123","Gogoljeva 23","Novi Sad","Srbija","23423234234","1231231231111");
+        d2.setId(2L);
+        TermDoctor td2 = new TermDoctor(LocalDate.of(2020,11,2),LocalTime.of(7,0),LocalTime.of(8,0),false,d2);
+
+        Room r = new Room("Room 2","2","Medical exam",false);
+        r.setId(1L);
+        TermRoom tr1 = new TermRoom(LocalDate.of(2020,12,2),LocalTime.of(6,0),LocalTime.of(7,0),true,r);
+
+        MedicalExam m1 = new MedicalExam(LocalDate.of(2020,11,2),
+                LocalTime.of(7,0),LocalTime.of(8,0),"REQUESTED",5000,10,
+                e,p,null,d1,clinic);
+        m1.setId(1L);
+
+        MedicalExamRequest mer1 = new MedicalExamRequest(m1); //zahtev koji je poslat na front sa zeljenim podacima
+        MedicalExamRequest mer2 = new MedicalExamRequest(m1); // zahtev sa fronta sa mogucim podacima, nesto se promenilo
+        mer2.setDate(LocalDate.of(2020,12,2));
+        mer2.setDoctor(new DoctorFA(d2)); //promenjen je doktor
+        //promenili su se datum i vreme
+        RoomME rm = new RoomME(1L,"Room 2","2",LocalDate.of(2020,12,2),LocalTime.of(6,0),LocalTime.of(7,0),"Medical exam");
+        MERoomRequest mrr = new MERoomRequest(mer1,mer2,rm);
+
+        Mockito.when(termRoomRepositoryMocked.findTermRoom(mrr.getRoomME().getDate(),mrr.getRoomME().getStartTime(),mrr.getRoomME().getId())).thenReturn(tr1);
+        //Promenilo se i vreme i datum, drugi slucaj
+        Mockito.when(termDoctorRepositoryMocked.findTermDoctor(mer1.getDate(),mer1.getStartTime(),mer1.getDoctor().getId())).thenReturn(td1);
+        Mockito.when(termDoctorRepositoryMocked.findTermDoctor(mer2.getDate(),rm.getStartTime(),mer2.getDoctor().getId())).thenReturn(td2);
+        Mockito.when(roomServiceMocked.findOne(rm.getId())).thenReturn(r);
+        Mockito.when(medicalExamRepositoryMocked.findById(m1.getId())).thenReturn(java.util.Optional.of(m1));
+        Mockito.when(doctorServiceMocked.findOne(mer2.getDoctor().getId())).thenReturn(d2);
+
+        //MedicalExam m2 = medicalExamService.reserveRoom(mrr);
+        String msg = medicalExamService.reserveRoom(mrr);
+        //Long actual = 2L;
+        //Assert.assertEquals(m2.getDoctor().getId(),actual);
+        //assertThat(m2.getDate()).isEqualTo(LocalDate.of(2020,12,2));
+        //assertThat(m2.getStartTime()).isEqualTo(LocalTime.of(6,0));
+        //assertThat(m2.getStatusME()).isEqualTo("APPROVED");
+        assertThat(msg).isEqualTo("Doctor's term is not free.");
     }
 }

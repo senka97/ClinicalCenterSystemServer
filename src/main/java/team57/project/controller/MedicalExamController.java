@@ -124,8 +124,12 @@ public class MedicalExamController {
     public ResponseEntity<?> reserveRoom(@RequestBody MERoomRequest meRoomRequest){
 
         try{
-                medicalExamService.reserveRoom(meRoomRequest);
-                return ResponseEntity.status(HttpStatus.OK).build();
+                String msg = medicalExamService.reserveRoom(meRoomRequest);
+                if(msg == null) {
+                    return ResponseEntity.status(HttpStatus.OK).build();
+                }else{
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body(msg);
+                }
 
             }catch(PessimisticLockException pe){
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("This room has just been reserved for that term.");

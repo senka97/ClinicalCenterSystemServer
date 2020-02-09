@@ -59,12 +59,20 @@ public class FastAppointmentServiceImpl implements FastAppointmentService {
 
     @Override
     @Transactional
-    public void addNewFA(Clinic clinic, FARequest faRequest) {
+    public String addNewFA(Clinic clinic, FARequest faRequest) {
 
+        //zakljuca se termin za doktora
         TermDoctor termDoctor = termDoctorRepository.findTermDoctor(faRequest.getDate(),faRequest.getTime(),faRequest.getIdDoctor());
+        if(!termDoctor.isFree()){ //proveri se da li je neko u medjuvremenu zauzeo taj termin
+            return "Doctor's term is not free.";
+        }
+        //zakljuca se termin za doktora
         TermRoom termRoom = termRoomRepository.findTermRoom(faRequest.getDate(),faRequest.getTime(),faRequest.getIdRoom());
-        Room room = roomRepository.findRoom(faRequest.getIdRoom()); //da li treba ovo da zakljucam ili samo termin?
-        Doctor doctor = doctorRepository.findDoctor(faRequest.getIdDoctor()); //isto pitanje
+        if(!termRoom.isFree()){ // proveri se da li je neko u medjuvremenu zauzeo tu sobu, neki drugi admin
+            return "Room's term is not free.";
+        }
+        Room room = roomRepository.findRoom(faRequest.getIdRoom());
+        Doctor doctor = doctorRepository.findDoctor(faRequest.getIdDoctor());
         ExamType examType = examTypeService.findOne(faRequest.getIdExamType());
 
         FastAppointment fa = new FastAppointment(faRequest.getDate(),faRequest.getTime(),1,
@@ -74,6 +82,8 @@ public class FastAppointmentServiceImpl implements FastAppointmentService {
         termDoctorRepository.save(termDoctor);
         termRoom.setFree(false);
         termRoomRepository.save(termRoom);
+
+        return null;
     }
 
     @Override

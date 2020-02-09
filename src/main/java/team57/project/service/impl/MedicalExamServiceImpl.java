@@ -106,12 +106,15 @@ public class MedicalExamServiceImpl implements MedicalExamService {
 
     @Override
     @Transactional
-    public MedicalExam reserveRoom(MERoomRequest meRoomRequest) throws MessagingException {
+    public String reserveRoom(MERoomRequest meRoomRequest) throws MessagingException {
         //podaci o tome da li se datum ili doktor promenio se nalaze u meRoomRequest.getExamEnd
         //podatak da li se termin promenio se nalazi u meRoomRequest.getRoomME
 
         //zakljuca se ovaj termin sobe da ga niko drugi ne moze zauzeti
         TermRoom tr = termRoomRepository.findTermRoom(meRoomRequest.getRoomME().getDate(),meRoomRequest.getRoomME().getStartTime(),meRoomRequest.getRoomME().getId());
+        if(!tr.isFree()){ //proveri se da li je neko u medjuvremenu zauzeo taj termin za sobu
+            return "Room's term is not free.";
+        }
         tr.setFree(false);
         termRoomRepository.save(tr);
         //ako je doktor ostao isti ali se datum ili vreme promenilo, onda slobadjam stari i zauzimam novi termin kod doktora
@@ -120,6 +123,9 @@ public class MedicalExamServiceImpl implements MedicalExamService {
                     !meRoomRequest.getExamStart().getStartTime().equals(meRoomRequest.getRoomME().getStartTime())){
                 TermDoctor tdOld = termDoctorRepository.findTermDoctor(meRoomRequest.getExamStart().getDate(),meRoomRequest.getExamStart().getStartTime(),meRoomRequest.getExamStart().getDoctor().getId());
                 TermDoctor tdNew = termDoctorRepository.findTermDoctor(meRoomRequest.getExamEnd().getDate(),meRoomRequest.getRoomME().getStartTime(),meRoomRequest.getExamEnd().getDoctor().getId());
+                if(!tdNew.isFree()){
+                    return "Doctor's term is not free.";
+                }
                 tdOld.setFree(true);
                 tdNew.setFree(false);
                 termDoctorRepository.save(tdOld);
@@ -132,6 +138,9 @@ public class MedicalExamServiceImpl implements MedicalExamService {
             if(meRoomRequest.getExamStart().getDoctor().getId() != meRoomRequest.getExamEnd().getDoctor().getId()) {
                 TermDoctor tdOld = termDoctorRepository.findTermDoctor(meRoomRequest.getExamStart().getDate(), meRoomRequest.getExamStart().getStartTime(), meRoomRequest.getExamStart().getDoctor().getId());
                 TermDoctor tdNew = termDoctorRepository.findTermDoctor(meRoomRequest.getExamStart().getDate(), meRoomRequest.getExamStart().getStartTime(), meRoomRequest.getExamEnd().getDoctor().getId());
+                if(!tdNew.isFree()){
+                    return "Doctor's term is not free.";
+                }
                 tdOld.setFree(true);
                 tdNew.setFree(false);
                 termDoctorRepository.save(tdOld);
@@ -145,6 +154,9 @@ public class MedicalExamServiceImpl implements MedicalExamService {
                    !meRoomRequest.getExamStart().getStartTime().equals(meRoomRequest.getRoomME().getStartTime())){
                TermDoctor tdOld = termDoctorRepository.findTermDoctor(meRoomRequest.getExamStart().getDate(), meRoomRequest.getExamStart().getStartTime(), meRoomRequest.getExamStart().getDoctor().getId());
                TermDoctor tdNew = termDoctorRepository.findTermDoctor(meRoomRequest.getExamEnd().getDate(), meRoomRequest.getRoomME().getStartTime(), meRoomRequest.getExamEnd().getDoctor().getId());
+               if(!tdNew.isFree()){
+                   return "Doctor's term is not free.";
+               }
                tdOld.setFree(true);
                tdNew.setFree(false);
                termDoctorRepository.save(tdOld);
@@ -166,7 +178,7 @@ public class MedicalExamServiceImpl implements MedicalExamService {
         //u medjuvremenu dodelio neku drugu sobu puci ce
 
         emailService.sendNotificationForReservation(meRoomRequest.getExamEnd(),meRoomRequest.getExamStart(),meRoomRequest.getRoomME(),me.getPatient().getEmail());
-        return me;
+        return null;
     }
 
     @Override

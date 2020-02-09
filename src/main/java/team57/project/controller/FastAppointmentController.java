@@ -20,6 +20,7 @@ import team57.project.service.impl.FastAppointmentServiceImpl;
 import team57.project.service.impl.PatientServiceImpl;
 
 import javax.persistence.OptimisticLockException;
+import javax.persistence.PessimisticLockException;
 import javax.persistence.RollbackException;
 import javax.xml.ws.Response;
 import java.util.ArrayList;
@@ -50,9 +51,13 @@ public class FastAppointmentController {
         try {
             Clinic clinic = clinicService.findOne(idClinic);
             try {
-                fastAppointmentService.addNewFA(clinic, faRequest);
-                return ResponseEntity.status(HttpStatus.OK).build();
-            } catch (RollbackException re) {
+                String msg = fastAppointmentService.addNewFA(clinic, faRequest);
+                if(msg == null) {
+                    return ResponseEntity.status(HttpStatus.OK).build();
+                }else{
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body(msg);
+                }
+            } catch (PessimisticLockException pe) {
                 return ResponseEntity.status(HttpStatus.LOCKED).body("Error occurred in transaction.");
             }
 
