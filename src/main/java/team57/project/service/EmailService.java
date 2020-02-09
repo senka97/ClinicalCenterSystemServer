@@ -183,7 +183,7 @@ public class EmailService {
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
         helper.setText(finalMessage, true);
         helper.setTo(emailP);
-        helper.setSubject("Clinical Center System account activation.");
+        helper.setSubject("Clinical Center System - reservation.");
         helper.setFrom(env.getProperty("spring.mail.username"));
         javaMailSender.send(mimeMessage);
 
