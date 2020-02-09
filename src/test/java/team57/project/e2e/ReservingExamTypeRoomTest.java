@@ -51,13 +51,13 @@ public class ReservingExamTypeRoomTest {
 
         clinicAdminHomePage.ensureIsClickableBtnExamRoom();
         clinicAdminHomePage.getBtnExamRoom().click();
-
+        Thread.sleep(1000);
         clinicAdminHomePage.ensureIsVisibleTableExamRequests();
         List<WebElement> rowsBefore = clinicAdminHomePage.getTableExamRequests().findElements(By.name("exam-request-row"));
 
         clinicAdminHomePage.ensureIsClickableBtnExamRequest();
         clinicAdminHomePage.getBtnExamRequest().click();
-
+        Thread.sleep(1000);
         clinicAdminHomePage.ensureIsVisibleTableExamRoomSuccess();
         clinicAdminHomePage.ensureIsClickableBtnReserve();
         clinicAdminHomePage.getBtnReserve().click();
@@ -84,12 +84,12 @@ public class ReservingExamTypeRoomTest {
 
         clinicAdminHomePage.ensureIsClickableBtnExamRoom();
         clinicAdminHomePage.getBtnExamRoom().click();
-
+        Thread.sleep(1000);
         clinicAdminHomePage.ensureIsVisibleTableExamRequests();
         List<WebElement> rowsBefore = clinicAdminHomePage.getTableExamRequests().findElements(By.name("exam-request-row"));
 
         //clinicAdminHomePage.ensureIsClickableBtnExamRequest();
-        driver.findElement(By.id("6")).click();
+        driver.findElement(By.id("7")).click();
 
         Thread.sleep(2000);
         clinicAdminHomePage.ensureIsClickableBtnReject();

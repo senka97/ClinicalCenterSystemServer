@@ -16,7 +16,7 @@ public class ClinicAdminHomePage {
     @FindBy(xpath = "//*[@id=\"table-exam-requests\"]")
     private WebElement tableExamRequests;
 
-    @FindBy(xpath = "//*[@id=\"9\"]")
+    @FindBy(xpath = "//*[@id=\"6\"]")
     private WebElement btnExamRequest;
 
     @FindBy(xpath = "//*[@id=\"table-exam-rooms-success\"]")

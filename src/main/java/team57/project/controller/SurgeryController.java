@@ -121,7 +121,7 @@ public class SurgeryController {
 
             return new ResponseEntity<>(HttpStatus.OK);
         }catch(PessimisticLockException pe){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("This room has just been reserved for that term.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("This room or doctor has just been reserved for that term.");
         }catch (OptimisticLockException oe){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Some other admin has just found the room for this surgery.");
         }

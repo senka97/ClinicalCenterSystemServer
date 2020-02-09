@@ -120,7 +120,7 @@ public class SearchingClinicsTest {
         patientHomePage.ensureIsClickableBtnListOfClinics();
         patientHomePage.getBtnListOfClinics().click();
 
-        //patientHomePage.ensureIsVisibleShowListOfClinics();
+        patientHomePage.ensureIsVisibleShowListOfClinics();
 
         patientHomePage.ensureIsClickableSelectExamType();
         patientHomePage.getSelectExamType().click();
@@ -129,12 +129,12 @@ public class SearchingClinicsTest {
         patientHomePage.getItemId().click();
 
         patientHomePage.getDatePickerInput().click();
-        patientHomePage.getDatePickerInput().sendKeys("2020-02-10"); //promeniti datum
+        patientHomePage.getDatePickerInput().sendKeys("2020-02-10");
 
         patientHomePage.getBtnSearch().click();
         patientHomePage.ensureIsVisibleDivListClinics();
 
-
+        Thread.sleep(1000);
         List<WebElement> rows = patientHomePage.getDivListClinics().findElements(By.className("clinics"));
 
         Assertions.assertEquals(1, rows.size());
@@ -177,11 +177,12 @@ public class SearchingClinicsTest {
         patientHomePage.getRowDoctor().click();
 
         patientHomePage.ensureIsVisibleTableAppointments();
+        Thread.sleep(1000);
         List<WebElement> rowsBefore = patientHomePage.getTableAppointments().findElements(By.name("counting-appointments"));
-        patientHomePage.ensureIsClickableAppointment();
+        //patientHomePage.ensureIsClickableAppointment();
         //Assertions.assertEquals(true, true);
-        //driver.findElement(By.id("1")).click();
-        patientHomePage.getAppointmentId().click();
+        driver.findElement(By.id("5")).click();
+       // patientHomePage.getAppointmentId().click();
         Thread.sleep(6000);
         patientHomePage.ensureIsVisibleTableDoctor();
         patientHomePage.ensureIsClickableBtnReset();
@@ -191,6 +192,7 @@ public class SearchingClinicsTest {
         patientHomePage.ensureIsClickableRowDoctor();
         patientHomePage.getRowDoctor().click();
         patientHomePage.ensureIsVisibleTableAppointments();
+        Thread.sleep(1000);
         List<WebElement> rows = patientHomePage.getTableAppointments().findElements(By.name("counting-appointments"));
 
         patientHomePage.ensureIsClickablePatientLogout();
