@@ -10,10 +10,7 @@ import team57.project.dto.RoomME;
 import team57.project.dto.RoomTerm;
 import team57.project.dto.SurgeryRequest;
 import team57.project.model.*;
-import team57.project.repository.ClinicRepository;
-import team57.project.repository.RoomRepository;
-import team57.project.repository.SurgeryRepository;
-import team57.project.repository.TermRoomRepository;
+import team57.project.repository.*;
 import team57.project.service.*;
 
 import javax.mail.MessagingException;
@@ -31,6 +28,8 @@ public class SurgeryServiceImpl implements SurgeryService {
     private SurgeryRepository surgeryRepository;
     @Autowired
     private TermRoomRepository termRoomRepository;
+    @Autowired
+    private TermDoctorRepository termDoctorRepository;
     @Autowired
     private EmailService emailService;
     @Autowired
@@ -123,7 +122,8 @@ public class SurgeryServiceImpl implements SurgeryService {
         {
             Doctor doctor = doctorService.findOne(doc.getId());
             //pessimistic lock exception
-            TermDoctor td = termDoctorService.findByDateTime(request.getDate(),request.getStartTime(),doctor.getId());
+           // TermDoctor td = termDoctorService.findByDateTime(request.getDate(),request.getStartTime(),doctor.getId());
+             TermDoctor td = termDoctorRepository.findTermDoctor(request.getDate(),request.getStartTime(),doctor.getId());
 
             td.setFree(false);
             doctor.getSurgeries().add(s);
@@ -133,7 +133,7 @@ public class SurgeryServiceImpl implements SurgeryService {
 
         }
         //pessimistic lock exception
-        TermRoom tr = termRoomService.findByDateTime(request.getDate(),request.getStartTime(),request.getIdRoom());
+        TermRoom tr = termRoomRepository.findTermRoom(request.getDate(),request.getStartTime(),request.getIdRoom());
         tr.setFree(false);
         termRoomService.save(tr);
 
