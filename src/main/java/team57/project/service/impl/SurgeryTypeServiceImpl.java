@@ -65,7 +65,11 @@ public class SurgeryTypeServiceImpl implements SurgeryTypeService {
     @Override
     public boolean removeSurgeryType(SurgeryType surgeryType, Clinic clinic) {
 
-        //ovde ide kod za proveru da li je neka operacija ovog tipa zakazana za buducnost
+        List<Surgery> surgeries = surgeryRepository.findSurgeryWithType(clinic.getId(),surgeryType.getId(), LocalDate.now(),LocalTime.now());
+
+        if(surgeries.size()!=0){
+            return false;
+        }
 
         surgeryType.setRemoved(true);
         surgeryTypeRepository.save(surgeryType);
