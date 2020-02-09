@@ -200,5 +200,16 @@ public class RoomServiceImpl implements RoomService {
 
     }
 
+    @Override
+    public List<TermRoomDTO> getReservedRoomTerms(Room room) {
+
+        List<TermRoom> termsRoom = termRoomRepository.getReservedRoomTerms(room.getId());
+        List<TermRoomDTO> termsRoomDTO = new ArrayList<TermRoomDTO>();
+        for(TermRoom tr: termsRoom){
+            termsRoomDTO.add(new TermRoomDTO(tr));
+        }
+        return termsRoomDTO;
+    }
+
 
 }
