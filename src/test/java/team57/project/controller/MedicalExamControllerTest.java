@@ -33,7 +33,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -52,29 +54,40 @@ public class MedicalExamControllerTest {
 
     private static final String URL_PREFIX = "/api/medicalExams";
 
-    private MediaType contentType = new MediaType(
-            MediaType.APPLICATION_JSON.getType(),
-            MediaType.APPLICATION_JSON.getSubtype(),
-            Charset.forName("utf8"));
+    private String accessToken;
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Before
+    public void login() {
+        ResponseEntity<UserTokenState> responseEntity =
+                restTemplate.postForEntity("/auth/login",
+                        new JwtAuthenticationRequest("zika.zikic789@gmail.com", "zika"),
+                        UserTokenState.class);
+        accessToken = "Bearer " + Objects.requireNonNull(responseEntity.getBody()).getAccessToken();
+        System.out.println(accessToken);
+    }
 
     private MockMvc mockMvc;
+
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
+    @PostConstruct
+    public void setUp() {
+        this.mockMvc = MockMvcBuilders
+                .webAppContextSetup(webApplicationContext)
+                .apply(springSecurity())
+                .build();
+    }
+
 
     @MockBean
     private MedicalExamServiceImpl medicalExamServiceMocked;
 
     @MockBean
     private ClinicService clinicServiceMocked;
-
-    @InjectMocks
-    private MedicalExamController medicalExamController;
-
-    @Before
-    public void init(){
-        MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders
-                .standaloneSetup(medicalExamController)
-                .build();
-    }
 
 
 
@@ -97,7 +110,8 @@ public class MedicalExamControllerTest {
         m1.setId(1L);
 
         Mockito.when(medicalExamServiceMocked.findOne(1L)).thenReturn(m1);
-        mockMvc.perform(get(URL_PREFIX+"/getExamRequest/1"))
+        mockMvc.perform(get(URL_PREFIX+"/getExamRequest/1")
+                .header("Authorization", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.id").value(1L))
@@ -142,7 +156,8 @@ public class MedicalExamControllerTest {
         Long idE = 1L;
         Mockito.when(clinicServiceMocked.findOne(clinic.getId())).thenReturn(clinic);
         Mockito.when(medicalExamServiceMocked.findExamRequests(clinic)).thenReturn(mers);
-        mockMvc.perform(get(URL_PREFIX+"/getExamRequests/1"))
+        mockMvc.perform(get(URL_PREFIX+"/getExamRequests/1")
+                .header("Authorization", accessToken))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -193,7 +208,8 @@ public class MedicalExamControllerTest {
             Mockito.when(medicalExamServiceMocked.findOne(m1.getId())).thenReturn(m1);
             Mockito.when(medicalExamServiceMocked.getAvailableRooms(m1)).thenReturn(rooms);
 
-            mockMvc.perform(get(URL_PREFIX+"/getAvailableRoomsExam/1"))
+            mockMvc.perform(get(URL_PREFIX+"/getAvailableRoomsExam/1")
+                    .header("Authorization", accessToken))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                     .andExpect(jsonPath("$", hasSize(3)));
@@ -241,6 +257,7 @@ public class MedicalExamControllerTest {
             String json = "{\"examStart\":{\"id\":1,\"date\":[2020,11,2],\"startTime\":[7,0],\"fullNamePatient\":\"Pera Peric\",\"doctor\":{\"id\":2,\"fullName\":\"Petar Petrovic\"},\"examTypeName\":\"Pregled 1\",\"idExamType\":1},\"examEnd\":{\"id\":1,\"date\":[2020,12,2],\"startTime\":[7,0],\"fullNamePatient\":\"Pera Peric\",\"doctor\":{\"id\":2,\"fullName\":\"Ivan Ivanovic\"},\"examTypeName\":\"Pregled 1\",\"idExamType\":1},\"roomME\":{\"id\":1,\"name\":\"Room 2\",\"number\":\"2\",\"date\":[2020,12,2],\"startTime\":[6,0],\"endTime\":[7,0],\"roomType\":\"Medical exam\"}}";
             Mockito.when(medicalExamServiceMocked.reserveRoom(mrr)).thenReturn(null);
             mockMvc.perform(put(URL_PREFIX+"/reserveRoom")
+                    .header("Authorization", accessToken)
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .content(json))
                     .andExpect(status().isOk());

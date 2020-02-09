@@ -26,7 +26,8 @@ public class FastAppointmentRepositoryTest {
     @Test
     public void testFindFree(){
 
-        List<FastAppointment> fa = fastAppointmentRepository.findFree(1L, LocalDate.of(2020,2,5),LocalTime.of(9,0));
+        //List<FastAppointment> fa = fastAppointmentRepository.findFree(1L, LocalDate.of(2020,2,5),LocalTime.of(9,0));
+        List<FastAppointment> fa = fastAppointmentRepository.findFree(1L);
         assertThat(fa.size()).isEqualTo(3);
     }
 
