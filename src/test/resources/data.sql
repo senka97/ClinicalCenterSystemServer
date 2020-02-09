@@ -1,5 +1,5 @@
 -- noinspection SqlNoDataSourceInspectionForFile
-insert into authority (name) value ('ROLE_CLINICAL_CENTER_ADMIN');
+/*insert into authority (name) value ('ROLE_CLINICAL_CENTER_ADMIN');
 insert into authority (name) value ('ROLE_CLINIC_ADMIN');
 insert into authority (name) value ('ROLE_PATIENT');
 insert into authority (name) value ('ROLE_DOCTOR');
@@ -203,4 +203,4 @@ insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values (
 insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values ('2020-02-07', '11:00:00',false,'10:00:00',3);
 insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values ('2020-02-07', '12:00:00',true,'11:00:00',3);
 insert into term_doctor(date_term, end_time, free,start_time,doctor_id) values ('2020-02-07', '13:00:00',false,'12:00:00',3);
-
+*/

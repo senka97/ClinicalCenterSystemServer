@@ -18,7 +18,7 @@ public interface FastAppointmentService {
     //Collection<FastAppointment> findFAWithExamType(Long id, LocalDateTime now);
     FastAppointment save(FastAppointment f);
     FastAppointment findOne(Long id);
-    void addNewFA(Clinic clinic, FARequest faRequest);
+    String addNewFA(Clinic clinic, FARequest faRequest);
     AllFastAppointments getAllFA(Clinic clinic);
     List<FastAppointmentDTO> getFreeFA(Clinic clinic);
     String reserveFA(FastAppointment fa,Patient patient) throws Exception;
