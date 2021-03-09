@@ -1,11 +1,19 @@
 # ClinicalCenterSystemServer
-Da bi se pokrenuo projekat potrebno je klonirati repozitorijum u lokalni direktorijum:
 
-git clone https://github.com/senka97/ClinicalCenterSystemServer.git
+Backend aplikacija informacionog sistema kliničkog centra.
 
-Potrebno je instalirati:
-1) Java SDK v1.8
-2) InteliiJ ili neki drugi IDE (npr. Eclipse)
-3) MySQL v8.0.18
+Frontend aplikacija: https://github.com/senka97/ClinicalCenterSystemClient
+
+Korišćene tehnologije:
+
+ - Backend: Spring Boot, MySQL v8.0.18
+ - Frontend: Angular 8
+
+Da bi se pokrenuo projekat potrebno je imati instalirano:
+
+ - Java SDK v1.8
+ - InteliiJ ili neki drugi IDE (npr. Eclipse)
+ - MySQL v8.0.18
 
 Importovati direktorijum u IntelliJ ili neki drugi IDE i pokrenuti aplikaciju. 
+ 
