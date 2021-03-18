@@ -6,8 +6,8 @@ Frontend aplikacija: https://github.com/senka97/ClinicalCenterSystemClient
 
 Korišćene tehnologije:
 
- - Backend: Spring Boot, MySQL v8.0.18
- - Frontend: Angular 8
+ - Spring Boot
+ - MySQL v8.0.18
 
 Da bi se pokrenuo projekat potrebno je imati instalirano:
 
